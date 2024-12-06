@@ -10,6 +10,7 @@
 
 # production
 /build
+/ready-to-deploy
 
 # misc
 .DS_Store
