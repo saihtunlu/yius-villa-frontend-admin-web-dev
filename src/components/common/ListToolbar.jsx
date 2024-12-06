@@ -1,0 +1,141 @@
+import chevronUpFill from '@iconify/icons-eva/chevron-up-fill';
+import chevronDownFill from '@iconify/icons-eva/chevron-down-fill';
+// material
+import { useTheme, styled } from '@mui/material/styles';
+import {
+  Toolbar,
+  Tooltip,
+  Typography,
+  InputAdornment,
+  OutlinedInput,
+  Menu,
+  Button,
+  MenuItem,
+  Stack,
+  Box,
+  TextField,
+  IconButton,
+} from '@mui/material';
+import { MouseEvent, useState } from 'react';
+import { Icon } from '@iconify/react';
+import searchFill from '@iconify/icons-eva/search-fill';
+import useResponsive from '../../hooks/useResponsive';
+import Iconify from './Iconify';
+// ----------------------------------------------------------------------
+
+const RootStyle = styled(Toolbar)(({ theme }) => ({
+  display: 'flex',
+  justifyContent: 'space-between',
+  padding: theme.spacing(0, 2.5) + ' !important',
+  background: theme.palette.background.paper,
+}));
+
+export default function ProductListToolbar({
+  numSelected,
+  filterName,
+  sortList,
+  onFilterName,
+  selectedSorting,
+  onSelectSorting,
+  actions,
+  input,
+}) {
+  const theme = useTheme();
+  const smUp = useResponsive('up', 'sm');
+  const [anchorEl, setAnchorEl] = useState(null);
+  const open = Boolean(anchorEl);
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = (event, value) => {
+    if (value !== 'backdropClick') {
+      onSelectSorting(value);
+    }
+    setAnchorEl(null);
+  };
+
+  const isLight = theme.palette.mode === 'light';
+  const selectedSortLabel = sortList ? sortList.filter((item) => item.value === selectedSorting)[0] : [];
+  return (
+    <RootStyle
+      sx={{
+        ...(numSelected > 0 && {
+          color: isLight ? 'primary.main' : 'text.primary',
+          bgcolor: isLight ? 'primary.lighter' : 'primary.dark',
+        }),
+        height: 96,
+        marginBottom: 0,
+      }}
+    >
+      {numSelected > 0 ? (
+        <Typography component="div" variant="subtitle1">
+          {numSelected} selected
+        </Typography>
+      ) : (
+        <Stack direction={'row'} spacing={2.5}>
+          <TextField
+            value={filterName}
+            sx={{ minWidth: '280px' }}
+            onChange={(e) => onFilterName(e.target.value)}
+            placeholder="Search ..."
+            slotProps={{
+              input: {
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <Iconify icon={'mynaui:search'} />
+                  </InputAdornment>
+                ),
+              },
+            }}
+          />
+
+          {input && input}
+        </Stack>
+      )}
+
+      {numSelected > 0 ? (
+        <Stack direction={'row'} spacing={1}>
+          {actions.map((node) => node)}
+        </Stack>
+      ) : (
+        sortList && (
+          <Stack spacing={1.5} direction={'row'} justifyContent={'flex-end'}>
+            <Box>
+              <Tooltip title="Sort by">
+                <IconButton onClick={handleClick}>
+                  <Iconify icon={'solar:sort-vertical-bold-duotone'} />
+                </IconButton>
+              </Tooltip>
+
+              <Menu
+                id="sort-by"
+                MenuListProps={{
+                  'aria-labelledby': 'sort-by',
+                }}
+                keepMounted
+                anchorEl={anchorEl}
+                open={open}
+                onClose={handleClose}
+                slotProps={{
+                  paper: {
+                    style: {},
+                  },
+                }}
+              >
+                {sortList.map((option, index) => (
+                  <MenuItem
+                    key={option.value + index}
+                    selected={option.value === selectedSorting}
+                    onClick={(event) => handleClose(event, option.value)}
+                  >
+                    {option.name}
+                  </MenuItem>
+                ))}
+              </Menu>
+            </Box>
+          </Stack>
+        )
+      )}
+    </RootStyle>
+  );
+}

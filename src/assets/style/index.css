@@ -1,0 +1,84 @@
+@media print {
+  #root * {
+    display: none !important;
+  }
+  #print-area {
+    display: block !important;
+    color: #000 !important;
+  }
+}
+
+.print-barcode {
+  display: none;
+  width: 40mm !important;
+  height: 30mm !important;
+}
+
+#print-area {
+  display: none;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+div#print-area_ {
+  display: none !important;
+}
+
+@keyframes rotate {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+body {
+  overflow: auto !important;
+  padding-right: 0px !important;
+}
+
+.scanner-animation {
+  width: 140%;
+  height: 140%;
+  position: absolute;
+  border: 143px solid rgba(0, 0, 0, 0.2);
+  margin-top: 0px !important;
+  border-radius: 33%;
+}
+.scanner-animation::before {
+  content: '';
+  position: absolute;
+  top: 25px;
+  bottom: 20px;
+  left: 20px;
+  right: 20px;
+  width: calc(100% - 40px);
+  height: 5px;
+  background: #54d62c;
+  box-shadow: 0 0 60px 5px #54d62c;
+  clip-path: inset(0);
+  animation:
+    x 0.8s ease-in-out infinite alternate,
+    y 1.3s ease-in-out infinite;
+}
+
+@keyframes x {
+  to {
+    transform: translateY(-100%);
+    top: 92%;
+  }
+}
+
+@keyframes y {
+  33% {
+    clip-path: inset(0 0 0 -60px);
+  }
+  50% {
+    clip-path: inset(0 0 0 0);
+  }
+  83% {
+    clip-path: inset(0 -60px 0 0);
+  }
+}
