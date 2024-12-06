@@ -3,7 +3,7 @@ import { useCallback, useEffect, useState } from 'react';
 import LoadingButton from '@mui/lab/LoadingButton';
 import { connect } from 'react-redux';
 import { sum } from 'lodash';
-import { useLocation, useNavigate, useBlocker } from 'react-router-dom';
+import { useBlocker } from 'react-router-dom';
 import onScan from 'onscan.js';
 
 import { useSnackbar } from 'notistack';
@@ -17,7 +17,6 @@ import { searchProducts, updateOrder } from '../../../redux/actions';
 import OrderPayment from './OrderPayment';
 import FulfillProducts from './FulfillProducts';
 import OrderTimeline from './OrderTimeline';
-import { PREFIX_URL } from '../../../config';
 import { INITIAL_STORE } from '../../../redux/reducer/store';
 import GeneralDetail from './GeneralDetail';
 
@@ -46,7 +45,6 @@ function OrderEditForm(props) {
     onScan.attachTo(document, {
       onScan: handleScan, // Triggered when a scan is detected
       reactToPaste: true, // Treat pasted text as a scan
-      onScanError: (error) => console.error('Scan Error:', error),
     });
 
     return () => {

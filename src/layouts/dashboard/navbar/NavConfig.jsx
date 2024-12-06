@@ -44,7 +44,7 @@ const sidebarConfig = [
   },
   {
     subheader: 'Employee Management',
-    show: (user) => true,
+    show: (user) => checkRole('Employee', 'read', user),
     items: [
       {
         title: 'User',
@@ -62,7 +62,7 @@ const sidebarConfig = [
         title: 'Attendance',
         path: 'attendance',
         icon: <Iconify icon={'solar:user-check-bold-duotone'} />,
-        show: (user) => true,
+        show: (user) => checkRole('Attendance', 'read', user),
 
         children: [
           {

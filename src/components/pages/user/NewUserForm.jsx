@@ -46,6 +46,7 @@ export const INITIAL_USER = {
   password_confirm: '',
   is_staff: true,
   is_active: true,
+  is_superuser: false,
 };
 
 const NewUserForm = (props) => {

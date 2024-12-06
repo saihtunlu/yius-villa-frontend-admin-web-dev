@@ -7,7 +7,7 @@ import { sentenceCase } from 'change-case';
 import axios from 'axios';
 import { useSnackbar } from 'notistack';
 import { useReactToPrint } from 'react-to-print';
-import domtoimage from 'dom-to-image-more';
+import html2canvas from 'html2canvas';
 
 import Page from '../../components/common/Page';
 import HeaderBreadcrumbs from '../../components/common/HeaderBreadcrumbs';
@@ -165,54 +165,66 @@ const EditOrder = () => {
   };
 
   const downloadImage = async (data) => {
+    setExporting(true);
+
+    // Create a temporary container for the content
     const tempDiv = document.createElement('div');
     tempDiv.innerHTML = data; // Inject the HTML content
-    // Append the hidden element to the body temporarily
-    document.body.appendChild(tempDiv);
+    document.body.appendChild(tempDiv); // Add to DOM temporarily
+
     const node = tempDiv.querySelector('#export-voucher-content');
 
+    if (!node) {
+      console.error('The specified node (#export-voucher-content) was not found.');
+      setExporting(false);
+      return;
+    }
+
+    // Wait for all images inside the node to load
     const images = Array.from(node.getElementsByTagName('img'));
-    const loadPromises = images.map((img) => {
-      // If image is not loaded, wait for it to load
-      if (!img.complete) {
+    const loadPromises = images.map(async (img) => {
+      if (img.src) {
+        img.crossOrigin = 'Anonymous';
+        img.src += '?not-from-cache-please';
         return new Promise((resolve) => {
-          img.onload = resolve; // Resolve the promise when the image is loaded
-          img.onerror = resolve; // Resolve on error as well
+          img.onload = resolve;
+          img.onerror = () => {
+            console.warn(`Image failed to load: ${img.src}`);
+            resolve();
+          };
         });
       }
-      // If image is already loaded, resolve immediately
       return Promise.resolve();
     });
     await Promise.all(loadPromises);
 
-    if (node) {
-      domtoimage
-        .toPng(node, {
-          width: node.clientWidth * 5,
-          height: node.clientHeight * 5,
-          style: {
-            transform: 'scale(' + 5 + ')',
-            transformOrigin: 'top left',
-          },
-        })
-        .then((dataUrl) => {
-          const link = document.createElement('a');
-          link.href = dataUrl;
-          link.download = `${order.customer.name}-${order.id}.png`; // Set the download file name
-          link.click(); // Trigger the download
-        })
-        .catch((error) => {
-          console.error('Error converting HTML to image:', error);
-        })
-        .finally(() => {
-          // Clean up by removing the temporary element after conversion
-          document.body.removeChild(tempDiv);
-          setExporting(false);
-        });
-    } else {
-      setExporting(false);
+    try {
+      // Use html2canvas to render the HTML node to a canvas
+      const canvas = await html2canvas(node, {
+        scale: 5, // Increase resolution
+        useCORS: true, // Enable cross-origin requests
+        allowTaint: true, // Allow cross-origin images
+      });
 
-      console.error('The specified node (#content-to-download) was not found.');
+      // Convert canvas to a data URL
+      const dataUrl = canvas.toDataURL('image/png');
+
+      const fileName =
+        order?.customer?.name && order?.id ? `${order.customer.name}-${order.id}.png` : 'exported-image.png';
+
+      // Trigger download
+      const link = document.createElement('a');
+      link.href = dataUrl;
+      link.download = fileName;
+      link.click();
+    } catch (error) {
+      console.error('Error converting HTML to canvas:', error);
+    } finally {
+      // Clean up temporary DOM element
+      if (document.body.contains(tempDiv)) {
+        document.body.removeChild(tempDiv);
+      }
+      setExporting(false);
     }
   };
 

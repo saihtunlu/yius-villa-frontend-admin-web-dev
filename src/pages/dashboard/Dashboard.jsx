@@ -24,6 +24,7 @@ import TopCities from '../../components/pages/dashboard/TopCities';
 import Iconify from '../../components/common/Iconify';
 import SaleChannels from '../../components/pages/dashboard/SaleChannels';
 import { INITIAL_STORE } from '../../redux/reducer/store';
+import { INITIAL_USER } from '../../components/pages/user/NewUserForm';
 
 const end = new Date();
 const start = new Date();
@@ -257,7 +258,7 @@ const Dashboard = (props) => {
                 chartData={saleData}
               />
             </Grid>
-            {user.is_superuser && (
+            {user?.is_superuser && (
               <Grid size={12}>
                 <ProfitSummary
                   title="Profits Summary"
@@ -307,7 +308,7 @@ const Dashboard = (props) => {
 
 const mapStateToProp = (state) => {
   return {
-    user: state.auth?.user,
+    user: state.auth?.user || INITIAL_USER,
   };
 };
 export default connect(mapStateToProp)(Dashboard);

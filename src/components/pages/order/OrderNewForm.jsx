@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import { useSnackbar } from 'notistack';
 import { useNavigate } from 'react-router-dom';
 import { sum } from 'lodash';
+import onScan from 'onscan.js';
 
 import OrderProductList from './OrderProductList';
 import Scrollbar from '../../common/Scrollbar';
@@ -13,7 +14,7 @@ import AddProduct from './AddProduct';
 import OrderSummary from './OrderSummary';
 import CustomerDetail from './CustomerDetail';
 import { PATH_DASHBOARD } from '../../../router/paths';
-import { createNewOrder } from '../../../redux/actions';
+import { createNewOrder, searchProducts } from '../../../redux/actions';
 import { PREFIX_URL } from '../../../config';
 import { INITIAL_STORE } from '../../../redux/reducer/store';
 import GeneralDetail from './GeneralDetail';
@@ -62,6 +63,90 @@ function OrderNewForm(props) {
   const [loading, setLoading] = useState(false);
   const isEmptyOrder = order.products.length === 0;
   const totalItems = sum(order.products.map((item) => parseInt(item.quantity, 10)));
+
+  useEffect(() => {
+    // Define the scan event handler
+    const handleScan = (event) => {
+      if (event) {
+        handleScanProducts(event); // Save scanned code to state
+      }
+    };
+
+    // Attach the onScan library to the document
+    onScan.attachTo(document, {
+      onScan: handleScan, // Triggered when a scan is detected
+      reactToPaste: true, // Treat pasted text as a scan
+    });
+
+    return () => {
+      // Detach the event listener on cleanup
+      onScan.detachFrom(document);
+    };
+  }, []);
+
+  const handleScanProducts = (scannedCode) => {
+    searchProducts(scannedCode).then((data) => {
+      if (data.length > 0) {
+        var product = data[0];
+        var check = order.products.filter(
+          (item) => item.product === product.id || item.variation_product === product.id
+        );
+
+        if (check.length > 0) {
+          const index = order.products.findIndex(
+            (item) => item.product === product.id || item.variation_product === product.id
+          );
+
+          if (index !== -1) {
+            setOrder((preState) => {
+              var newState = JSON.parse(JSON.stringify(preState));
+              newState.products[index].quantity += 1;
+              newState.products[index].subtotal = newState.products[index].quantity * newState.products[index].price;
+
+              enqueueSnackbar(
+                `Product name "${check[0].name}" quantity updated to ${newState.products[index].quantity}`,
+                {
+                  variant: 'success',
+                }
+              );
+              return newState;
+            });
+          }
+        } else {
+          var sellingPrice = product.sale_price || product.regular_price;
+
+          var primary_price =
+            parseInt(product.cost_per_item, 10) === 0 || !product.cost_per_item
+              ? parseInt(parseInt(sellingPrice, 10) * 0.6666, 10)
+              : product.cost_per_item;
+
+          var profit = sellingPrice - primary_price;
+
+          var margin = ((profit / sellingPrice) * 100).toFixed(2);
+
+          const scannedProduct = {
+            profit,
+            margin,
+            cost_per_item: product.cost_per_item,
+            name: product.is_main_product ? product.name : product.product_name + ' - ' + product.name,
+            quantity: 1,
+            price: sellingPrice,
+            image:
+              (product.is_main_product ? product.images[0]?.image || '/assets/img/default.png' : product.image) ||
+              '/assets/img/default.png',
+            variation_product: product.is_main_product ? null : product.id,
+            number_of_fulfilled: 0,
+            product: product.is_main_product ? product.id : null,
+            subtotal: sellingPrice,
+          };
+          handleUpdateProducts([scannedProduct]);
+          enqueueSnackbar(scannedProduct.name + ' has been added!', { variant: 'success' });
+        }
+      } else {
+        enqueueSnackbar('No product with ' + scannedCode, { variant: 'warning' });
+      }
+    });
+  };
 
   // effects
   useEffect(() => {

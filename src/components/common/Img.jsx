@@ -73,7 +73,7 @@ export default function Img({
           sx={{ width: 1, height: 1, objectFit: 'cover' }}
           src={src.includes('http') ? src : MEDIA_URL + src}
           onError={(event) => {
-            event.target.src = `${MEDIA_URL}/media/default.png`;
+            event.target.src = `${MEDIA_URL}/assets/img/default.png`;
           }}
           {...other}
         />
@@ -118,7 +118,7 @@ export default function Img({
           sx={{ width: 1, height: 1, objectFit: 'cover', cursor: 'pointer' }}
           src={src.includes('http') ? src : MEDIA_URL + src}
           onError={(event) => {
-            event.target.src = `${MEDIA_URL}/media/default.png`;
+            event.target.src = `${MEDIA_URL}/assets/img/default.png`;
           }}
           {...other}
         />
