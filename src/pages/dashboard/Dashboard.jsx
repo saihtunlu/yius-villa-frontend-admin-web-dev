@@ -258,7 +258,7 @@ const Dashboard = (props) => {
                 chartData={saleData}
               />
             </Grid>
-            {user?.is_superuser && (
+            {user?.role?.name === 'OWner' && (
               <Grid size={12}>
                 <ProfitSummary
                   title="Profits Summary"

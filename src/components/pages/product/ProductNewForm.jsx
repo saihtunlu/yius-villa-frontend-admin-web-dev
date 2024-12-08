@@ -378,7 +378,7 @@ function ProductNewForm(props) {
                     }}
                   />
                 </Stack>
-                {user.is_superadmin && (
+                {user?.role?.name === 'Owner' && (
                   <Stack spacing={2.5} direction={{ xs: 'column', sm: 'row' }} justifyContent={'space-between'}>
                     <TextField
                       fullWidth
@@ -730,7 +730,7 @@ function ProductNewForm(props) {
                                 }}
                               />
                             </Stack>
-                            {user.is_superadmin && (
+                            {user?.role?.name === 'Owner' && (
                               <Stack spacing={2.5} direction={{ xs: 'column', sm: 'row' }}>
                                 <TextField
                                   fullWidth

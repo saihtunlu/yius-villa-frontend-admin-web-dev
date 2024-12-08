@@ -347,7 +347,10 @@ const AddProduct = (props) => {
                                   <Typography variant="subtitle2">
                                     {product.is_main_product
                                       ? product.name
-                                      : product.product_name + ' - ' + product.name}
+                                      : product.product_name + ' - ' + product.name}{' '}
+                                    <Typography variant="body2" component={'span'}>
+                                      ({product.barcode})
+                                    </Typography>
                                   </Typography>
                                 }
                                 secondary={

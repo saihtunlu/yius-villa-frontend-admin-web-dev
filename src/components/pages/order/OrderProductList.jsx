@@ -16,6 +16,8 @@ import {
   IconButton,
   Tooltip,
 } from '@mui/material';
+import { useSelector } from 'react-redux';
+
 import { fCurrency } from '../../../utils/formatNumber';
 import Img from '../../common/Img';
 import Iconify from '../../common/Iconify';
@@ -56,6 +58,7 @@ function Incrementer({ available, quantity, onIncrease, onDecrease }) {
 }
 
 export default function CheckoutProductList({ products, onDelete, onIncreaseQuantity, onDecreaseQuantity }) {
+  const user = useSelector((state) => state.user);
   return (
     <TableContainer sx={{ minWidth: 720 }}>
       <Table>
@@ -102,6 +105,12 @@ export default function CheckoutProductList({ products, onDelete, onIncreaseQuan
                             price:&nbsp;
                           </Typography>
                           {fCurrency(price)}
+
+                          {user?.role?.name === 'Owner' && (
+                            <Typography component="span" variant="caption" sx={{ color: 'text.secondary' }}>
+                              / profit: {fCurrency(product.profit)}
+                            </Typography>
+                          )}
                         </Typography>
                       </Box>
                     </Box>

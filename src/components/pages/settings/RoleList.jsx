@@ -279,7 +279,7 @@ function RoleList() {
                 label={'Name'}
                 value={selectedRole.name}
                 required
-                placeholder="KPay"
+                placeholder="Enter role name"
                 onChange={(event) => {
                   setSelectedRole((preState) => {
                     return { ...preState, name: event.target.value };

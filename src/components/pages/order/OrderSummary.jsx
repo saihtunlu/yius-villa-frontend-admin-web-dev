@@ -21,6 +21,8 @@ import {
 } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { Icon } from '@iconify/react';
+import { useSelector } from 'react-redux';
+
 import plusFill from '@iconify/icons-eva/plus-fill';
 import closeFill from '@iconify/icons-eva/close-fill';
 import { fCurrency } from '../../../utils/formatNumber';
@@ -28,6 +30,7 @@ import Iconify from '../../common/Iconify';
 
 export default function OrderSummary({
   total,
+  profitAmount,
   discount,
   subtotal,
   tax,
@@ -37,6 +40,8 @@ export default function OrderSummary({
   OnRemoveExtraFee,
   extraFees,
 }) {
+  const user = useSelector((state) => state.user);
+
   const [open, setOpen] = useState(false);
   const [openExtraFees, setOpenExtraFees] = useState(false);
   const [extraFee, setExtraFee] = useState({
@@ -116,13 +121,14 @@ export default function OrderSummary({
                 {discount.discount ? '-' + fCurrency(discount.discount) : '-'}
               </Typography>
             </Stack>
-
-            {/* <Stack direction="row" justifyContent="space-between">
-              <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                Tax({tax.rate}%)
-              </Typography>
-              <Typography variant="subtitle3">{fCurrency(tax.value)}</Typography>
-            </Stack> */}
+            {user?.role?.name === 'Owner' && (
+              <Stack direction="row" justifyContent="space-between">
+                <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                  Profit
+                </Typography>
+                <Typography variant="subtitle3">{fCurrency(profitAmount)}</Typography>
+              </Stack>
+            )}
 
             {extraFees.map((fee, index) => {
               return (

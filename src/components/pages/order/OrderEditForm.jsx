@@ -364,6 +364,7 @@ function OrderEditForm(props) {
                   };
                 });
               }}
+              profitAmount={order.profit_amount}
               total={order.total}
               taxIncluded={store.settings.tax_type !== 'Exclusive'}
               discount={{

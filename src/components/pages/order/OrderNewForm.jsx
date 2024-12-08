@@ -300,6 +300,7 @@ function OrderNewForm(props) {
             <CustomerDetail initialOrder={order} onSaveCustomer={(order) => setOrder(order)} />
 
             <OrderSummary
+              profitAmount={order.profit_amount}
               OnRemoveExtraFee={(index) => {
                 setOrder((preState) => {
                   var newState = JSON.parse(JSON.stringify(preState));

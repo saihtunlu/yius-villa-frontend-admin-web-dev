@@ -6,5 +6,5 @@ import { INITIAL_USER } from '../components/pages/user/NewUserForm';
 // ----------------------------------------------------------------------
 
 export function checkRole(name, type, user = INITIAL_USER) {
-  return user?.is_superuser || user?.role?.permissions?.filter((val) => val.name === name)[0][type] || false;
+  return user?.role?.name === 'Owner' || user?.role?.permissions?.filter((val) => val.name === name)[0][type] || false;
 }

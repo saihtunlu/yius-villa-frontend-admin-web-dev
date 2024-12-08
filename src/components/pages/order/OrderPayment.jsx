@@ -346,13 +346,17 @@ export default function OrderPayment({ initialOrder, onRemovePayment, onChange }
                             }}
                           />
                         </ListItemAvatar>
+
                         <ListItemText
                           id={labelId}
                           primary={<Typography variant="body2">{method.name}</Typography>}
                           secondary={
-                            <Typography variant="caption">
-                              {method.name !== 'COD' && `${method.account_number} (${method.account_holder_name})`}
-                            </Typography>
+                            method.account_number &&
+                            method.account_holder_name && (
+                              <Typography variant="caption">
+                                {method.name !== 'COD' && `${method.account_number} (${method.account_holder_name})`}
+                              </Typography>
+                            )
                           }
                         />
                       </ListItemButton>

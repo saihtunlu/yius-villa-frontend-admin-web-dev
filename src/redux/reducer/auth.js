@@ -9,7 +9,6 @@ import {
 import { INITIAL_STORE } from './store';
 
 export const INITIAL_USER = {
-  is_superuser: false,
   first_name: '',
   last_name: '',
   email: '',
