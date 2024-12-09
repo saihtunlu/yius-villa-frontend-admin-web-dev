@@ -101,7 +101,7 @@ export default function GeneralDetail({ initialOrder, onSave }) {
                 Delivery Company
               </Typography>
               <Typography maxWidth={'70%'} textAlign={'right'} variant="subtitle3">
-                {initialOrder.delivery_company.name || '-'}
+                {initialOrder.delivery_company?.name || '-'}
               </Typography>
             </Stack>
 
@@ -194,7 +194,7 @@ export default function GeneralDetail({ initialOrder, onSave }) {
             />
 
             <RemoteAutocomplete
-              value={order.delivery_company.name}
+              value={order.delivery_company?.name || '-'}
               onChange={(value, data) => {
                 setOrder((preState) => {
                   return { ...preState, delivery_company: { name: value } };
