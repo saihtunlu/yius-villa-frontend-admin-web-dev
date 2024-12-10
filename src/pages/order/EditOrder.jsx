@@ -7,7 +7,7 @@ import { sentenceCase } from 'change-case';
 import axios from 'axios';
 import { useSnackbar } from 'notistack';
 import { useReactToPrint } from 'react-to-print';
-import html2canvas from 'html2canvas';
+import domtoimage from 'dom-to-image-more';
 
 import Page from '../../components/common/Page';
 import HeaderBreadcrumbs from '../../components/common/HeaderBreadcrumbs';
@@ -199,20 +199,26 @@ const EditOrder = () => {
     await Promise.all(loadPromises);
 
     try {
-      // Use html2canvas to render the HTML node to a canvas
-      const canvas = await html2canvas(node, {
-        scale: 5, // Increase resolution
-        useCORS: true, // Enable cross-origin requests
-        allowTaint: true, // Allow cross-origin images
+      // Convert the HTML node to a data URL
+      const dataUrl = await domtoimage.toPng(node, {
+        quality: 1, // Maximum image quality
+        width: node.offsetWidth * 5, // Scale width for higher resolution
+        height: node.offsetHeight * 5, // Scale height for higher resolution
+        style: {
+          transform: 'scale(5)', // Scale for better clarity
+          transformOrigin: 'top left', // Ensure proper scaling
+        },
+        filter: (node) => {
+          // Optional: Exclude elements like invisible ones
+          return node.tagName !== 'SCRIPT';
+        },
       });
 
-      // Convert canvas to a data URL
-      const dataUrl = canvas.toDataURL('image/png');
-
+      // Create the filename using order details if available
       const fileName =
         order?.customer?.name && order?.id ? `${order.customer.name}-${order.id}.png` : 'exported-image.png';
 
-      // Trigger download
+      // Trigger a download of the image
       const link = document.createElement('a');
       link.href = dataUrl;
       link.download = fileName;

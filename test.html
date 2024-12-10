@@ -1,0 +1,183 @@
+{% load static %} {% load replace_under %} {% load format_date %}
+
+<style>
+  div#export-voucher-content {
+    background: white;
+    max-width: 380px;
+    padding: 10px;
+    color: #212b36;
+    line-height: 1.5 !important;
+    font-weight: 600;
+  }
+
+  .flex-x-between {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  img#sale-logo {
+    height: 15mm;
+    display: block;
+    margin: 10px auto;
+  }
+</style>
+<div id="export-voucher-content">
+  <img src="{{store.logo}}" id="sale-logo" alt="" />
+  <div style="border-radius: 10px; padding: 5px !important; margin-top: 10px !important; background: #f4f6f8">
+    <p style="font-size: 12px !important; padding: 1mm; width: 100%; margin: 5px 0px !important">
+      <svg xmlns="http://www.w3.org/2000/svg" style="margin-bottom: -1mm" width="18" height="18" viewBox="0 0 24 24">
+        <path
+          fill="#637381"
+          fill-rule="evenodd"
+          d="m16.1 13.359l.456-.453c.63-.626 1.611-.755 2.417-.317l1.91 1.039c1.227.667 1.498 2.302.539 3.255l-1.42 1.412c-.362.36-.81.622-1.326.67c-1.192.111-3.645.051-6.539-1.643zm-5.91-5.876l.287-.286c.707-.702.774-1.83.157-2.654L9.374 2.86C8.61 1.84 7.135 1.705 6.26 2.575l-1.57 1.56c-.433.432-.723.99-.688 1.61c.065 1.14.453 3.22 2.149 5.776z"
+          clip-rule="evenodd"
+        />
+        <path
+          fill="#637381"
+          d="M12.063 11.497c-2.946-2.929-1.88-4.008-1.873-4.015l-4.039 4.04c.667 1.004 1.535 2.081 2.664 3.204c1.14 1.134 2.26 1.975 3.322 2.596L16.1 13.36s-1.082 1.076-4.037-1.862"
+          opacity="0.6"
+        />
+      </svg>
+      <span> : {{store.phone}} </span><br />
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        style="margin-bottom: -1mm !important"
+        width="18"
+        height="18"
+        viewBox="0 0 24 24"
+      >
+        <path
+          fill="#637381"
+          fill-rule="evenodd"
+          d="M12 2c-4.418 0-8 3.646-8 8.143c0 4.462 2.553 9.67 6.537 11.531a3.45 3.45 0 0 0 2.926 0C17.447 19.812 20 14.606 20 10.144C20 5.645 16.418 2 12 2M9 8.757c0 1.02 1.165 2.097 2.043 2.765c.42.319.63.478.957.478c.328 0 .537-.16.957-.479C13.835 10.855 15 9.778 15 8.758c0-1.733-1.65-2.38-3-1.041c-1.35-1.339-3-.692-3 1.041"
+          clip-rule="evenodd"
+        />
+      </svg>
+      <span>
+        : {{store.store_address.address}}, {{store.store_address.city|replace_under}},
+        {{store.store_address.state|replace_under}}
+      </span>
+    </p>
+  </div>
+
+  <div class="flex-x-between" style="margin: 10px 0px; padding-bottom: 5px; border-bottom: 0.08rem dashed #637381">
+    <span style="font-size: 12px !important; padding: 1mm; margin-bottom: 0px !important">
+      Sale ID : #{{ sale.id }}
+    </span>
+    <span style="font-size: 12px !important; padding: 1mm"> {{ sale.created_at|format_date}} </span>
+  </div>
+
+  <p style="font-weight: 600; font-size: 12px !important; margin: 5px 0px !important">Customer Detail</p>
+  <div style="border-radius: 10px; padding: 5px; margin-top: 5px !important; background: #f4f6f8; font-size: 12px">
+    <svg xmlns="http://www.w3.org/2000/svg" style="margin-bottom: -1mm" width="18" height="18" viewBox="0 0 24 24">
+      <circle cx="12" cy="6" r="4" fill="#637381" />
+      <path fill="#637381" d="M20 17.5c0 2.485 0 4.5-8 4.5s-8-2.015-8-4.5S7.582 13 12 13s8 2.015 8 4.5" />
+    </svg>
+    <span style="margin-top: 0px !important">: {{ sale.customer.name }}</span><br />
+    <svg xmlns="http://www.w3.org/2000/svg" style="margin-bottom: -1mm" width="18" height="18" viewBox="0 0 24 24">
+      <path
+        fill="#637381"
+        fill-rule="evenodd"
+        d="m16.1 13.359l.456-.453c.63-.626 1.611-.755 2.417-.317l1.91 1.039c1.227.667 1.498 2.302.539 3.255l-1.42 1.412c-.362.36-.81.622-1.326.67c-1.192.111-3.645.051-6.539-1.643zm-5.91-5.876l.287-.286c.707-.702.774-1.83.157-2.654L9.374 2.86C8.61 1.84 7.135 1.705 6.26 2.575l-1.57 1.56c-.433.432-.723.99-.688 1.61c.065 1.14.453 3.22 2.149 5.776z"
+        clip-rule="evenodd"
+      />
+      <path
+        fill="#637381"
+        d="M12.063 11.497c-2.946-2.929-1.88-4.008-1.873-4.015l-4.039 4.04c.667 1.004 1.535 2.081 2.664 3.204c1.14 1.134 2.26 1.975 3.322 2.596L16.1 13.36s-1.082 1.076-4.037-1.862"
+        opacity="0.6"
+      />
+    </svg>
+    <span> : {{ sale.phone }}</span><br />
+
+    <svg xmlns="http://www.w3.org/2000/svg" style="margin-bottom: -1mm" width="18" height="18" viewBox="0 0 24 24">
+      <path
+        fill="#637381"
+        fill-rule="evenodd"
+        d="M12 2c-4.418 0-8 3.646-8 8.143c0 4.462 2.553 9.67 6.537 11.531a3.45 3.45 0 0 0 2.926 0C17.447 19.812 20 14.606 20 10.144C20 5.645 16.418 2 12 2M9 8.757c0 1.02 1.165 2.097 2.043 2.765c.42.319.63.478.957.478c.328 0 .537-.16.957-.479C13.835 10.855 15 9.778 15 8.758c0-1.733-1.65-2.38-3-1.041c-1.35-1.339-3-.692-3 1.041"
+        clip-rule="evenodd"
+      /></svg
+    ><span>
+      : {{sale.address.address}}, {{sale.address.city|replace_under}}, {{sale.address.state|replace_under}}
+    </span>
+  </div>
+
+  <p style="font-weight: 600; font-size: 12px !important; margin: 5px 0px !important">Items</p>
+
+  {% for product in sale.products %}
+
+  <div style="border-radius: 10px; padding: 5px; margin-top: 5px; background: #f4f6f8; display: flex">
+    <img
+      src="{{product.image}}"
+      style="width: 63px; height: 63px; border-radius: 8px; margin-right: 5px"
+      alt=""
+      srcset=""
+    />
+    <div>
+      <p style="font-size: 12px; margin: 0px !important; font-weight: 700">{{product.name}}</p>
+      <p style="font-size: 12px; margin: 5px 0px 0px 0px !important">Rate : {{product.quantity}}x{{product.price}}</p>
+      <p style="font-size: 12px; margin: 5px 0px 0px 0px !important">
+        Total : {{store.settings.prefix_currency}}{{product.subtotal}}{{store.settings.suffix_currency}}
+      </p>
+    </div>
+  </div>
+  {% endfor %}
+
+  <p style="font-weight: 600; font-size: 12px !important; margin: 5px 0px !important">Price</p>
+  <div style="border-radius: 10px; padding: 5px; margin-top: 5px !important; background: #f4f6f8; font-size: 12px">
+    <div
+      style="
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 5px;
+        border-bottom: 1px solid rgba(145, 158, 171, 0.24);
+      "
+    >
+      <p style="font-size: 12px; margin: 5px 0px !important">Subtotal</p>
+      <p style="font-size: 12px; margin: 5px 0px !important">
+        {{store.settings.prefix_currency}}{{sale.subtotal}}{{store.settings.suffix_currency}}
+      </p>
+    </div>
+
+    {% if sale.discount != 0 %}
+    <div
+      style="
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 5px;
+        border-bottom: 1px solid rgba(145, 158, 171, 0.24);
+      "
+    >
+      <p style="font-size: 12px; margin: 5px 0px !important">Discount</p>
+      <p style="font-size: 12px; margin: 5px 0px !important">
+        -{{store.settings.prefix_currency}}{{sale.discount}}{{store.settings.suffix_currency}}
+      </p>
+    </div>
+    {% endif %} {% for extra_fee in sale.extra_fees %}
+    <div
+      style="
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 5px;
+        border-bottom: 1px solid rgba(145, 158, 171, 0.24);
+      "
+    >
+      <p style="font-size: 12px; margin: 5px 0px !important">{{ extra_fee.label}}</p>
+      <p style="font-size: 12px; margin: 5px 0px !important">
+        {{store.settings.prefix_currency}}{{extra_fee.amount}}{{store.settings.suffix_currency}}
+      </p>
+    </div>
+    {% endfor %}
+
+    <div style="display: flex; justify-content: space-between; margin-bottom: 5px">
+      <p style="font-size: 12px; margin: 5px 0px !important">Total</p>
+      <p style="font-size: 12px; font-weight: 700; margin: 5px 0px !important">
+        {{store.settings.prefix_currency}}{{sale.total}}{{store.settings.suffix_currency}}
+      </p>
+    </div>
+  </div>
+
+  <div style="margin-top: 10px">
+    <span style="font-size: 10px; display: block; text-align: center">Thank You For Supporting Us ðŸ–¤</span>
+  </div>
+</div>
