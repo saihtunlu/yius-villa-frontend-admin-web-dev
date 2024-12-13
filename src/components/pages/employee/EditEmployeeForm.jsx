@@ -326,56 +326,58 @@ const EditEmployeeForm = (props) => {
                     xs: 'column',
                   }}
                 >
-                  <FormControl fullWidth sx={{}}>
-                    <InputLabel id="role-select-label">Department</InputLabel>
-                    <Select
-                      labelId="role-select-label-id"
-                      id="role-select-id"
-                      required
-                      value={data.department.name || ''}
-                      label={'Department'}
-                      onChange={(event) => {
-                        setData((preState) => {
-                          var newState = JSON.parse(JSON.stringify(preState));
-                          newState.department.name = event.target.value;
-                          newState.position.name = '';
-                          return { ...newState };
-                        });
-                      }}
-                    >
-                      {departmentData.map((val, index) => (
-                        <MenuItem key={`${index}-state`} value={val.name}>
-                          {val.name}
-                        </MenuItem>
-                      ))}
-                    </Select>
-                  </FormControl>
+                  <Autocomplete
+                    fullWidth
+                    options={departmentData.map((data) => data.name)}
+                    renderInput={(params) => <TextField {...params} label="Department" />}
+                    value={data.department.name || ''}
+                    onChange={(_, value) => {
+                      setData((preState) => {
+                        var newState = JSON.parse(JSON.stringify(preState));
+                        newState.department.name = value;
+                        newState.position.name = '';
+                        return { ...newState };
+                      });
+                    }}
+                    filterOptions={(options, params) => {
+                      const filtered = filter(options, params);
+                      const { inputValue } = params;
+                      // Suggest the creation of a new value
+                      const isExisting = options.some((option) => inputValue === option);
+                      if (inputValue !== '' && !isExisting) {
+                        filtered.push(inputValue);
+                      }
+                      return filtered;
+                    }}
+                  />
 
-                  <FormControl fullWidth sx={{}}>
-                    <InputLabel id="role-select-label">Position</InputLabel>
-                    <Select
-                      labelId="role-select-label-id"
-                      id="role-select-id"
-                      required
-                      value={data.position.name || ''}
-                      label={'Position'}
-                      onChange={(event) => {
-                        setData((preState) => {
-                          var newState = JSON.parse(JSON.stringify(preState));
-                          newState.position.name = event.target.value;
-                          return { ...newState };
-                        });
-                      }}
-                    >
-                      {departmentData
+                  <Autocomplete
+                    fullWidth
+                    options={
+                      departmentData
                         .filter((val) => val.name === data.department.name)[0]
-                        ?.department_positions.map((val, index) => (
-                          <MenuItem key={`${index}-state`} value={val.name}>
-                            {val.name}
-                          </MenuItem>
-                        ))}
-                    </Select>
-                  </FormControl>
+                        ?.department_positions.map((data) => data.name) || []
+                    }
+                    renderInput={(params) => <TextField {...params} label="Position" />}
+                    value={data.position.name || ''}
+                    onChange={(_, value) => {
+                      setData((preState) => {
+                        var newState = JSON.parse(JSON.stringify(preState));
+                        newState.position.name = value;
+                        return { ...newState };
+                      });
+                    }}
+                    filterOptions={(options, params) => {
+                      const filtered = filter(options, params);
+                      const { inputValue } = params;
+                      // Suggest the creation of a new value
+                      const isExisting = options.some((option) => inputValue === option);
+                      if (inputValue !== '' && !isExisting) {
+                        filtered.push(inputValue);
+                      }
+                      return filtered;
+                    }}
+                  />
                 </Stack>
 
                 <Stack
@@ -403,7 +405,7 @@ const EditEmployeeForm = (props) => {
                         });
                       }}
                     >
-                      {['Active', 'Resigned', 'Terminated'].map((val, index) => (
+                      {['Active', 'Resigned', 'Terminated', 'Archived'].map((val, index) => (
                         <MenuItem key={`${index}-state`} value={val}>
                           {val}
                         </MenuItem>

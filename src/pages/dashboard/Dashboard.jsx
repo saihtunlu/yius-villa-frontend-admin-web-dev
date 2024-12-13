@@ -79,68 +79,72 @@ const Dashboard = (props) => {
     axios
       .get(`sale-reports/?from=${startDate.formatted}&to=${endDate.formatted}&today=${today}`)
       .then((response) => {
-        const resData = response.data;
-        setTodayData(resData.today_data);
-        setTopSoldProducts(resData.top_sold_products);
-        setTopCustomers(resData.top_customers);
-        setTopCitiesData(resData.top_cities);
-        setPaymentData(resData.sales_by_payments);
-        setSaleChannels(resData.sale_by_channels);
-        const index = resData.sales_by_payments[0].dates.findIndex((date) => date === today);
-        setTodayIndex(index);
+        try {
+          const resData = response.data;
+          setTodayData(resData.today_data);
+          setTopSoldProducts(resData.top_sold_products);
+          setTopCustomers(resData.top_customers);
+          setTopCitiesData(resData.top_cities);
+          setPaymentData(resData.sales_by_payments);
+          setSaleChannels(resData.sale_by_channels);
+          const index = resData.sales_by_payments[0]?.dates.findIndex((date) => date === today);
+          setTodayIndex(index);
 
-        var labels_ = [];
-        var orderedAmount = [];
-        var receivedAmount = [];
-        var saleCounts = [];
-        var profitAmount = [];
-        resData.total_sales.forEach((res, index) => {
-          labels_.push(res.label);
+          var labels_ = [];
+          var orderedAmount = [];
+          var receivedAmount = [];
+          var saleCounts = [];
+          var profitAmount = [];
+          resData.total_sales.forEach((res, index) => {
+            labels_.push(res.label);
 
-          if (index !== resData.total_sales.length - 1) {
-            res.data.forEach((data) => {
-              if (data.type === 'sale_price') {
-                orderedAmount.push(data.data);
-              }
-              if (data.type === 'received_amounts') {
-                receivedAmount.push(data.data);
-              }
-              if (data.type === 'sale_counts') {
-                saleCounts.push(data.data);
-              }
+            if (index !== resData.total_sales.length - 1) {
+              res.data.forEach((data) => {
+                if (data.type === 'sale_price') {
+                  orderedAmount.push(data.data);
+                }
+                if (data.type === 'received_amounts') {
+                  receivedAmount.push(data.data);
+                }
+                if (data.type === 'sale_counts') {
+                  saleCounts.push(data.data);
+                }
 
-              if (data.type === 'profit_amount') {
-                profitAmount.push(data.data);
-              }
-            });
-          }
-        });
-        setDataLabels(labels_);
+                if (data.type === 'profit_amount') {
+                  profitAmount.push(data.data);
+                }
+              });
+            }
+          });
+          setDataLabels(labels_);
 
-        setSaleData([
-          {
-            name: 'Ordered amount',
-            data: orderedAmount,
-          },
-          {
-            name: 'Received amount',
-            data: receivedAmount,
-          },
-        ]);
-        setNoOfSaleData([
-          {
-            name: 'Number of orders',
-            data: saleCounts,
-          },
-        ]);
-        setProfitData([
-          {
-            name: 'Profit Amount',
-            data: profitAmount,
-          },
-        ]);
+          setSaleData([
+            {
+              name: 'Ordered amount',
+              data: orderedAmount,
+            },
+            {
+              name: 'Received amount',
+              data: receivedAmount,
+            },
+          ]);
+          setNoOfSaleData([
+            {
+              name: 'Number of orders',
+              data: saleCounts,
+            },
+          ]);
+          setProfitData([
+            {
+              name: 'Profit Amount',
+              data: profitAmount,
+            },
+          ]);
 
-        setIsReady(true);
+          setIsReady(true);
+        } catch (e) {
+          console.log('🚀 ~ .then ~ e:', e);
+        }
       })
       .catch(() => {
         setGettingData(false);
@@ -258,7 +262,7 @@ const Dashboard = (props) => {
                 chartData={saleData}
               />
             </Grid>
-            {user?.role?.name === 'OWner' && (
+            {user?.role?.name === 'Owner' && (
               <Grid size={12}>
                 <ProfitSummary
                   title="Profits Summary"
@@ -296,7 +300,7 @@ const Dashboard = (props) => {
                   chartData={topCitiesData}
                 />
               </Stack>
-            </Grid>{' '}
+            </Grid>
           </>
         ) : (
           <DashboardSkeleton />

@@ -87,6 +87,11 @@ const statusTypes = [
     value: 'Terminated',
     color: 'error',
   },
+  {
+    label: 'Archived',
+    value: 'Archived',
+    color: 'error',
+  },
 ];
 
 const TABLE_HEAD = [

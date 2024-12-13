@@ -7,8 +7,8 @@ export const APP_URL = window.location.origin;
 // export const API_URL = process.env.REACT_APP_API_URL || '/api/';
 // export const MEDIA_URL = '';
 
-// export const API_URL = 'http://localhost:8000/api/';
-export const API_URL = 'https://backend.yiusvilla.com/api/';
+export const API_URL = 'http://localhost:8000/api/';
+// export const API_URL = 'https://backend.yiusvilla.com/api/';
 export const MEDIA_URL = '';
 
 export const HEADER = {
