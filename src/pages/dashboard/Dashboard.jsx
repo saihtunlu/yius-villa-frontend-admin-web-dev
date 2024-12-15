@@ -25,6 +25,8 @@ import Iconify from '../../components/common/Iconify';
 import SaleChannels from '../../components/pages/dashboard/SaleChannels';
 import { INITIAL_STORE } from '../../redux/reducer/store';
 import { INITIAL_USER } from '../../components/pages/user/NewUserForm';
+import TopSalesmen from '../../components/pages/dashboard/TopSalesmen';
+import { fCurrency } from '../../utils/formatNumber';
 
 const end = new Date();
 const start = new Date();
@@ -61,6 +63,7 @@ const Dashboard = (props) => {
 
   const [topSoldProducts, setTopSoldProducts] = useState([]);
   const [topCustomers, setTopCustomers] = useState([]);
+  const [topSalesMenData, setTopSalesMenData] = useState([]);
   const [topCitiesData, setTopCitiesData] = useState([]);
   const [noOfSaleData, setNoOfSaleData] = useState([]);
 
@@ -84,6 +87,7 @@ const Dashboard = (props) => {
           setTodayData(resData.today_data);
           setTopSoldProducts(resData.top_sold_products);
           setTopCustomers(resData.top_customers);
+          setTopSalesMenData(resData.top_salesmen);
           setTopCitiesData(resData.top_cities);
           setPaymentData(resData.sales_by_payments);
           setSaleChannels(resData.sale_by_channels);
@@ -199,7 +203,20 @@ const Dashboard = (props) => {
             <Grid size={{ xs: 12, md: 8 }}>
               <Welcome
                 storeName={store.name}
-                caption={`You have made ${todayData.sale_prices ? todayData.sale_prices.toFixed(0) : '0'} MMK total sale (received amount - ${todayData.received_amounts || '0'} MMK)  on ${moment().format('MMM, Do YYYY')}.`}
+                caption={
+                  <Typography>
+                    On {moment().format('MMM Do YYYY')}, you made a total sale of{' '}
+                    <Typography sx={{ fontWeight: 700 }} variant="span">
+                      {todayData.sale_prices ? fCurrency(todayData.sale_prices.toFixed(0)) : '0'}
+                    </Typography>
+                    <br />
+                    (received amount:{' '}
+                    <Typography sx={{ fontWeight: 700 }} variant="span">
+                      {fCurrency(todayData.received_amounts) || '0'}
+                    </Typography>
+                    )
+                  </Typography>
+                }
               />
             </Grid>
             <Grid size={{ xs: 12, md: 4 }}>
@@ -262,33 +279,41 @@ const Dashboard = (props) => {
                 chartData={saleData}
               />
             </Grid>
-            {user?.role?.name === 'Owner' && (
-              <Grid size={12}>
-                <ProfitSummary
-                  title="Profits Summary"
-                  subheader={`Total ${profitData[0].data.reduce((total, value) => {
-                    return total + value;
-                  }, 0)}MMK  from ${moment(startDate.unformatted).format('DD-MM-YYYY')} to ${moment(endDate.unformatted).format('DD-MM-YYYY')}`}
-                  chartLabels={dataLabels}
-                  chartData={profitData}
-                />
-              </Grid>
-            )}
+
             <Grid size={{ xs: 12, md: 8 }}>
-              <TopSoldProducts
-                title="Top Sold Products"
-                subheader={`from ${moment(startDate.unformatted).format('DD-MM-YYYY')} to ${moment(endDate.unformatted).format('DD-MM-YYYY')}`}
-                tableData={topSoldProducts}
-                tableLabels={[
-                  { id: 'Product', label: 'Product' },
-                  { id: 'no.of_sold', label: 'No. Of Sold' },
-                  { id: 'total', label: 'Total' },
-                  { id: 'rank', label: 'Rank' },
-                ]}
-              />
+              <Stack spacing={3}>
+                {user?.role?.name === 'Owner' && (
+                  <ProfitSummary
+                    title="Profits Summary"
+                    subheader={`Total ${profitData[0].data.reduce((total, value) => {
+                      return total + value;
+                    }, 0)}MMK  from ${moment(startDate.unformatted).format('DD-MM-YYYY')} to ${moment(endDate.unformatted).format('DD-MM-YYYY')}`}
+                    chartLabels={dataLabels}
+                    chartData={profitData}
+                  />
+                )}
+                <TopSoldProducts
+                  title="Top Sold Products"
+                  subheader={`from ${moment(startDate.unformatted).format('DD-MM-YYYY')} to ${moment(endDate.unformatted).format('DD-MM-YYYY')}`}
+                  tableData={topSoldProducts}
+                  tableLabels={[
+                    { id: 'Product', label: 'Product' },
+                    { id: 'no.of_sold', label: 'No. Of Sold' },
+                    { id: 'total', label: 'Total' },
+                    { id: 'rank', label: 'Rank' },
+                  ]}
+                />
+              </Stack>
             </Grid>
             <Grid size={{ xs: 12, md: 4 }}>
               <Stack direction={'column'} spacing={3}>
+                {user.role?.name === 'Owner' && (
+                  <TopSalesmen
+                    title="Top Salesmen"
+                    subheader={`from ${moment(startDate.unformatted).format('DD-MM-YYYY')} to ${moment(endDate.unformatted).format('DD-MM-YYYY')}`}
+                    list={topSalesMenData}
+                  />
+                )}
                 <TopCustomers
                   title="Top Customers"
                   subheader={`from ${moment(startDate.unformatted).format('DD-MM-YYYY')} to ${moment(endDate.unformatted).format('DD-MM-YYYY')}`}

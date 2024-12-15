@@ -57,12 +57,12 @@ const sortList = [
     value: '-updated_at',
   },
   {
-    name: 'Customer A–Z',
-    value: 'customer__name',
+    name: 'Name A–Z',
+    value: 'name',
   },
   {
-    name: 'Customer Z–A',
-    value: '-customer__name',
+    name: 'Name Z–A',
+    value: '-name',
   },
 ];
 

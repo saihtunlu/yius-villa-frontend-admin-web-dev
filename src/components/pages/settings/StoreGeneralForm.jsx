@@ -140,7 +140,6 @@ function StoreGeneralForm(props) {
                     sx={{ width: '50%' }}
                     label={'Phone number'}
                     required
-                    type={'number'}
                     value={store.phone}
                     onChange={(event) => {
                       setStore((preState) => {

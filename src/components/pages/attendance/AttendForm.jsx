@@ -14,6 +14,7 @@ import {
   Alert,
   CircularProgress,
   Switch,
+  Button,
 } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 
@@ -52,7 +53,7 @@ const messageData = {
   color: 'warning',
   text: 'Scanning... Please align your QR code with the camera.',
 };
-export default function AttendForm({ type, show = true }) {
+export default function AttendForm({ type }) {
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState('');
   const [text, setText] = useState('');
@@ -113,23 +114,18 @@ export default function AttendForm({ type, show = true }) {
 
   return (
     <>
-      {show && (
-        <Tooltip title={'Attendance ' + type} placement="left">
-          <Fab
-            sx={{
-              position: 'fixed',
-              right: '25px',
-              bottom: '85px',
-              zIndex: '1000000000 !important',
-            }}
-            color="success"
-            size="medium"
-            onClick={handleClickOpen}
-          >
-            <Iconify color="#fff" icon={'solar:calendar-add-bold-duotone'} />
-          </Fab>
-        </Tooltip>
-      )}
+      <Tooltip title={'Attendance ' + type} placement="bottom">
+        <Button
+          sx={{ minWidth: 140 }}
+          color="black"
+          size="medium"
+          variant="outlined"
+          onClick={handleClickOpen}
+          startIcon={<Iconify icon={'solar:calendar-add-bold-duotone'} />}
+        >
+          {type}
+        </Button>
+      </Tooltip>
 
       <Dialog onClose={handleClose} open={open}>
         <DialogTitle variant="subtitle1">Attendance ({type})</DialogTitle>

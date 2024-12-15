@@ -1,18 +1,30 @@
 import { ReactNode } from 'react';
 import { isString } from 'lodash';
 // material
-import { Box, Typography, Link, Stack } from '@mui/material';
+import { Box, Typography, Link, Stack, IconButton } from '@mui/material';
+
 //
 import Breadcrumbs from './Breadcrumbs';
 
-export default function HeaderBreadcrumbs({ links, action, heading, moreLink = '' || [], status, sx, ...other }) {
+export default function HeaderBreadcrumbs({
+  links,
+  action,
+  heading,
+  moreLink = '' || [],
+  status,
+  hideBack = false,
+  sx,
+  ...other
+}) {
   return (
     <Box sx={{ mb: 3, ...sx }}>
       <Box sx={{ display: 'flex', alignItems: 'flex-end' }}>
         <Box sx={{ flexGrow: 1 }}>
-          <Typography variant="h4" gutterBottom>
-            {heading}
-          </Typography>
+          <Stack direction={'row'} spacing={1} alignItems={'center'}>
+            <Typography variant="h4" gutterBottom>
+              {heading}
+            </Typography>
+          </Stack>
           <Stack direction={'row'} alignItems={'center'} spacing={2}>
             <Breadcrumbs links={links} {...other} />
             {status && status.map((item) => item)}

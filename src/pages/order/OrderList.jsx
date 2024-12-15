@@ -183,7 +183,6 @@ const TABLE_HEAD = [
 
 const pageOptions = Array.from({ length: 20 }, (_, index) => index * 10);
 const OrderList = () => {
-  const user = useSelector((state) => state.user);
   const { enqueueSnackbar } = useSnackbar();
   const theme = useTheme();
   const navigate = useNavigate();
@@ -336,9 +335,6 @@ const OrderList = () => {
     });
   };
 
-  const totalSale = orders.results.reduce((acc, item) => acc + item.total, 0);
-  const totalProfit = orders.results.reduce((acc, item) => acc + item.profit_amount, 0);
-
   return (
     <Page title={'Order List Page'} roleBased role={{ name: 'Order', type: 'read' }}>
       <Grid container spacing={2.5}>
@@ -477,18 +473,6 @@ const OrderList = () => {
                         }
                       }}
                     />
-
-                    {user.role?.name === 'Owner' && (
-                      <Stack direction={'column'} spacing={0.5}>
-                        <Typography variant="body2" color="primary">
-                          Total Sale: {fCurrency(totalSale)}
-                        </Typography>
-
-                        <Typography variant="body2" color="success">
-                          Total Profit: {fCurrency(totalProfit)}
-                        </Typography>
-                      </Stack>
-                    )}
                   </Stack>
                 }
                 numSelected={selected.length}
@@ -582,18 +566,7 @@ const OrderList = () => {
                                 </Stack>
                               </TableCell>
 
-                              <TableCell align="left">
-                                {fCurrency(row.total)}
-
-                                {user.role?.name === 'Owner' && (
-                                  <>
-                                    <br />
-                                    <Typography color="success" variant="caption">
-                                      {fCurrency(row.profit_amount)}
-                                    </Typography>
-                                  </>
-                                )}
-                              </TableCell>
+                              <TableCell align="left">{fCurrency(row.total)}</TableCell>
                               <TableCell align="left">
                                 <Stack direction={'row'} spacing={1} alignItems={'center'}>
                                   <Label

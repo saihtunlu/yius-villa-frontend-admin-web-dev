@@ -110,14 +110,6 @@ const sortList = [
     name: 'Updated (newest first)',
     value: '-updated_at',
   },
-  {
-    name: 'Customer A–Z',
-    value: 'customer__name',
-  },
-  {
-    name: 'Customer Z–A',
-    value: '-customer__name',
-  },
 ];
 
 const TABLE_HEAD = [

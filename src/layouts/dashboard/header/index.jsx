@@ -1,6 +1,9 @@
 // @mui
 import { styled } from '@mui/material/styles';
 import { Box, Stack, AppBar, Toolbar } from '@mui/material';
+import moment from 'moment';
+import { useSelector } from 'react-redux';
+
 // hooks
 import useOffSetTop from '../../../hooks/useOffSetTop';
 import useResponsive from '../../../hooks/useResponsive';
@@ -18,6 +21,7 @@ import Iconify from '../../../components/common/Iconify';
 import LetterLogo from '../../../components/common/LetterLogo';
 import LanguagePopover from './LanguagePopover';
 import NotificationsPopover from './NotificationsPopover';
+import AttendForm from '../../../components/pages/attendance/AttendForm';
 
 const RootStyle = styled(AppBar, {
   shouldForwardProp: (prop) => prop !== 'isCollapse' && prop !== 'isOffset' && prop !== 'verticalLayout',
@@ -50,6 +54,7 @@ const RootStyle = styled(AppBar, {
 export default function DashboardHeader({ onOpenSidebar, isCollapse = false, verticalLayout = false }) {
   const isOffset = useOffSetTop(HEADER.DASHBOARD_DESKTOP_HEIGHT) && !verticalLayout;
 
+  const store = useSelector((state) => state.auth?.user?.store);
   const isDesktop = useResponsive('up', 'lg');
 
   return (
@@ -72,7 +77,15 @@ export default function DashboardHeader({ onOpenSidebar, isCollapse = false, ver
         <Box sx={{ flexGrow: 1 }} />
 
         <Stack direction="row" alignItems="center" spacing={{ xs: 0.5, sm: 1.5 }}>
-          <LanguagePopover />
+          {moment().isBefore(moment(store?.settings?.latest_check_in_time, 'HH:mm:ss')) && (
+            <AttendForm type="Check-In" />
+          )}
+
+          {moment().isAfter(moment(store?.settings?.start_check_out_time, 'HH:mm:ss')) && (
+            <AttendForm type="Check-Out" />
+          )}
+
+          {/* <LanguagePopover /> */}
           {/* <NotificationsPopover /> */}
           <AccountPopover />
         </Stack>

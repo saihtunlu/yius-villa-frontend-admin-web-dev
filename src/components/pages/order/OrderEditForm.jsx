@@ -336,14 +336,15 @@ function OrderEditForm(props) {
               }}
             />
 
-            <CustomerDetail
-              initialOrder={order}
-              onSaveCustomer={(order) => {
-                setOrder(order);
-
-                setInitialData(JSON.stringify(order));
-              }}
-            />
+            {order.type !== 'In-store Sale' && (
+              <CustomerDetail
+                initialOrder={order}
+                onSaveCustomer={(order) => {
+                  setOrder(order);
+                  setInitialData(JSON.stringify(order));
+                }}
+              />
+            )}
 
             <OrderSummary
               extraFees={order.extra_fees}

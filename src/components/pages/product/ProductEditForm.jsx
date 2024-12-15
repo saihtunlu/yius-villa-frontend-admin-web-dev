@@ -160,7 +160,7 @@ function ProductEditForm(props) {
                   })
                 }
               />
-              <div>
+              {/* <div>
                 <LabelStyle>Description</LabelStyle>
                 <QuillEditor
                   simple
@@ -172,7 +172,7 @@ function ProductEditForm(props) {
                     });
                   }}
                 />
-              </div>
+              </div> */}
 
               <FormControlLabel
                 control={<Switch checked={product.has_variant} inputProps={{ 'aria-label': 'controlled' }} />}

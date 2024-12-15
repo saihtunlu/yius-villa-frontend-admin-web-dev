@@ -297,7 +297,9 @@ function OrderNewForm(props) {
         <Grid size={{ xs: 12, md: 4 }}>
           <Stack spacing={2.5}>
             <GeneralDetail initialOrder={order} onSave={(order) => setOrder(order)} />
-            <CustomerDetail initialOrder={order} onSaveCustomer={(order) => setOrder(order)} />
+            {order.type !== 'In-store Sale' && (
+              <CustomerDetail initialOrder={order} onSaveCustomer={(order) => setOrder(order)} />
+            )}
 
             <OrderSummary
               profitAmount={order.profit_amount}

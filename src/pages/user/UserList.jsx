@@ -14,8 +14,6 @@ import {
   TableRow,
   TableHead,
   useTheme,
-  IconButton,
-  Tooltip,
   Stack,
   Typography,
   FormControl,
@@ -25,14 +23,7 @@ import {
 } from '@mui/material';
 import { Link as RouterLink, useNavigate, useNavigation } from 'react-router-dom';
 import { connect } from 'react-redux';
-import plusFill from '@iconify/icons-eva/plus-fill';
-import archiveFill from '@iconify/icons-eva/archive-fill';
-import edit2Fill from '@iconify/icons-eva/edit-2-fill';
-import starFill from '@iconify/icons-eva/star-fill';
-import checkmarkCircleFill from '@iconify/icons-eva/checkmark-circle-fill';
 import { useSnackbar } from 'notistack';
-import { capitalCase } from 'change-case';
-import { Icon } from '@iconify/react';
 import moment from 'moment';
 
 import Page from '../../components/common/Page';
@@ -309,7 +300,7 @@ const UserList = () => {
                                   />
                                   <Stack sx={{ ml: 1 }}>
                                     <Typography variant="subtitle3" line={1}>
-                                      {row.first_name + '_ ' + row.last_name || '-'}
+                                      {row.first_name + ' ' + row.last_name || '-'}
                                     </Typography>
                                     <Typography variant="caption" color={'text.secondary'} line={1}>
                                       {row.email || '-'}

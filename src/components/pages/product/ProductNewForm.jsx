@@ -66,7 +66,7 @@ export const INITIAL_PRODUCT = {
   length: '',
   width: '',
   width_unit: '',
-  has_variant: false,
+  has_variant: true,
   options: [
     {
       name: '',
@@ -218,7 +218,7 @@ function ProductNewForm(props) {
                 }
               />
 
-              <div>
+              {/* <div>
                 <LabelStyle>Description</LabelStyle>
                 <QuillEditor
                   simple
@@ -230,7 +230,7 @@ function ProductNewForm(props) {
                     })
                   }
                 />
-              </div>
+              </div> */}
 
               <FormControlLabel
                 control={
@@ -539,214 +539,125 @@ function ProductNewForm(props) {
                 </Stack>
               </Card>
 
-              <Card sx={{ p: 2.5 }}>
-                <Stack spacing={2.5}>
-                  <Typography variant="subtitle1">Variations</Typography>
-                  {variations.map((variant, index) => {
-                    return (
-                      <Accordion
-                        key={index + '-product-variation'}
-                        sx={{
-                          backgroundColor: (theme) => theme.palette.background.neutral + ' !important',
-                          borderRadius: (theme) => theme.shape.borderRadius + 'px',
-
-                          '&::before': {
-                            display: 'none !important',
-                          },
-                          '&.Mui-expanded': {
-                            boxShadow: 'none',
-                            marginBottom: 0,
-                            marginTop: '24px !important',
-                          },
-                        }}
-                      >
-                        <AccordionSummary
+              {variations.length !== 0 && (
+                <Card sx={{ p: 2.5 }}>
+                  <Stack spacing={2.5}>
+                    <Typography variant="subtitle1">Variations</Typography>
+                    {variations.map((variant, index) => {
+                      return (
+                        <Accordion
+                          key={index + '-product-variation'}
                           sx={{
-                            px: 2.5,
+                            backgroundColor: (theme) => theme.palette.background.neutral + ' !important',
+                            borderRadius: (theme) => theme.shape.borderRadius + 'px',
+
+                            '&::before': {
+                              display: 'none !important',
+                            },
+                            '&.Mui-expanded': {
+                              boxShadow: 'none',
+                              marginBottom: 0,
+                              marginTop: '24px !important',
+                            },
                           }}
-                          expandIcon={
-                            <IconButton>
-                              <Icon icon={arrowIosDownwardFill} />
-                            </IconButton>
-                          }
-                          aria-controls="panel1a-content"
-                          id="panel1a-header"
                         >
-                          <Stack
-                            direction={'row'}
-                            sx={{ width: '100%' }}
-                            alignItems={'center'}
-                            justifyContent={'space-between'}
+                          <AccordionSummary
+                            sx={{
+                              px: 2.5,
+                            }}
+                            expandIcon={
+                              <IconButton>
+                                <Icon icon={arrowIosDownwardFill} />
+                              </IconButton>
+                            }
+                            aria-controls="panel1a-content"
+                            id="panel1a-header"
                           >
-                            <Typography>{variant.name}</Typography>
-
-                            <IconButton
-                              color={'error'}
-                              onClick={() => {
-                                setVariations((preState) => {
-                                  var newState = JSON.parse(JSON.stringify(preState));
-                                  newState.splice(index, 1);
-                                  return newState;
-                                });
-                              }}
+                            <Stack
+                              direction={'row'}
+                              sx={{ width: '100%' }}
+                              alignItems={'center'}
+                              justifyContent={'space-between'}
                             >
-                              <Iconify icon={'solar:trash-bin-minimalistic-bold-duotone'} />
-                            </IconButton>
-                          </Stack>
-                        </AccordionSummary>
+                              <Typography>{variant.name}</Typography>
 
-                        <AccordionDetails
-                          sx={{
-                            p: 2.5,
-                          }}
-                        >
-                          <Stack spacing={2.5}>
-                            <Media
-                              initialSelected={[{ image: variant.image }]}
-                              single
-                              caption=""
-                              onChange={(data) => {
-                                setVariations((preState) => {
-                                  var newState = JSON.parse(JSON.stringify(preState));
-                                  newState[index].image = data[0]?.full_url;
-                                  return newState;
-                                });
-                              }}
-                            />
-                            <Stack spacing={2.5} direction={{ xs: 'column', sm: 'row' }}>
-                              <TextField
-                                fullWidth
-                                label="Name"
-                                value={variant.name}
-                                onChange={(event) =>
+                              <IconButton
+                                color={'error'}
+                                onClick={() => {
                                   setVariations((preState) => {
                                     var newState = JSON.parse(JSON.stringify(preState));
-                                    newState[index].name = event.target.value;
+                                    newState.splice(index, 1);
                                     return newState;
-                                  })
-                                }
-                              />
-
-                              <TextField
-                                fullWidth
-                                label="Barcode"
-                                value={variant.barcode}
-                                onChange={(event) =>
-                                  setVariations((preState) => {
-                                    var newState = JSON.parse(JSON.stringify(preState));
-                                    newState[index].barcode = event.target.value;
-                                    return newState;
-                                  })
-                                }
-                              />
+                                  });
+                                }}
+                              >
+                                <Iconify icon={'solar:trash-bin-minimalistic-bold-duotone'} />
+                              </IconButton>
                             </Stack>
+                          </AccordionSummary>
 
-                            <Stack spacing={2.5} direction={{ xs: 'column', sm: 'row' }}>
-                              <TextField
-                                fullWidth
-                                placeholder="0"
-                                label="Regular Price"
-                                value={variant.regular_price}
-                                onChange={(event) =>
+                          <AccordionDetails
+                            sx={{
+                              p: 2.5,
+                            }}
+                          >
+                            <Stack spacing={2.5}>
+                              <Media
+                                initialSelected={[{ image: variant.image }]}
+                                single
+                                caption=""
+                                onChange={(data) => {
                                   setVariations((preState) => {
                                     var newState = JSON.parse(JSON.stringify(preState));
-                                    const { margin, profit } = calcMarginAndProfit(
-                                      newState[index].cost_per_item,
-                                      event.target.value,
-                                      newState[index].sale_price
-                                    );
-
-                                    newState[index].regular_price = event.target.value;
-                                    newState[index].margin = margin;
-                                    newState[index].profit = profit;
+                                    newState[index].image = data[0]?.full_url;
                                     return newState;
-                                  })
-                                }
-                                slotProps={{
-                                  input: {
-                                    ...(store.settings.suffix_currency
-                                      ? {
-                                          endAdornment: (
-                                            <InputAdornment position="start">
-                                              {store.settings.suffix_currency}
-                                            </InputAdornment>
-                                          ),
-                                        }
-                                      : {
-                                          startAdornment: (
-                                            <InputAdornment position="start">
-                                              {store.settings.prefix_currency}
-                                            </InputAdornment>
-                                          ),
-                                        }),
-                                    type: 'number',
-                                    inputMode: 'numeric',
-                                    inputProps: { min: 0 },
-                                  },
+                                  });
                                 }}
                               />
+                              <Stack spacing={2.5} direction={{ xs: 'column', sm: 'row' }}>
+                                <TextField
+                                  fullWidth
+                                  label="Name"
+                                  value={variant.name}
+                                  onChange={(event) =>
+                                    setVariations((preState) => {
+                                      var newState = JSON.parse(JSON.stringify(preState));
+                                      newState[index].name = event.target.value;
+                                      return newState;
+                                    })
+                                  }
+                                />
 
-                              <TextField
-                                fullWidth
-                                placeholder="0"
-                                label="Sale Price"
-                                value={variant.sale_price}
-                                onChange={(event) =>
-                                  setVariations((preState) => {
-                                    var newState = JSON.parse(JSON.stringify(preState));
+                                <TextField
+                                  fullWidth
+                                  label="Barcode"
+                                  value={variant.barcode}
+                                  onChange={(event) =>
+                                    setVariations((preState) => {
+                                      var newState = JSON.parse(JSON.stringify(preState));
+                                      newState[index].barcode = event.target.value;
+                                      return newState;
+                                    })
+                                  }
+                                />
+                              </Stack>
 
-                                    const { margin, profit } = calcMarginAndProfit(
-                                      newState[index].cost_per_item,
-                                      newState[index].regular_price,
-                                      event.target.value
-                                    );
-                                    newState[index].sale_price = event.target.value;
-                                    newState[index].margin = margin;
-                                    newState[index].profit = profit;
-                                    return newState;
-                                  })
-                                }
-                                slotProps={{
-                                  input: {
-                                    ...(store.settings.suffix_currency
-                                      ? {
-                                          endAdornment: (
-                                            <InputAdornment position="start">
-                                              {store.settings.suffix_currency}
-                                            </InputAdornment>
-                                          ),
-                                        }
-                                      : {
-                                          startAdornment: (
-                                            <InputAdornment position="start">
-                                              {store.settings.prefix_currency}
-                                            </InputAdornment>
-                                          ),
-                                        }),
-                                    type: 'number',
-                                    inputMode: 'numeric',
-                                    inputProps: { min: 0 },
-                                  },
-                                }}
-                              />
-                            </Stack>
-                            {user?.role?.name === 'Owner' && (
                               <Stack spacing={2.5} direction={{ xs: 'column', sm: 'row' }}>
                                 <TextField
                                   fullWidth
                                   placeholder="0"
-                                  label="Cost per item"
-                                  sx={{ width: 'calc(50% - 12px)' }}
-                                  value={variant.cost_per_item}
+                                  label="Regular Price"
+                                  value={variant.regular_price}
                                   onChange={(event) =>
                                     setVariations((preState) => {
                                       var newState = JSON.parse(JSON.stringify(preState));
                                       const { margin, profit } = calcMarginAndProfit(
+                                        newState[index].cost_per_item,
                                         event.target.value,
-                                        newState[index].regular_price,
                                         newState[index].sale_price
                                       );
-                                      newState[index].cost_per_item = event.target.value;
+
+                                      newState[index].regular_price = event.target.value;
                                       newState[index].margin = margin;
                                       newState[index].profit = profit;
                                       return newState;
@@ -775,69 +686,160 @@ function ProductNewForm(props) {
                                     },
                                   }}
                                 />
-                                <Stack
-                                  direction={'row'}
-                                  justifyContent="space-around"
-                                  alignItems={'center'}
-                                  sx={{ width: '48%' }}
-                                >
-                                  <Box>
-                                    <LabelStyle>Margin</LabelStyle>
-                                    <Typography textAlign={'center'} variant="body1">
-                                      {variant.margin || '-'}%
-                                    </Typography>
-                                  </Box>
-                                  <Box>
-                                    <LabelStyle>Profit</LabelStyle>
-                                    <Typography textAlign={'center'} variant="body1">
-                                      {fCurrency(variant.profit || '') || '-'}
-                                    </Typography>
-                                  </Box>
+
+                                <TextField
+                                  fullWidth
+                                  placeholder="0"
+                                  label="Sale Price"
+                                  value={variant.sale_price}
+                                  onChange={(event) =>
+                                    setVariations((preState) => {
+                                      var newState = JSON.parse(JSON.stringify(preState));
+
+                                      const { margin, profit } = calcMarginAndProfit(
+                                        newState[index].cost_per_item,
+                                        newState[index].regular_price,
+                                        event.target.value
+                                      );
+                                      newState[index].sale_price = event.target.value;
+                                      newState[index].margin = margin;
+                                      newState[index].profit = profit;
+                                      return newState;
+                                    })
+                                  }
+                                  slotProps={{
+                                    input: {
+                                      ...(store.settings.suffix_currency
+                                        ? {
+                                            endAdornment: (
+                                              <InputAdornment position="start">
+                                                {store.settings.suffix_currency}
+                                              </InputAdornment>
+                                            ),
+                                          }
+                                        : {
+                                            startAdornment: (
+                                              <InputAdornment position="start">
+                                                {store.settings.prefix_currency}
+                                              </InputAdornment>
+                                            ),
+                                          }),
+                                      type: 'number',
+                                      inputMode: 'numeric',
+                                      inputProps: { min: 0 },
+                                    },
+                                  }}
+                                />
+                              </Stack>
+                              {user?.role?.name === 'Owner' && (
+                                <Stack spacing={2.5} direction={{ xs: 'column', sm: 'row' }}>
+                                  <TextField
+                                    fullWidth
+                                    placeholder="0"
+                                    label="Cost per item"
+                                    sx={{ width: 'calc(50% - 12px)' }}
+                                    value={variant.cost_per_item}
+                                    onChange={(event) =>
+                                      setVariations((preState) => {
+                                        var newState = JSON.parse(JSON.stringify(preState));
+                                        const { margin, profit } = calcMarginAndProfit(
+                                          event.target.value,
+                                          newState[index].regular_price,
+                                          newState[index].sale_price
+                                        );
+                                        newState[index].cost_per_item = event.target.value;
+                                        newState[index].margin = margin;
+                                        newState[index].profit = profit;
+                                        return newState;
+                                      })
+                                    }
+                                    slotProps={{
+                                      input: {
+                                        ...(store.settings.suffix_currency
+                                          ? {
+                                              endAdornment: (
+                                                <InputAdornment position="start">
+                                                  {store.settings.suffix_currency}
+                                                </InputAdornment>
+                                              ),
+                                            }
+                                          : {
+                                              startAdornment: (
+                                                <InputAdornment position="start">
+                                                  {store.settings.prefix_currency}
+                                                </InputAdornment>
+                                              ),
+                                            }),
+                                        type: 'number',
+                                        inputMode: 'numeric',
+                                        inputProps: { min: 0 },
+                                      },
+                                    }}
+                                  />
+                                  <Stack
+                                    direction={'row'}
+                                    justifyContent="space-around"
+                                    alignItems={'center'}
+                                    sx={{ width: '48%' }}
+                                  >
+                                    <Box>
+                                      <LabelStyle>Margin</LabelStyle>
+                                      <Typography textAlign={'center'} variant="body1">
+                                        {variant.margin || '-'}%
+                                      </Typography>
+                                    </Box>
+                                    <Box>
+                                      <LabelStyle>Profit</LabelStyle>
+                                      <Typography textAlign={'center'} variant="body1">
+                                        {fCurrency(variant.profit || '') || '-'}
+                                      </Typography>
+                                    </Box>
+                                  </Stack>
                                 </Stack>
-                              </Stack>
-                            )}
+                              )}
 
-                            {product.is_tracking && product.has_variant && variant.inventory !== null && (
-                              <Stack spacing={2.5} direction={{ xs: 'column', sm: 'row' }}>
-                                <TextField
-                                  fullWidth
-                                  placeholder="0"
-                                  sx={{ width: '48%' }}
-                                  label="Number of stock"
-                                  value={variant.number_of_stock}
-                                  onChange={(event) =>
-                                    setVariations((preState) => {
-                                      var newState = JSON.parse(JSON.stringify(preState));
-                                      newState[index].number_of_stock = event.target.value;
-                                      return newState;
-                                    })
-                                  }
-                                />
-                                <TextField
-                                  fullWidth
-                                  placeholder="0"
-                                  sx={{ width: '48%' }}
-                                  label="Number of threshold"
-                                  value={variant.threshold_stock}
-                                  onChange={(event) =>
-                                    setVariations((preState) => {
-                                      var newState = JSON.parse(JSON.stringify(preState));
-                                      newState[index].threshold_stock = event.target.value;
-                                      return newState;
-                                    })
-                                  }
-                                />
-                              </Stack>
-                            )}
+                              {product.is_tracking && product.has_variant && variant.inventory !== null && (
+                                <Stack spacing={2.5} direction={{ xs: 'column', sm: 'row' }}>
+                                  <TextField
+                                    fullWidth
+                                    placeholder="0"
+                                    sx={{ width: '48%' }}
+                                    label="Number of stock"
+                                    value={variant.number_of_stock}
+                                    onChange={(event) =>
+                                      setVariations((preState) => {
+                                        var newState = JSON.parse(JSON.stringify(preState));
+                                        newState[index].number_of_stock = event.target.value;
+                                        return newState;
+                                      })
+                                    }
+                                  />
+                                  <TextField
+                                    fullWidth
+                                    placeholder="0"
+                                    sx={{ width: '48%' }}
+                                    label="Number of threshold"
+                                    value={variant.threshold_stock}
+                                    onChange={(event) =>
+                                      setVariations((preState) => {
+                                        var newState = JSON.parse(JSON.stringify(preState));
+                                        newState[index].threshold_stock = event.target.value;
+                                        return newState;
+                                      })
+                                    }
+                                  />
+                                </Stack>
+                              )}
 
-                            {/* <Stack direction={'row'} justifyContent="flex-end"></Stack> */}
-                          </Stack>
-                        </AccordionDetails>
-                      </Accordion>
-                    );
-                  })}
-                </Stack>
-              </Card>
+                              {/* <Stack direction={'row'} justifyContent="flex-end"></Stack> */}
+                            </Stack>
+                          </AccordionDetails>
+                        </Accordion>
+                      );
+                    })}
+                  </Stack>
+                </Card>
+              )}
             </Stack>
           </Collapse>
         </Grid2>

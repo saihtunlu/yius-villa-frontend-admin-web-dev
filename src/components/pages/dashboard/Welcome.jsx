@@ -33,8 +33,7 @@ export default function Welcome(props) {
         }}
       >
         <Typography gutterBottom variant="h4">
-          Welcome back,
-          <br /> {storeName}!
+          Welcome, {storeName}!
         </Typography>
 
         <Typography variant="body2" sx={{ pb: { xs: 3, xl: 5 }, maxWidth: 480, mx: 'auto' }}>

@@ -261,11 +261,6 @@ const EditOrder = () => {
     <Page title={"Edit Order Page | Yiu's Villa"} roleBased role={{ name: 'Order', type: 'update' }}>
       <Grid container spacing={2.5}>
         <Grid size={12}>
-          {status.pending_task && (
-            <Alert severity="warning" sx={{ mb: 2.5 }}>
-              {status.pending_task}
-            </Alert>
-          )}
           <HeaderBreadcrumbs
             heading={'Edit an order'}
             links={[
@@ -408,6 +403,11 @@ const EditOrder = () => {
                   ]
             }
           />
+          {status.pending_task && (
+            <Alert severity="warning" sx={{ mb: 2.5 }}>
+              {status.pending_task}
+            </Alert>
+          )}
           {isReady ? (
             <OrderEditForm
               initialOrder={order}

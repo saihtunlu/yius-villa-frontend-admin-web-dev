@@ -4,7 +4,6 @@ import {
   Grid2 as Grid,
   Box,
   Card,
-  Checkbox,
   Table,
   TableBody,
   TableCell,
@@ -14,20 +13,17 @@ import {
   TableHead,
   useTheme,
   IconButton,
-  Tooltip,
   Stack,
   Button,
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { connect } from 'react-redux';
-import edit2Fill from '@iconify/icons-eva/edit-2-fill';
 import starFill from '@iconify/icons-eva/star-fill';
 import checkmarkCircleFill from '@iconify/icons-eva/checkmark-circle-fill';
 import { useSnackbar } from 'notistack';
 import { Icon } from '@iconify/react';
 import moment from 'moment';
 import { DatePicker } from '@mui/x-date-pickers';
-import plusFill from '@iconify/icons-eva/plus-fill';
 
 import Page from '../../components/common/Page';
 import HeaderBreadcrumbs from '../../components/common/HeaderBreadcrumbs';
@@ -58,14 +54,6 @@ const sortList = [
   {
     name: 'Updated (newest first)',
     value: '-updated_at',
-  },
-  {
-    name: 'Customer A–Z',
-    value: 'customer__name',
-  },
-  {
-    name: 'Customer Z–A',
-    value: '-customer__name',
   },
 ];
 

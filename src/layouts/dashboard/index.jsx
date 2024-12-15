@@ -31,25 +31,6 @@ import AttendForm from '../../components/pages/attendance/AttendForm';
 
 // ----------------------------------------------------------------------
 
-// const MainStyle = styled('main', {
-//   shouldForwardProp: (prop) => prop !== 'collapseClick',
-// })(({ collapseClick, theme }) => ({
-//   flexGrow: 1,
-//   paddingTop: HEADER.MOBILE_HEIGHT + 24,
-//   paddingBottom: HEADER.MOBILE_HEIGHT + 24,
-//   [theme.breakpoints.up('lg')]: {
-//     paddingTop: HEADER.DASHBOARD_DESKTOP_HEIGHT + 24,
-//     paddingBottom: HEADER.DASHBOARD_DESKTOP_HEIGHT + 24,
-//     width: `calc(100% - ${NAVBAR.DASHBOARD_WIDTH}px)`,
-//     transition: theme.transitions.create('margin-left', {
-//       duration: theme.transitions.duration.shorter,
-//     }),
-//     ...(collapseClick && {
-//       marginLeft: NAVBAR.DASHBOARD_COLLAPSE_WIDTH,
-//     }),
-//   },
-// }));
-
 const MainStyle = styled('main', {
   shouldForwardProp: (prop) => prop !== 'collapseClick',
 })(({ collapseClick, theme }) => ({
@@ -164,12 +145,6 @@ export default function DashboardLayout() {
             </Fab>
           )}
         </AnimatePresence>
-
-        <AttendForm show={moment().isAfter(moment(store.settings.latest_check_in_time, 'HH:mm:ss'))} type="Check-In" />
-        <AttendForm
-          show={moment().isBefore(moment(store.settings.start_check_out_time, 'HH:mm:ss'))}
-          type="Check-Out"
-        />
       </>
     );
   }
@@ -229,9 +204,6 @@ export default function DashboardLayout() {
       </AnimatePresence>
 
       {/* </Zoom> */}
-
-      <AttendForm show={moment().isBefore(moment(store?.settings?.latest_check_in_time, 'HH:mm:ss'))} type="Check-In" />
-      <AttendForm show={moment().isAfter(moment(store?.settings?.start_check_out_time, 'HH:mm:ss'))} type="Check-Out" />
     </Box>
   );
 }
