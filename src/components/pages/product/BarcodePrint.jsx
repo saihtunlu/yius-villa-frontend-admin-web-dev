@@ -20,8 +20,8 @@ export default function BarcodePrint({ value, onChangeValue, price }) {
         ref={contentRef}
         width={'100%'}
       >
-        <Barcode value={value} width={1} height={60} fontSize={10} />
-        <Typography align="center" fontSize={12}>
+        <Barcode value={value} width={1} height={55} fontSize={10} />
+        <Typography align="center" fontSize={10} sx={{ margin: 0, fontWeight: 700 }}>
           {price}Ks
         </Typography>
       </Stack>
