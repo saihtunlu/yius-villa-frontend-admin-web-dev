@@ -66,6 +66,7 @@
     "camelcase":0,
     "no-return-assign":0,
     "one-var":0,
+    "arrow-body-style":0,
     "prefer-destructuring": [
       1,
       {

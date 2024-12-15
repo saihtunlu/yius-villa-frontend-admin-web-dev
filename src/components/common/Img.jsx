@@ -47,6 +47,7 @@ export default function Img({
           }
         }}
         sx={{
+          cursor: 'pointer',
           width: 1,
           lineHeight: 0,
           display: 'block',

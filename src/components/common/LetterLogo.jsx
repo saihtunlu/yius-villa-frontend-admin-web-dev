@@ -23,7 +23,7 @@ export default function LetterLogo({ disabledLink = false, width, height, sx }) 
 
   return (
     // eslint-disable-next-line react/jsx-no-target-blank
-    <a href="https://salespoint.com.mm/" target="_blank">
+    <a href="https://admin.yiusvilla.com/" target="_blank">
       {logo}
     </a>
   );

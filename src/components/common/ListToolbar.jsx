@@ -41,8 +41,9 @@ export default function ProductListToolbar({
   input,
 }) {
   const theme = useTheme();
-  const smUp = useResponsive('up', 'sm');
   const [anchorEl, setAnchorEl] = useState(null);
+  const [filterName_, setFilterName_] = useState(filterName);
+
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -55,7 +56,16 @@ export default function ProductListToolbar({
   };
 
   const isLight = theme.palette.mode === 'light';
-  const selectedSortLabel = sortList ? sortList.filter((item) => item.value === selectedSorting)[0] : [];
+
+  const handleKeyDown = (e) => {
+    console.log('🚀 ~ handleKeyDown ~ e:', e);
+    // Check if Enter key (key code 13 or 'Enter')
+    if (e.keyCode === 13) {
+      // Trigger search or apply filter when Enter is pressed
+      onFilterName(filterName_); // Call the function to apply the filter
+    }
+  };
+
   return (
     <RootStyle
       sx={{
@@ -74,9 +84,10 @@ export default function ProductListToolbar({
       ) : (
         <Stack direction={'row'} spacing={2.5}>
           <TextField
-            value={filterName}
+            value={filterName_}
             sx={{ minWidth: '280px' }}
-            onChange={(e) => onFilterName(e.target.value)}
+            onChange={(e) => setFilterName_(e.target.value)}
+            onKeyDown={handleKeyDown}
             placeholder="Search ..."
             slotProps={{
               input: {

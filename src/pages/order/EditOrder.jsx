@@ -21,7 +21,7 @@ import Iconify from '../../components/common/Iconify';
 import SelectMenu from '../../components/common/SelectMenu';
 import MenuPopover from '../../components/common/MenuPopover';
 
-const statusTitles = ['Active', 'Cancelled', 'Completed', 'Refunded'];
+const statusTitles = ['Active', 'Payment added', 'Payment verified', 'Parcel packaged', 'Cancelled', 'Refunded'];
 
 const EditOrder = () => {
   const contentRef = useRef(null);
@@ -30,7 +30,6 @@ const EditOrder = () => {
   const [printContent, setPrintContent] = useState('');
   const [exporting, setExporting] = useState(false);
   const [printingSaleSlip, setPrintingSaleSlip] = useState(false);
-  const [voucherContent, setVoucherContent] = useState('');
   const [order, setOrder] = useState(INITIAL_ORDER);
   const [isReady, setIsReady] = useState(false);
   const [updatingStatus, setUpdatingStatus] = useState(false);
@@ -125,6 +124,12 @@ const EditOrder = () => {
       .then(({ data }) => {
         enqueueSnackbar('Update status success', { variant: 'success' });
         setOrder(data);
+        setStatus({
+          status: data.status,
+          payment_status: data.payment_status,
+          is_fulfilled: data.is_fulfilled,
+          pending_task: data.pending_task,
+        });
         setUpdatingStatus(false);
       })
       .catch(() => {
@@ -274,7 +279,7 @@ const EditOrder = () => {
             action={
               <Stack direction={'row'} spacing={2}>
                 <SelectMenu
-                  value={order.status}
+                  value={status.status}
                   loading={updatingStatus}
                   actions={statusTitles}
                   color="black"
@@ -355,11 +360,7 @@ const EditOrder = () => {
                     <Label
                       key="order-status"
                       variant={theme.palette.mode === 'light' ? 'ghost' : 'filled'}
-                      color={
-                        (status.status === 'Archived' && 'error') ||
-                        (status.status === 'Draft' && 'warning') ||
-                        'success'
-                      }
+                      color={'primary'}
                     >
                       {sentenceCase(status.status)}
                     </Label>,

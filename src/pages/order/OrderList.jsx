@@ -28,7 +28,7 @@ import {
   Badge,
 } from '@mui/material';
 import { Link as RouterLink, createSearchParams, useNavigate, useNavigation } from 'react-router-dom';
-import { connect } from 'react-redux';
+import { connect, useSelector } from 'react-redux';
 import plusFill from '@iconify/icons-eva/plus-fill';
 import archiveFill from '@iconify/icons-eva/archive-fill';
 import edit2Fill from '@iconify/icons-eva/edit-2-fill';
@@ -58,6 +58,7 @@ import ListSkeleton from '../../components/skeleton/ListSkeleton';
 import Avatar from '../../components/common/Avatar';
 import TextMaxLine from '../../components/common/TextMaxLine';
 import Iconify from '../../components/common/Iconify';
+
 // import Iconify from '../../components/common/Iconify';
 
 const status = [
@@ -150,51 +151,51 @@ const TABLE_HEAD = [
   { id: 'seller', label: 'Seller', alignRight: false },
 
   { id: 'total_price', label: 'Total', alignRight: false },
-  { id: 'payment', label: 'Payment', alignRight: false },
   { id: 'status', label: 'Status', alignRight: false },
-  { id: 'fulfill', label: 'Fulfillment', alignRight: false },
-
   { id: '' },
 ];
-const ACTIONS = [
-  {
-    label: 'Archive orders',
-    value: 'Archived',
-    icon: <Iconify icon={'solar:archive-bold-duotone'} />,
-    color: 'warning',
-  },
-  {
-    label: 'Set as Active',
-    value: 'Active',
-    icon: <Iconify icon={'solar:star-bold'} />,
-    color: 'success',
-  },
-  {
-    label: 'Set as Completed',
-    value: 'Completed',
-    icon: <Iconify icon={'solar:check-circle-bold'} />,
-    color: 'info',
-  },
-  {
-    label: 'Set as Canceled',
-    value: 'Canceled',
-    icon: <Iconify icon={'solar:bag-cross-bold'} />,
-    color: 'error',
-  },
-];
+// const ACTIONS = [
+//   {
+//     label: 'Archive orders',
+//     value: 'Archived',
+//     icon: <Iconify icon={'solar:archive-bold-duotone'} />,
+//     color: 'warning',
+//   },
+//   {
+//     label: 'Set as Active',
+//     value: 'Active',
+//     icon: <Iconify icon={'solar:star-bold'} />,
+//     color: 'success',
+//   },
+//   {
+//     label: 'Set as Completed',
+//     value: 'Completed',
+//     icon: <Iconify icon={'solar:check-circle-bold'} />,
+//     color: 'info',
+//   },
+//   {
+//     label: 'Set as Canceled',
+//     value: 'Canceled',
+//     icon: <Iconify icon={'solar:bag-cross-bold'} />,
+//     color: 'error',
+//   },
+// ];
 
+const pageOptions = Array.from({ length: 20 }, (_, index) => index * 10);
 const OrderList = () => {
+  const user = useSelector((state) => state.user);
   const { enqueueSnackbar } = useSnackbar();
   const theme = useTheme();
   const navigate = useNavigate();
   const query = useQuery();
   const statusParam = query.get('status') || '';
   const queryParam = query.get('query') || '';
-  const pageSizeParam = query.get('page_size') || 5;
+  const pageSizeParam = query.get('page_size') || 10;
   const fromDateParam = query.get('from_date') || '';
   const toDateParam = query.get('to_date') || '';
   const orderByParam = query.get('order_by') || '-created_at';
   const pendingStatusParam = query.get('pending_status') || '';
+  const pageParam = query.get('page') || 0;
 
   const [filters, setFilters] = useState({
     query: queryParam,
@@ -203,7 +204,7 @@ const OrderList = () => {
     status: statusParam,
     dates: [fromDateParam, toDateParam],
     pendingStatus: pendingStatusParam,
-    page: 0,
+    page: pageParam,
   });
   const [pendingData, setPendingData] = useState(pendingStatusData);
   const [selected, setSelected] = useState([]);
@@ -229,6 +230,7 @@ const OrderList = () => {
 
   useEffect(() => {
     var params = '';
+
     if (filters.dates[0] && filters.dates[1]) {
       params = `?pending_status=${filters.pendingStatus}&status=${filters.status}&query=${filters.query}&page_size=${filters.pageSize}&from_date=${filters.dates[0]}&to_date=${filters.dates[1]}&page=${filters.page}&order_by=${filters.order_by}`;
     } else {
@@ -325,7 +327,7 @@ const OrderList = () => {
       toDate = '';
     }
 
-    var url = `sales/?pending_status=${filters.pendingStatus}&page=${filters.page + 1}&page_size=${
+    var url = `sales/?pending_status=${filters.pendingStatus}&page=${parseInt(filters.page, 10) + 1}&page_size=${
       filters.pageSize
     }&query=${filters.query}&status=${filters.status}&delivery=&from_date=${fromDate}&to_date=${toDate}&order_by=${filters.order_by}`;
     axios.get(url).then(({ data }) => {
@@ -333,6 +335,9 @@ const OrderList = () => {
       setIsReady(true);
     });
   };
+
+  const totalSale = orders.results.reduce((acc, item) => acc + item.total, 0);
+  const totalProfit = orders.results.reduce((acc, item) => acc + item.profit_amount, 0);
 
   return (
     <Page title={'Order List Page'} roleBased role={{ name: 'Order', type: 'read' }}>
@@ -412,7 +417,7 @@ const OrderList = () => {
 
               <ListToolbar
                 input={
-                  <Stack spacing={2.5} direction={'row'}>
+                  <Stack spacing={2.5} direction={'row'} alignItems={'center'}>
                     <FormControl sx={{ width: '180px' }}>
                       <InputLabel id="status-filter">Status</InputLabel>
                       <Select
@@ -472,6 +477,18 @@ const OrderList = () => {
                         }
                       }}
                     />
+
+                    {user.role?.name === 'Owner' && (
+                      <Stack direction={'column'} spacing={0.5}>
+                        <Typography variant="body2" color="primary">
+                          Total Sale: {fCurrency(totalSale)}
+                        </Typography>
+
+                        <Typography variant="body2" color="success">
+                          Total Profit: {fCurrency(totalProfit)}
+                        </Typography>
+                      </Stack>
+                    )}
                   </Stack>
                 }
                 numSelected={selected.length}
@@ -488,30 +505,12 @@ const OrderList = () => {
                     return { ...preState, query: value, page: 0 };
                   });
                 }}
-                actions={ACTIONS.map((action, index) => (
-                  <Tooltip title={action.label}>
-                    <IconButton disabled={updatingStatus} onClick={() => handleUpdateStatus(action.value)}>
-                      {action.icon}
-                    </IconButton>
-                  </Tooltip>
-                ))}
               />
               <Box sx={{ overflowX: 'auto' }}>
                 <TableContainer sx={{ minWidth: 800 }}>
                   <Table>
                     <TableHead>
                       <TableRow>
-                        <TableCell padding="checkbox">
-                          <Checkbox
-                            color="primary"
-                            indeterminate={selected.length > 0 && selected.length < orders.results.length}
-                            checked={orders.results.length > 0 && selected.length === orders.results.length}
-                            onChange={handleSelectAllClick}
-                            inputProps={{
-                              'aria-label': 'select all desserts',
-                            }}
-                          />
-                        </TableCell>
                         {TABLE_HEAD.map((headCell) => (
                           <TableCell key={headCell.id} align={headCell.alignRight ? 'right' : 'left'}>
                             {headCell.label}
@@ -532,20 +531,8 @@ const OrderList = () => {
                     ) : (
                       <TableBody>
                         {orders.results.map((row, index) => {
-                          const isItemSelected = isSelected(row.id);
                           return (
-                            <TableRow
-                              hover
-                              role="checkbox"
-                              aria-checked={isItemSelected}
-                              tabIndex={-1}
-                              key={`${row.id}`}
-                              selected={isItemSelected}
-                            >
-                              <TableCell padding="checkbox">
-                                <Checkbox checked={isItemSelected} onClick={() => handleSelect(row.id)} />
-                              </TableCell>
-
+                            <TableRow hover key={`${row.id}`}>
                               <TableCell
                                 sx={{ cursor: 'pointer' }}
                                 onClick={() => navigate(PATH_DASHBOARD.order.edit(row.id))}
@@ -564,7 +551,7 @@ const OrderList = () => {
                                   {row.type}
                                 </Label>
                               </TableCell>
-                              <TableCell align="left" sx={{ maxWidth: 150, minWidth: 100 }}>
+                              <TableCell align="left" sx={{ maxWidth: 200, minWidth: 150 }}>
                                 <TextMaxLine line={1} variant="body2">
                                   {row.note || '-'}
                                 </TextMaxLine>
@@ -595,40 +582,45 @@ const OrderList = () => {
                                 </Stack>
                               </TableCell>
 
-                              <TableCell align="left">{fCurrency(row.total)}</TableCell>
                               <TableCell align="left">
-                                <Label
-                                  variant={theme.palette.mode === 'light' ? 'ghost' : 'filled'}
-                                  color={
-                                    (row.payment_status === 'Unpaid' && 'error') ||
-                                    (row.payment_status === 'Partially Paid' && 'warning') ||
-                                    'success'
-                                  }
-                                >
-                                  {sentenceCase(row.payment_status)}
-                                </Label>
-                              </TableCell>
+                                {fCurrency(row.total)}
 
-                              <TableCell align="left">
-                                {ACTIONS.filter((data) => data.value === row.status)[0] ? (
-                                  <Label
-                                    variant={theme.palette.mode === 'light' ? 'ghost' : 'filled'}
-                                    color={ACTIONS.filter((data) => data.value === row.status)[0].color}
-                                  >
-                                    {ACTIONS.filter((data) => data.value === row.status)[0].value}
-                                  </Label>
-                                ) : (
-                                  '-'
+                                {user.role?.name === 'Owner' && (
+                                  <>
+                                    <br />
+                                    <Typography color="success" variant="caption">
+                                      {fCurrency(row.profit_amount)}
+                                    </Typography>
+                                  </>
                                 )}
                               </TableCell>
-
                               <TableCell align="left">
-                                <Label
-                                  variant={theme.palette.mode === 'light' ? 'ghost' : 'filled'}
-                                  color={(!row.is_fulfilled && 'warning') || 'success'}
-                                >
-                                  {row.is_fulfilled ? 'Done' : 'Not yet'}
-                                </Label>
+                                <Stack direction={'row'} spacing={1} alignItems={'center'}>
+                                  <Label
+                                    variant={theme.palette.mode === 'light' ? 'ghost' : 'filled'}
+                                    color={
+                                      (row.payment_status === 'Unpaid' && 'error') ||
+                                      (row.payment_status === 'Partially Paid' && 'warning') ||
+                                      'success'
+                                    }
+                                  >
+                                    {sentenceCase(row.payment_status)}
+                                  </Label>
+
+                                  <Label
+                                    variant={theme.palette.mode === 'light' ? 'ghost' : 'filled'}
+                                    color={'primary'}
+                                  >
+                                    {row.status}
+                                  </Label>
+
+                                  <Label
+                                    variant={theme.palette.mode === 'light' ? 'ghost' : 'filled'}
+                                    color={(!row.is_fulfilled && 'warning') || 'success'}
+                                  >
+                                    {row.is_fulfilled ? 'Fulfilled' : 'Not Fulfilled'}
+                                  </Label>
+                                </Stack>
                               </TableCell>
 
                               <TableCell align="center">
@@ -668,11 +660,11 @@ const OrderList = () => {
               </Box>
 
               <TablePagination
-                rowsPerPageOptions={[1, 5, 10, 25, 30]}
+                rowsPerPageOptions={pageOptions}
                 component="div"
                 count={orders.total_pages * parseInt(filters.pageSize, 10)}
                 rowsPerPage={parseInt(filters.pageSize, 10)}
-                page={filters.page}
+                page={parseInt(filters.page, 10)}
                 onPageChange={(event, value) => {
                   setFilters((preState) => {
                     return { ...preState, page: value };

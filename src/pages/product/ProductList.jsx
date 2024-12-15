@@ -109,6 +109,8 @@ const ProductList = (props) => {
   const queryParam = query.get('query') || '';
   const pageSizeParam = query.get('page_size') || 5;
   const orderByParam = query.get('order_by') || '-created_at';
+  const pageParam = query.get('page') || 0;
+
   // const mainCategoryParam = query.get('main_category') || '';
   // const subCategory = query.get('sub_category') || '';
   const [filters, setFilters] = useState({
@@ -116,7 +118,7 @@ const ProductList = (props) => {
     order_by: orderByParam,
     pageSize: pageSizeParam,
     status: statusParam,
-    page: 0,
+    page: pageParam,
     // main_category: subCategory,
     // sub_category: mainCategoryParam,
   });
@@ -178,7 +180,7 @@ const ProductList = (props) => {
 
   // actions
   const getProducts = () => {
-    var link = `product/list/?page=${filters.page + 1}&status=${filters.status}&query=${filters.query}&page_size=${filters.pageSize}&order_by=${filters.order_by}`;
+    var link = `product/list/?page=${parseInt(filters.page, 10) + 1}&status=${filters.status}&query=${filters.query}&page_size=${filters.pageSize}&order_by=${filters.order_by}`;
     axios.get(link).then(({ data }) => {
       setProducts(data);
       setIsReady(true);
@@ -597,7 +599,7 @@ const ProductList = (props) => {
                 component="div"
                 count={products.total_pages * parseInt(filters.pageSize, 10)}
                 rowsPerPage={parseInt(filters.pageSize, 10)}
-                page={filters.page}
+                page={parseInt(filters.page, 10)}
                 onPageChange={(event, value) => {
                   setFilters((preState) => {
                     return { ...preState, page: value };
