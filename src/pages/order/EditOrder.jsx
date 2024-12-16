@@ -189,8 +189,8 @@ const EditOrder = () => {
     const images = Array.from(node.getElementsByTagName('img'));
     const loadPromises = images.map(async (img) => {
       if (img.src) {
-        img.crossOrigin = 'Anonymous';
-        img.src += '?not-from-cache-please';
+        img.crossOrigin = 'anonymous';
+        img.src += '?nocache=12345';
         return new Promise((resolve) => {
           img.onload = resolve;
           img.onerror = () => {

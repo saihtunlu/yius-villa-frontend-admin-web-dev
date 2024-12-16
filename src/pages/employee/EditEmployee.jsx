@@ -157,10 +157,11 @@ const EditEmployee = (props) => {
             spacing={1}
             alignItems={'center'}
           >
-            <img alt="" src={store.logo} style={{ width: '115px' }} />
+            <img alt="" crossOrigin="anonymous" src={store.logo + '?nocache=12345'} style={{ width: '115px' }} />
             <img
               alt=""
-              src={employee.photo}
+              crossOrigin="anonymous"
+              src={employee.photo + '?nocache=31423'}
               style={{
                 height: '110px',
                 width: '110px',
