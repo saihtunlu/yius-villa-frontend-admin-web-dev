@@ -190,7 +190,7 @@ const EditOrder = () => {
     const loadPromises = images.map(async (img) => {
       if (img.src) {
         img.crossOrigin = 'anonymous';
-        img.src += '?nocache=12345';
+        img.src += '?nocache=' + order.id;
         return new Promise((resolve) => {
           img.onload = resolve;
           img.onerror = () => {

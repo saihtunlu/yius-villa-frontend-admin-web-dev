@@ -157,16 +157,17 @@ const EditEmployee = (props) => {
             spacing={1}
             alignItems={'center'}
           >
-            <img alt="" crossOrigin="anonymous" src={store.logo + '?nocache=12345'} style={{ width: '115px' }} />
+            <img alt="" crossOrigin="anonymous" src={store.logo + '?nocache='} style={{ width: '115px' }} />
             <img
               alt=""
               crossOrigin="anonymous"
-              src={employee.photo + '?nocache=31423'}
+              src={employee.photo + '?nocache=' + employee.em_id}
               style={{
                 height: '110px',
                 width: '110px',
                 borderRadius: '100%',
                 border: '5px solid #fff ',
+                objectFit: 'cover',
                 zIndex: 1,
               }}
             />
