@@ -161,6 +161,7 @@ const Dashboard = (props) => {
       <Grid container spacing={3}>
         <Grid size={12}>
           <HeaderBreadcrumbs
+            hideBack
             heading="Dashboard"
             links={[{ name: t('demo.title'), href: PATH_DASHBOARD.root }]}
             action={

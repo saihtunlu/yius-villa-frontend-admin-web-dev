@@ -231,6 +231,7 @@ const AttendanceSheet = () => {
       <Grid container spacing={2.5}>
         <Grid size={12}>
           <HeaderBreadcrumbs
+            hideBack
             heading="Attendance Sheet"
             links={[
               { name: 'Dashboard', href: PATH_DASHBOARD.root },

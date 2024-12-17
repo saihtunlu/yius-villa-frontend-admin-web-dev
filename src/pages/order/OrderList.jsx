@@ -340,6 +340,7 @@ const OrderList = () => {
       <Grid container spacing={2.5}>
         <Grid size={12}>
           <HeaderBreadcrumbs
+            hideBack
             heading="Order List"
             links={[
               { name: 'Dashboard', href: PATH_DASHBOARD.root },

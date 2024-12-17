@@ -211,6 +211,7 @@ const EmployeeList = () => {
       <Grid container spacing={2.5}>
         <Grid size={12}>
           <HeaderBreadcrumbs
+            hideBack
             heading="Employee List"
             links={[
               { name: 'Dashboard', href: PATH_DASHBOARD.root },

@@ -11,6 +11,7 @@ const AttendanceSetting = () => {
       <Grid container spacing={2.5}>
         <Grid size={12}>
           <HeaderBreadcrumbs
+            hideBack
             heading={'Settings'}
             links={[
               { name: 'Dashboard', href: PATH_DASHBOARD.root },

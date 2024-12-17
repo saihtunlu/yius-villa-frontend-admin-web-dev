@@ -226,6 +226,7 @@ const FinanceList = () => {
       <Grid container spacing={2.5}>
         <Grid size={12}>
           <HeaderBreadcrumbs
+            hideBack
             heading="Finance"
             links={[
               { name: 'Dashboard', href: PATH_DASHBOARD.root },

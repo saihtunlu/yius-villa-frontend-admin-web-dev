@@ -85,6 +85,7 @@ const StoreSettings = (props) => {
         <Grid size={12}>
           <HeaderBreadcrumbs
             heading={'Settings'}
+            hideBack
             links={[
               { name: 'Dashboard', href: PATH_DASHBOARD.root },
               {

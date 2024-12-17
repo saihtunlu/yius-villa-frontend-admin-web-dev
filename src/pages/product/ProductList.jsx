@@ -245,6 +245,7 @@ const ProductList = (props) => {
       <Grid2 container spacing={2.5} maxWidth={'xl'}>
         <Grid2 size={12}>
           <HeaderBreadcrumbs
+            hideBack
             heading="Product List"
             links={[
               { name: 'Dashboard', href: PATH_DASHBOARD.root },

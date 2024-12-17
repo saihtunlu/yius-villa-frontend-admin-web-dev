@@ -162,6 +162,7 @@ export default function Calendar() {
         <Grid size={12}>
           <HeaderBreadcrumbs
             heading="Calendar"
+            hideBack
             links={[{ name: 'Dashboard', href: PATH_DASHBOARD.root }, { name: 'Calendar' }]}
             action={
               <Button

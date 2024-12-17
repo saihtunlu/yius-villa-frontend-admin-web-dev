@@ -161,6 +161,7 @@ const UserList = () => {
         <Grid size={12}>
           <HeaderBreadcrumbs
             heading="User List"
+            hideBack
             links={[
               { name: 'Dashboard', href: PATH_DASHBOARD.root },
               {

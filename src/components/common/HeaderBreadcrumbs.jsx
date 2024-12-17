@@ -2,9 +2,11 @@ import { ReactNode } from 'react';
 import { isString } from 'lodash';
 // material
 import { Box, Typography, Link, Stack, IconButton } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 
 //
 import Breadcrumbs from './Breadcrumbs';
+import Iconify from './Iconify';
 
 export default function HeaderBreadcrumbs({
   links,
@@ -16,11 +18,31 @@ export default function HeaderBreadcrumbs({
   sx,
   ...other
 }) {
+  const navigate = useNavigate();
   return (
     <Box sx={{ mb: 3, ...sx }}>
       <Box sx={{ display: 'flex', alignItems: 'flex-end' }}>
         <Box sx={{ flexGrow: 1 }}>
           <Stack direction={'row'} spacing={1} alignItems={'center'}>
+            {!hideBack && (
+              <IconButton
+                onClick={() => {
+                  navigate(-1);
+                }}
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24">
+                  <path
+                    fill="none"
+                    stroke="currentColor"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={1.5}
+                    d="m15 5l-6 7l6 7"
+                  />
+                </svg>
+              </IconButton>
+            )}
+
             <Typography variant="h4" gutterBottom>
               {heading}
             </Typography>
