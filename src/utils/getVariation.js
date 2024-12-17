@@ -21,7 +21,7 @@ export const getVariations = (value, product) => {
       name: '',
       regular_price: product.regular_price,
       sale_price: product.sale_price,
-      barcode: barcodeGenerator('YV362V'),
+      barcode: barcodeGenerator('YV'),
       is_tracking: true,
       selectedOptions,
       cost_per_item: product.cost_per_item,
