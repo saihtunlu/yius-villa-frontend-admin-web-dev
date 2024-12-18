@@ -135,7 +135,7 @@ const AttendanceList = () => {
   const query = useQuery();
   const statusParam = query.get('status') || '';
   const queryParam = query.get('query') || '';
-  const pageSizeParam = query.get('page_size') || 5;
+  const pageSizeParam = query.get('page_size') || 10;
   const orderByParam = query.get('order_by') || '-created_at';
   const fromDateParam = query.get('from_date') || '';
   const toDateParam = query.get('to_date') || '';

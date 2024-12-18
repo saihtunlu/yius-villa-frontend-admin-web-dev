@@ -148,7 +148,7 @@ const TABLE_HEAD = [
   { id: 'note', label: 'Note', alignRight: false },
   { id: 'customer', label: 'Customer', alignRight: false },
 
-  { id: 'seller', label: 'Seller', alignRight: false },
+  { id: 'seller', label: 'Salesmen', alignRight: false },
 
   { id: 'total_price', label: 'Total', alignRight: false },
   { id: 'status', label: 'Status', alignRight: false },
@@ -181,7 +181,7 @@ const TABLE_HEAD = [
 //   },
 // ];
 
-const pageOptions = Array.from({ length: 20 }, (_, index) => index * 10);
+const pageOptions = Array.from({ length: 10 }, (_, index) => (1 + index) * 15);
 const OrderList = () => {
   const { enqueueSnackbar } = useSnackbar();
   const theme = useTheme();
@@ -189,7 +189,7 @@ const OrderList = () => {
   const query = useQuery();
   const statusParam = query.get('status') || '';
   const queryParam = query.get('query') || '';
-  const pageSizeParam = query.get('page_size') || 10;
+  const pageSizeParam = query.get('page_size') || 15;
   const fromDateParam = query.get('from_date') || '';
   const toDateParam = query.get('to_date') || '';
   const orderByParam = query.get('order_by') || '-created_at';
@@ -537,37 +537,41 @@ const OrderList = () => {
                                 </Label>
                               </TableCell>
                               <TableCell align="left" sx={{ maxWidth: 200, minWidth: 150 }}>
-                                <TextMaxLine line={1} variant="body2">
+                                <TextMaxLine line={1} sx={{ ml: '5px' }} variant="body2">
                                   {row.note || '-'}
                                 </TextMaxLine>
                               </TableCell>
 
-                              <TableCell align="left" sx={{ maxWidth: 180, minWidth: 100 }}>
+                              <TableCell align="left" sx={{ maxWidth: 200, minWidth: 150 }}>
                                 <Stack direction={'row'} alignItems={'center'}>
                                   <Avatar
-                                    sx={{ width: 25, height: 25, mr: '5px' }}
+                                    sx={{ width: 25, height: 25 }}
                                     user={{
                                       first_name: row.customer?.name,
                                     }}
                                   />
-                                  <TextMaxLine variant="body2" line={1}>
+                                  <TextMaxLine variant="body2" sx={{ ml: '5px' }} line={1}>
                                     {row.customer?.name || '-'}
                                   </TextMaxLine>
                                 </Stack>
                               </TableCell>
-                              <TableCell align="left" sx={{ minWidth: 120 }}>
+                              <TableCell align="left" sx={{ minWidth: 150 }}>
                                 <Stack direction={'row'} alignItems={'center'}>
                                   <Avatar
-                                    sx={{ width: 25, height: 25, mr: '5px' }}
+                                    sx={{ width: 25, height: 25 }}
                                     user={{
                                       first_name: row.exported_by,
                                     }}
                                   />
-                                  <Typography variant="body2">{row.exported_by || '-'}</Typography>
+                                  <TextMaxLine variant="body2" sx={{ ml: '5px' }} line={1}>
+                                    {row.exported_by || '-'}
+                                  </TextMaxLine>
                                 </Stack>
                               </TableCell>
 
-                              <TableCell align="left">{fCurrency(row.total)}</TableCell>
+                              <TableCell align="left" sx={{ fontWeight: 600 }}>
+                                {fCurrency(row.total)}
+                              </TableCell>
                               <TableCell align="left">
                                 <Stack direction={'row'} spacing={1} alignItems={'center'}>
                                   <Label

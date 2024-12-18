@@ -64,7 +64,9 @@ const FulfillProducts = (props) => {
     setOpen(false);
   };
 
-  const showBtn = pendingTask.includes('inspection');
+  // const showBtn = pendingTask.includes('inspection');
+  const showBtn = !pendingTask.includes('addition');
+
   return (
     <div>
       {showBtn && (

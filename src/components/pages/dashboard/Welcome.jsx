@@ -36,10 +36,8 @@ export default function Welcome(props) {
           Welcome, {storeName}!
         </Typography>
 
-        <Typography variant="body2" sx={{ pb: { xs: 3, xl: 5 }, maxWidth: 480, mx: 'auto' }}>
-          {caption}
-        </Typography>
-        <Button to={PATH_DASHBOARD.order.create} variant="contained" component={RouterLink}>
+        {caption}
+        <Button to={PATH_DASHBOARD.order.create} variant="contained" sx={{ mt: 2.5 }} component={RouterLink}>
           Add new order
         </Button>
       </CardContent>
