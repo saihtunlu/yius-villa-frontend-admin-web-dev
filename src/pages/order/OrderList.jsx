@@ -184,6 +184,8 @@ const TABLE_HEAD = [
 const pageOptions = Array.from({ length: 10 }, (_, index) => (1 + index) * 15);
 const OrderList = () => {
   const { enqueueSnackbar } = useSnackbar();
+  const user = useSelector((state) => state.auth?.user);
+
   const theme = useTheme();
   const navigate = useNavigate();
   const query = useQuery();
@@ -571,6 +573,12 @@ const OrderList = () => {
 
                               <TableCell align="left" sx={{ fontWeight: 600 }}>
                                 {fCurrency(row.total)}
+                                <br />
+                                {user?.role?.name === 'Owner' && (
+                                  <Typography color="success" component={'span'} variant="caption">
+                                    {fCurrency(row.profit_amount)}
+                                  </Typography>
+                                )}
                               </TableCell>
                               <TableCell align="left">
                                 <Stack direction={'row'} spacing={1} alignItems={'center'}>
