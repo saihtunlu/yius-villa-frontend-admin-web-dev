@@ -114,12 +114,15 @@ function ProductEditForm(props) {
     setProduct((prevState) => ({ ...prevState, profit, margin }));
   }, [product.sale_price, product.regular_price, product.cost_per_item]);
 
-  // Price Calculation Logic
   const calcMarginAndProfit = (cost_per_item, regular_price, sale_price) => {
-    if (cost_per_item && (sale_price > 0 || regular_price)) {
+    cost_per_item = Number(cost_per_item);
+    regular_price = Number(regular_price);
+    sale_price = Number(sale_price);
+
+    if (cost_per_item && (sale_price > 0 || regular_price > 0)) {
       const price = sale_price > 0 ? sale_price : regular_price;
       const profit = price - cost_per_item;
-      const margin = ((profit / price) * 100).toFixed(2);
+      const margin = ((profit / cost_per_item) * 100).toFixed(2);
       return { profit, margin };
     }
     return { profit: null, margin: null };

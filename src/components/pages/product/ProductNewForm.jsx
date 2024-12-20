@@ -166,20 +166,17 @@ function ProductNewForm(props) {
   };
 
   const calcMarginAndProfit = (cost_per_item, regular_price, sale_price) => {
-    var profit = null;
-    var margin = null;
+    cost_per_item = Number(cost_per_item);
+    regular_price = Number(regular_price);
+    sale_price = Number(sale_price);
 
-    if (sale_price > 0 && cost_per_item) {
-      profit = sale_price - cost_per_item;
-      margin = ((profit / sale_price) * 100).toFixed(2);
-    } else if (regular_price && cost_per_item) {
-      profit = parseInt(regular_price, 10) - parseInt(cost_per_item, 10);
-      margin = ((profit / parseInt(regular_price, 10)) * 100).toFixed(2);
-    } else {
-      margin = null;
-      profit = null;
+    if (cost_per_item && (sale_price > 0 || regular_price > 0)) {
+      const price = sale_price > 0 ? sale_price : regular_price;
+      const profit = price - cost_per_item;
+      const margin = ((profit / cost_per_item) * 100).toFixed(2);
+      return { profit, margin };
     }
-    return { margin, profit };
+    return { profit: null, margin: null };
   };
 
   return (
