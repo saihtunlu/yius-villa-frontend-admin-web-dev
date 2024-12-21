@@ -311,25 +311,11 @@ const AddProduct = (props) => {
                             }
                             disablePadding
                           >
-                            <ListItemButton
-                              sx={{ p: 1.5 }}
-                              role={undefined}
-                              onClick={() => {
-                                setSearchResult((preState) => {
-                                  var newState = JSON.parse(JSON.stringify(preState));
-                                  if (!product.isSelected) {
-                                    newState[index].isSelected = true;
-                                  } else {
-                                    newState[index].isSelected = false;
-                                  }
-                                  return [...newState];
-                                });
-                              }}
-                              dense
-                            >
+                            <ListItemButton sx={{ p: 1.5 }} role={undefined} dense>
                               <ListItemAvatar>
                                 <Img
                                   alt={product.name}
+                                  lightbox
                                   src={
                                     product.is_main_product ? product.images[0]?.image || product.image : product.image
                                   }
@@ -342,6 +328,17 @@ const AddProduct = (props) => {
                                 />
                               </ListItemAvatar>
                               <ListItemText
+                                onClick={() => {
+                                  setSearchResult((preState) => {
+                                    var newState = JSON.parse(JSON.stringify(preState));
+                                    if (!product.isSelected) {
+                                      newState[index].isSelected = true;
+                                    } else {
+                                      newState[index].isSelected = false;
+                                    }
+                                    return [...newState];
+                                  });
+                                }}
                                 id={labelId}
                                 primary={
                                   <Typography variant="subtitle2">

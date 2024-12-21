@@ -81,6 +81,7 @@ export default function CheckoutProductList({ products, onDelete, onIncreaseQuan
                     <Img
                       alt="product image"
                       src={image}
+                      lightbox
                       sx={{
                         width: 55,
                         height: 55,

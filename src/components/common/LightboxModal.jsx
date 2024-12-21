@@ -99,15 +99,7 @@ function LightboxModalStyles() {
   );
 }
 
-
-
-export default function LightboxModal({
-  images,
-  photoIndex,
-  setPhotoIndex,
-  isOpen,
-  ...other
-}) {
+export default function LightboxModal({ images, photoIndex, setPhotoIndex, isOpen, ...other }) {
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = 'hidden';
@@ -116,9 +108,7 @@ export default function LightboxModal({
     }
   }, [isOpen]);
 
-  const showIndex = (
-    <Typography variant="subtitle2">{`${photoIndex + 1} / ${images.length}`}</Typography>
-  );
+  const showIndex = <Typography variant="subtitle2">{`${photoIndex + 1} / ${images.length}`}</Typography>;
 
   const toolbarButtons = [showIndex];
 
@@ -132,18 +122,21 @@ export default function LightboxModal({
     <>
       <LightboxModalStyles />
 
-      {isOpen && (
-        <Lightbox
-          animationDuration={160}
-          nextSrc={images[(photoIndex + 1) % images.length]}
-          prevSrc={images[(photoIndex + images.length - 1) % images.length]}
-          onMovePrevRequest={() => setPhotoIndex((photoIndex + images.length - 1) % images.length)}
-          onMoveNextRequest={() => setPhotoIndex((photoIndex + 1) % images.length)}
-          toolbarButtons={toolbarButtons}
-          reactModalStyle={customStyles}
-          {...other}
-        />
-      )}
+      {isOpen &&
+        (images.length > 1 ? (
+          <Lightbox
+            animationDuration={160}
+            nextSrc={images[(photoIndex + 1) % images.length]}
+            prevSrc={images[(photoIndex + images.length - 1) % images.length]}
+            onMovePrevRequest={() => setPhotoIndex((photoIndex + images.length - 1) % images.length)}
+            onMoveNextRequest={() => setPhotoIndex((photoIndex + 1) % images.length)}
+            toolbarButtons={toolbarButtons}
+            reactModalStyle={customStyles}
+            {...other}
+          />
+        ) : (
+          <Lightbox animationDuration={160} toolbarButtons={toolbarButtons} reactModalStyle={customStyles} {...other} />
+        ))}
     </>
   );
 }
