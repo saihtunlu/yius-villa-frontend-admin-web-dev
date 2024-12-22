@@ -45,6 +45,7 @@ function OrderEditForm(props) {
     onScan.attachTo(document, {
       onScan: handleScan, // Triggered when a scan is detected
       reactToPaste: true, // Treat pasted text as a scan
+      ignoreIfFocusOn: ['input', 'textarea'],
     });
 
     return () => {
