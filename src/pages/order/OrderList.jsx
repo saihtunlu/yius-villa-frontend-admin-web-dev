@@ -110,7 +110,7 @@ const pendingStatusData = [
   },
   {
     name: 'Checking and Packaging Products',
-    value: 'Pending the inspection of products and preparation for delivery.',
+    value: 'unfulfilled',
     color: 'error',
   },
 ];
@@ -219,7 +219,6 @@ const OrderList = () => {
     next: 1,
   });
 
-  const isSelected = (id) => selected.indexOf(id) !== -1;
   const isProductNotFound = orders.results.length === 0;
 
   // effects
@@ -241,31 +240,6 @@ const OrderList = () => {
     return () => {};
   }, [filters]);
 
-  // handlers
-  const handleSelectAllClick = (event) => {
-    if (event.target.checked) {
-      const newSelected = orders.results.map((n) => n.id);
-      setSelected(newSelected);
-      return;
-    }
-    setSelected([]);
-  };
-  const handleSelect = (id) => {
-    const selectedIndex = selected.indexOf(id);
-    var newSelected = [];
-
-    if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, id);
-    } else if (selectedIndex === 0) {
-      newSelected = newSelected.concat(selected.slice(1));
-    } else if (selectedIndex === selected.length - 1) {
-      newSelected = newSelected.concat(selected.slice(0, -1));
-    } else if (selectedIndex > 0) {
-      newSelected = newSelected.concat(selected.slice(0, selectedIndex), selected.slice(selectedIndex + 1));
-    }
-
-    setSelected(newSelected);
-  };
   const handleUpdateStatus = (status, id) => {
     setUpdatingStatus(true);
     var data = [];
@@ -312,7 +286,7 @@ const OrderList = () => {
         }
         data1.push(data2);
       });
-
+      data1[3].count = data[0].to_fulfill;
       setPendingData(data1);
     });
   };
@@ -398,7 +372,7 @@ const OrderList = () => {
                               <Label
                                 color={item.color}
                                 sx={{
-                                  borderRadius: '100%',
+                                  borderRadius: '30px',
                                 }}
                                 variant="filled"
                               >
