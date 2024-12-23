@@ -280,8 +280,19 @@ const AttendanceSheet = () => {
                   <Table>
                     <TableHead>
                       <TableRow>
-                        {tableHead.map((headCell) => (
-                          <TableCell key={headCell.id} align={headCell.date ? 'center' : 'left'}>
+                        {tableHead.map((headCell, index) => (
+                          <TableCell
+                            key={headCell.id}
+                            sx={
+                              index === 0 && {
+                                position: 'sticky',
+                                left: 0,
+                                zIndex: 1,
+                                minWidth: 220,
+                              }
+                            }
+                            align={headCell.date ? 'center' : 'left'}
+                          >
                             {headCell.label} <br />
                             <Typography variant="caption" sx={{ fontWeight: '600' }}>
                               {headCell.date}
@@ -306,7 +317,16 @@ const AttendanceSheet = () => {
                           const isItemSelected = isSelected(row.id);
                           return (
                             <TableRow hover aria-checked={isItemSelected} key={`${row.id}+${index}`}>
-                              <TableCell sx={{ minWidth: 220 }} align="left">
+                              <TableCell
+                                align="left"
+                                sx={{
+                                  position: 'sticky',
+                                  left: 0,
+                                  zIndex: 1,
+                                  minWidth: 220,
+                                  backgroundColor: theme.palette.background.paper,
+                                }}
+                              >
                                 <Stack direction={'row'} alignItems={'center'}>
                                   <Avatar
                                     sx={{ width: 40, height: 40 }}
