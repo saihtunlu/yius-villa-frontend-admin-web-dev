@@ -13,9 +13,36 @@ export default function Avatar({
   ...other
 }) {
   const theme = useTheme();
-  // const randomNumber = Math.floor(Math.random() * 21) + 1;
-  // const defaultAvatar = `/assets/avatar/avatar-${randomNumber}.webp`;
-  const defaultAvatar = `/assets/avatar/avatar-11.webp`;
+
+  const avatars = [
+    'avatar-1.webp',
+    'avatar-2.webp',
+    'avatar-3.webp',
+    'avatar-4.webp',
+    'avatar-5.webp',
+    'avatar-6.webp',
+    'avatar-7.webp',
+    'avatar-8.webp',
+    'avatar-9.webp',
+    'avatar-10.webp',
+    'avatar-11.webp',
+    'avatar-12.webp',
+    'avatar-13.webp',
+    'avatar-14.webp',
+    'avatar-15.webp',
+    'avatar-16.webp',
+    'avatar-17.webp',
+    'avatar-18.webp',
+    'avatar-19.webp',
+    'avatar-20.webp',
+    'avatar-21.webp',
+  ];
+
+  // Get the current day of the year, cycle it into the array range (0-20)
+  const currentDay = new Date().getDate(); // Get day of the month (1 to 31)
+  const avatarIndex = currentDay % avatars.length; // Use modulus to ensure it always selects a valid index
+
+  const defaultAvatar = `/assets/avatar/${avatars[avatarIndex]}`;
 
   if (multiple) {
     return (
