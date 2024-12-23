@@ -22,6 +22,7 @@ const FulfillProducts = (props) => {
   const { onChange, initialProducts, sid, pendingTask } = props;
   const [products, setProducts] = useState([]);
   const [open, setOpen] = useState(false);
+  const [updateAll, setUpdateAll] = useState(false);
   const [updating, setUpdating] = useState(false);
   const descriptionElementRef = useRef(null);
 
@@ -39,7 +40,6 @@ const FulfillProducts = (props) => {
   }, [initialProducts]);
 
   const handleUpdateFulfillment = () => {
-    setUpdating(true);
     const payload = {
       sid,
       products,
@@ -47,9 +47,11 @@ const FulfillProducts = (props) => {
     axios
       .put('sale/fulfill/', { data: payload })
       .then(({ data }) => {
-        setOpen(false);
         setUpdating(false);
         onChange(data);
+        setUpdateAll(false);
+
+        setOpen(false);
       })
       .catch(() => {
         setOpen(false);
@@ -89,9 +91,40 @@ const FulfillProducts = (props) => {
         aria-labelledby="Fulfill"
         aria-describedby="FulfillProducts"
       >
-        <DialogTitle variant="subtitle1" id="FulfillProducts-library">
+        <DialogTitle
+          component={Stack}
+          direction={'row'}
+          justifyContent={'space-between'}
+          variant="subtitle1"
+          id="FulfillProducts-library"
+        >
           Fulfill Product
+          <LoadingButton
+            variant={'text'}
+            color="primary"
+            size="small"
+            onClick={() => {
+              setUpdateAll(true);
+              setProducts((pre) =>
+                pre.map((pro) => {
+                  pro.number_of_fulfilled = pro.quantity;
+                  pro.is_fulfilled = true;
+                  return pro;
+                })
+              );
+
+              setTimeout(() => {
+                handleUpdateFulfillment();
+              }, 200);
+            }}
+            startIcon={<Icon icon={'line-md:check-all'} />}
+            autoFocus
+            loading={updateAll}
+          >
+            Fulfill All
+          </LoadingButton>
         </DialogTitle>
+
         <DialogContent dividers sx={{ pb: 0 }}>
           <Grid container spacing={0}>
             <Grid size={12}>
@@ -166,7 +199,10 @@ const FulfillProducts = (props) => {
           <LoadingButton
             variant={'contained'}
             color="black"
-            onClick={handleUpdateFulfillment}
+            onClick={() => {
+              setUpdating(true);
+              handleUpdateFulfillment();
+            }}
             autoFocus
             loading={updating}
           >

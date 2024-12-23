@@ -1,5 +1,5 @@
 // material
-import { Box, Grid2 as Grid, InputAdornment, Skeleton, Stack, useTheme, Typography } from '@mui/material';
+import { Box, Grid2 as Grid, InputAdornment, Skeleton, Stack, useTheme, Typography, Card } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import moment from 'moment';
@@ -69,6 +69,7 @@ const Dashboard = (props) => {
 
   const [profitData, setProfitData] = useState([]);
   const [paymentData, setPaymentData] = useState([]);
+  const [productReport, setProductReport] = useState({ total_selling_amount: 0, total_purchase_cost: 0 });
 
   useEffect(() => {
     getData();
@@ -93,7 +94,10 @@ const Dashboard = (props) => {
           setSaleChannels(resData.sale_by_channels);
           const index = resData.sales_by_payments[0]?.dates.findIndex((date) => date === today);
           setTodayIndex(index);
-
+          setProductReport({
+            total_selling_amount: resData.total_selling_amount,
+            total_purchase_cost: resData.total_purchase_cost,
+          });
           var labels_ = [];
           var orderedAmount = [];
           var receivedAmount = [];
@@ -204,19 +208,132 @@ const Dashboard = (props) => {
             <Grid size={{ xs: 12, md: 8 }}>
               <Welcome
                 storeName={store.name}
-                caption={
-                  <Typography>
-                    On {moment().format('MMM Do YYYY')}, you made a total sale of{' '}
-                    <Typography sx={{ fontWeight: 700 }} variant="span">
-                      {todayData.sale_prices ? fCurrency(todayData.sale_prices.toFixed(0)) : '0'}
+                content={
+                  <Stack spacing={2.5}>
+                    <Typography sx={{ pt: 4 }}>
+                      <Typography sx={{ fontWeight: 700 }} variant="span">
+                        Congratulation!
+                        <br />
+                      </Typography>
+                      You have achieved a total sales amount of
+                      <Typography sx={{ fontWeight: 700 }} variant="h4">
+                        {fCurrency(todayData.sale_prices)}
+                      </Typography>
                     </Typography>
-                    <br />
-                    (received amount:{' '}
-                    <Typography sx={{ fontWeight: 700 }} variant="span">
-                      {fCurrency(todayData.received_amounts) || '0'}
-                    </Typography>
-                    )
-                  </Typography>
+
+                    <Stack direction={'row'} flexWrap={'wrap'} spacing={3} sx={{ pt: 5 }}>
+                      <Stack direction={'row'} alignItems={'center'} spacing={1}>
+                        <Stack
+                          justifyContent={'center'}
+                          alignItems={'center'}
+                          sx={{
+                            background: theme.palette.primary.main,
+                            borderRadius: '8px',
+                            height: 40,
+                            width: 40,
+                          }}
+                        >
+                          <Iconify
+                            icon="solar:card-line-duotone"
+                            sx={{
+                              color: '#fff',
+                            }}
+                          />
+                        </Stack>
+
+                        <Stack>
+                          <Typography variant="body2">Payments</Typography>
+                          <Typography fontWeight={700} variant="body1">
+                            {fCurrency(todayData.received_amounts)}
+                          </Typography>
+                        </Stack>
+                      </Stack>
+
+                      <Stack direction={'row'} alignItems={'center'} spacing={1}>
+                        <Stack
+                          justifyContent={'center'}
+                          alignItems={'center'}
+                          sx={{
+                            background: theme.palette.primary.main,
+                            borderRadius: '8px',
+                            height: 40,
+                            width: 40,
+                          }}
+                        >
+                          <Iconify
+                            icon="streamline:discount-percent-coupon"
+                            width={22}
+                            sx={{
+                              color: '#fff',
+                            }}
+                          />
+                        </Stack>
+
+                        <Stack>
+                          <Typography variant="body2">Discounts</Typography>
+                          <Typography fontWeight={700} variant="body1">
+                            {fCurrency(todayData.today_discount)}
+                          </Typography>
+                        </Stack>
+                      </Stack>
+
+                      <Stack direction={'row'} alignItems={'center'} spacing={1}>
+                        <Stack
+                          justifyContent={'center'}
+                          alignItems={'center'}
+                          sx={{
+                            background: theme.palette.primary.main,
+                            borderRadius: '8px',
+                            height: 40,
+                            width: 40,
+                          }}
+                        >
+                          <Iconify
+                            icon="hugeicons:money-add-01"
+                            sx={{
+                              color: '#fff',
+                            }}
+                          />
+                        </Stack>
+
+                        <Stack>
+                          <Typography variant="body2">Extra Fees</Typography>
+                          <Typography fontWeight={700} variant="body1">
+                            {fCurrency(todayData.today_extra_fee)}
+                          </Typography>
+                        </Stack>
+                      </Stack>
+
+                      {user.role?.name === 'Owner' && (
+                        <Stack direction={'row'} alignItems={'center'} spacing={1}>
+                          <Stack
+                            justifyContent={'center'}
+                            alignItems={'center'}
+                            sx={{
+                              background: theme.palette.primary.main,
+                              borderRadius: '8px',
+                              height: 40,
+                              width: 40,
+                            }}
+                          >
+                            <Iconify
+                              icon="hugeicons:money-receive-circle"
+                              sx={{
+                                color: '#fff',
+                              }}
+                            />
+                          </Stack>
+
+                          <Stack>
+                            <Typography variant="body2">Profit</Typography>
+                            <Typography fontWeight={700} variant="body1">
+                              {fCurrency(todayData.profit_amount)}
+                            </Typography>
+                          </Stack>
+                        </Stack>
+                      )}
+                    </Stack>
+                  </Stack>
                 }
               />
             </Grid>
@@ -308,6 +425,69 @@ const Dashboard = (props) => {
             </Grid>
             <Grid size={{ xs: 12, md: 4 }}>
               <Stack direction={'column'} spacing={3}>
+                {user.role?.name === 'Owner' && (
+                  <Card>
+                    <Stack sx={{ p: 2.5, pb: 0 }} spacing={1}>
+                      <Typography variant="subtitle1">Inventory Report</Typography>
+                    </Stack>
+                    <Stack spacing={2.5} sx={{ p: 2.5 }}>
+                      <Stack direction={'row'} alignItems={'center'} spacing={1}>
+                        <Stack
+                          justifyContent={'center'}
+                          alignItems={'center'}
+                          sx={{
+                            background: theme.palette.success.lighter,
+                            borderRadius: '8px',
+                            height: 40,
+                            width: 40,
+                          }}
+                        >
+                          <Iconify
+                            icon="solar:box-bold-duotone"
+                            sx={{
+                              color: theme.palette.success.main,
+                            }}
+                          />
+                        </Stack>
+
+                        <Stack>
+                          <Typography variant="body2">Total Selling Amount</Typography>
+                          <Typography fontWeight={700} variant="body1">
+                            {fCurrency(productReport.total_selling_amount)}
+                          </Typography>
+                        </Stack>
+                      </Stack>
+
+                      <Stack direction={'row'} alignItems={'center'} spacing={1}>
+                        <Stack
+                          justifyContent={'center'}
+                          alignItems={'center'}
+                          sx={{
+                            background: theme.palette.success.lighter,
+                            borderRadius: '8px',
+                            height: 40,
+                            width: 40,
+                          }}
+                        >
+                          <Iconify
+                            icon="solar:inbox-in-bold-duotone"
+                            sx={{
+                              color: theme.palette.success.main,
+                            }}
+                          />
+                        </Stack>
+
+                        <Stack>
+                          <Typography variant="body2">Total Purchase Amount</Typography>
+                          <Typography fontWeight={700} variant="body1">
+                            {fCurrency(productReport.total_purchase_cost)}
+                          </Typography>
+                        </Stack>
+                      </Stack>
+                    </Stack>
+                  </Card>
+                )}
+
                 {user.role?.name === 'Owner' && (
                   <TopSalesmen
                     title="Top Salesmen"

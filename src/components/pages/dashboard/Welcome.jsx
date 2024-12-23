@@ -22,7 +22,7 @@ const RootStyle = styled(Card)(({ theme }) => ({
 }));
 
 export default function Welcome(props) {
-  const { storeName, caption } = props;
+  const { storeName, content } = props;
   return (
     <RootStyle>
       <CardContent
@@ -32,14 +32,7 @@ export default function Welcome(props) {
           pl: { md: 5 },
         }}
       >
-        <Typography gutterBottom variant="h4">
-          Welcome, {storeName}!
-        </Typography>
-
-        {caption}
-        <Button to={PATH_DASHBOARD.order.create} variant="contained" sx={{ mt: 2.5 }} component={RouterLink}>
-          Add new order
-        </Button>
+        {content}
       </CardContent>
 
       <MotivationIllustration

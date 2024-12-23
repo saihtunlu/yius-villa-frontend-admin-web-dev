@@ -13,6 +13,9 @@ export default function Avatar({
   ...other
 }) {
   const theme = useTheme();
+  // const randomNumber = Math.floor(Math.random() * 21) + 1;
+  // const defaultAvatar = `/assets/avatar/avatar-${randomNumber}.webp`;
+  const defaultAvatar = `/assets/avatar/avatar-11.webp`;
 
   if (multiple) {
     return (
@@ -30,7 +33,7 @@ export default function Avatar({
 
                   borderColor,
                 }}
-                src={data?.avatar ? data?.avatar : '/assets/img/default-avatar.png'}
+                src={data?.avatar ? data?.avatar : defaultAvatar}
                 alt={data?.first_name}
                 color={
                   data?.avatar && !data?.avatar.includes('default') ? 'default' : createAvatar(data?.first_name).color
@@ -77,7 +80,7 @@ export default function Avatar({
         }}
       >
         <MAvatar
-          src={user?.avatar ? user?.avatar : '/assets/img/default-avatar.png'}
+          src={user?.avatar ? user?.avatar : defaultAvatar}
           alt={user?.first_name}
           color={user?.avatar && !user?.avatar.includes('default') ? 'default' : createAvatar(user?.first_name).color}
           {...other}
