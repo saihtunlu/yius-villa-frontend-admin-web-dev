@@ -317,7 +317,9 @@ const AddProduct = (props) => {
                                   alt={product.name}
                                   lightbox
                                   src={
-                                    product.is_main_product ? product.images[0]?.image || product.image : product.image
+                                    product.is_main_product
+                                      ? product.images[0]?.image || '/assets/img/default.png'
+                                      : product.image
                                   }
                                   sx={{
                                     borderRadius: (theme) => theme.shape.borderRadiusSm + 'px',

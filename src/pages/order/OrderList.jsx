@@ -154,32 +154,6 @@ const TABLE_HEAD = [
   { id: 'status', label: 'Status', alignRight: false },
   { id: '' },
 ];
-// const ACTIONS = [
-//   {
-//     label: 'Archive orders',
-//     value: 'Archived',
-//     icon: <Iconify icon={'solar:archive-bold-duotone'} />,
-//     color: 'warning',
-//   },
-//   {
-//     label: 'Set as Active',
-//     value: 'Active',
-//     icon: <Iconify icon={'solar:star-bold'} />,
-//     color: 'success',
-//   },
-//   {
-//     label: 'Set as Completed',
-//     value: 'Completed',
-//     icon: <Iconify icon={'solar:check-circle-bold'} />,
-//     color: 'info',
-//   },
-//   {
-//     label: 'Set as Canceled',
-//     value: 'Canceled',
-//     icon: <Iconify icon={'solar:bag-cross-bold'} />,
-//     color: 'error',
-//   },
-// ];
 
 const pageOptions = Array.from({ length: 10 }, (_, index) => (1 + index) * 15);
 const OrderList = () => {
@@ -240,36 +214,6 @@ const OrderList = () => {
     return () => {};
   }, [filters]);
 
-  const handleUpdateStatus = (status, id) => {
-    setUpdatingStatus(true);
-    var data = [];
-    if (id) {
-      data = [id];
-    } else {
-      selected.forEach((id) => {
-        data.push(id);
-      });
-    }
-
-    axios
-      .put('sales-status/', {
-        status,
-        ids: data,
-        text: `has changed Order Status to "${status}" at`,
-      })
-      .then(() => {
-        getOrders();
-        setUpdatingStatus(false);
-        enqueueSnackbar(capitalCase(status) + ' success', {
-          variant: 'success',
-        });
-        setSelected([]);
-      })
-      .catch(() => {
-        setUpdatingStatus(false);
-      });
-  };
-
   // actions
 
   const getBadges = () => {
@@ -286,7 +230,9 @@ const OrderList = () => {
         }
         data1.push(data2);
       });
-      data1[3].count = data[0].to_fulfill;
+      if (data[0].to_fulfill) {
+        data1[3].count = data[0].to_fulfill;
+      }
       setPendingData(data1);
     });
   };
@@ -586,16 +532,6 @@ const OrderList = () => {
                               <TableCell align="center">
                                 <MoreMenu
                                   actions={[
-                                    {
-                                      icon: <Iconify icon={'solar:archive-bold-duotone'} />,
-                                      text: 'Archive',
-                                      props: {
-                                        onClick: () => {
-                                          handleUpdateStatus('Archived', row.id);
-                                        },
-                                        sx: { color: 'text.secondary' },
-                                      },
-                                    },
                                     {
                                       icon: <Iconify icon={'solar:pen-new-round-bold-duotone'} />,
                                       text: 'Edit',
