@@ -63,6 +63,14 @@ const sortList = [
     value: '-name',
   },
   {
+    name: 'Number of Stock(Highest)',
+    value: '-number_of_stock',
+  },
+  {
+    name: 'Number of Stock(Lowest)',
+    value: 'number_of_stock',
+  },
+  {
     name: 'Created (oldest first)',
     value: 'created_at',
   },

@@ -30,10 +30,8 @@ import { connect } from 'react-redux';
 import { useSnackbar } from 'notistack';
 import { useNavigate } from 'react-router-dom';
 import { Icon } from '@iconify/react';
-import trash2Fill from '@iconify/icons-eva/trash-2-fill';
 import Autocomplete from '@mui/material/Autocomplete';
 import LoadingButton from '@mui/lab/LoadingButton';
-import Barcode from 'react-barcode';
 
 import QuillEditor from '../../common/quill';
 import Media from '../../common/Media';
@@ -49,7 +47,7 @@ import Iconify from '../../common/Iconify';
 export const INITIAL_PRODUCT = {
   name: '',
   slug: '',
-  barcode: barcodeGenerator('YV3621'),
+  barcode: barcodeGenerator('YV36'),
   description: '',
   images: [],
   regular_price: 0,
@@ -629,13 +627,13 @@ function ProductNewForm(props) {
                                   fullWidth
                                   label="Barcode"
                                   value={variant.barcode}
-                                  onChange={(event) =>
-                                    setVariations((preState) => {
-                                      var newState = JSON.parse(JSON.stringify(preState));
-                                      newState[index].barcode = event.target.value;
-                                      return newState;
-                                    })
-                                  }
+                                  // onChange={(event) =>
+                                  //   setVariations((preState) => {
+                                  //     var newState = JSON.parse(JSON.stringify(preState));
+                                  //     newState[index].barcode = event.target.value;
+                                  //     return newState;
+                                  //   })
+                                  // }
                                 />
                               </Stack>
 
@@ -992,11 +990,11 @@ function ProductNewForm(props) {
                     fullWidth
                     label="Barcode"
                     value={product.barcode}
-                    onChange={(event) =>
-                      setProduct((preState) => {
-                        return { ...preState, barcode: event.target.value };
-                      })
-                    }
+                    // onChange={(event) =>
+                    //   setProduct((preState) => {
+                    //     return { ...preState, barcode: event.target.value };
+                    //   })
+                    // }
                   />
                 )}
               </Stack>

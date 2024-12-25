@@ -18,16 +18,40 @@ export default function BarcodePrint({ value, onChangeValue, price }) {
         direction={'column'}
         alignItems={'center'}
         ref={contentRef}
+        sx={{
+          position: 'relative',
+        }}
         width={'100%'}
       >
         <Barcode value={value} width={1} height={55} fontSize={10} />
-        <Typography align="center" fontSize={10} sx={{ margin: 0, fontWeight: 700 }}>
+        <Typography
+          align="center"
+          fontSize={14}
+          variant="span"
+          sx={{
+            position: 'absolute',
+            margin: 0,
+            marginTop: '-2mm',
+            zIndex: 1,
+            fontWeight: 700,
+            textAlign: 'center',
+            left: 0,
+            right: 0,
+          }}
+        >
           {price}Ks
         </Typography>
       </Stack>
 
       <Stack spacing={2.5} direction={'row'} alignItems={'center'} width={'100%'}>
-        <TextField fullWidth label="Barcode" value={value} onChange={onChangeValue} />
+        <TextField
+          fullWidth
+          label="Barcode"
+          sx={{ cursor: 'not-allowed' }}
+          value={value}
+          // disabled
+          // onChange={onChangeValue}
+        />
 
         <Tooltip title="Print barcode">
           <IconButton aria-label="print-barcode" sx={{ width: 45, height: 45 }} onClick={reactToPrintFn}>
