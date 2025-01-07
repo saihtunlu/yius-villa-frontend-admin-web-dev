@@ -47,7 +47,7 @@ import Iconify from '../../common/Iconify';
 export const INITIAL_PRODUCT = {
   name: '',
   slug: '',
-  barcode: barcodeGenerator('YV36'),
+  barcode: '',
   description: '',
   images: [],
   regular_price: 0,
@@ -102,6 +102,9 @@ function ProductNewForm(props) {
 
   // effects
   useEffect(() => {
+    setProduct((preState) => {
+      return { ...preState, barcode: barcodeGenerator('YV36') };
+    });
     getOptions();
     return () => {};
     // eslint-disable-next-line react-hooks/exhaustive-deps
