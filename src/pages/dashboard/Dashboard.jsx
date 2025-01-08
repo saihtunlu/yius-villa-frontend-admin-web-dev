@@ -103,10 +103,10 @@ const Dashboard = (props) => {
           var receivedAmount = [];
           var saleCounts = [];
           var profitAmount = [];
+          var discountAmount = [];
           resData.total_sales.forEach((res, index) => {
-            labels_.push(res.label);
-
             if (index !== resData.total_sales.length - 1) {
+              labels_.push(res.label);
               res.data.forEach((data) => {
                 if (data.type === 'sale_price') {
                   orderedAmount.push(data.data);
@@ -121,6 +121,10 @@ const Dashboard = (props) => {
                 if (data.type === 'profit_amount') {
                   profitAmount.push(data.data);
                 }
+
+                if (data.type === 'discount_amount') {
+                  discountAmount.push(data.data);
+                }
               });
             }
           });
@@ -128,12 +132,16 @@ const Dashboard = (props) => {
 
           setSaleData([
             {
-              name: 'Ordered amount',
+              name: 'Sale',
               data: orderedAmount,
             },
             {
-              name: 'Received amount',
+              name: 'Payment Received',
               data: receivedAmount,
+            },
+            {
+              name: 'Discount',
+              data: discountAmount,
             },
           ]);
           setNoOfSaleData([
