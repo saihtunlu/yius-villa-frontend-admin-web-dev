@@ -34,6 +34,7 @@ const Dashboard = Loadable(lazy(() => import('../pages/dashboard/Dashboard')));
 
 // Order
 const OrderList = Loadable(lazy(() => import('../pages/order/OrderList')));
+const OrderItemList = Loadable(lazy(() => import('../pages/order/OrderItemList')));
 const CreateOrder = Loadable(lazy(() => import('../pages/order/CreateOrder')));
 const EditOrder = Loadable(lazy(() => import('../pages/order/EditOrder')));
 
@@ -112,6 +113,7 @@ const routes = [
         children: [
           { element: <Navigate to="list" replace />, index: true },
           { path: 'list', element: <OrderList /> },
+          { path: 'item/list', element: <OrderItemList /> },
           { path: 'create', element: <CreateOrder /> },
           { path: ':id/edit', element: <EditOrder /> },
         ],

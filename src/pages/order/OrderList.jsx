@@ -273,15 +273,26 @@ const OrderList = () => {
               { name: 'List' },
             ]}
             action={
-              <Button
-                variant="contained"
-                startIcon={<Iconify icon="mynaui:plus-solid" />}
-                color={'text'}
-                component={RouterLink}
-                to={PATH_DASHBOARD.order.create}
-              >
-                New order
-              </Button>
+              <Stack spacing={2} direction={'row'}>
+                <Button
+                  variant="outlined"
+                  startIcon={<Iconify icon="material-symbols:list-rounded" />}
+                  color={'text'}
+                  component={RouterLink}
+                  to={PATH_DASHBOARD.order.itemList}
+                >
+                  Item List
+                </Button>
+                <Button
+                  variant="contained"
+                  startIcon={<Iconify icon="mynaui:plus-solid" />}
+                  color={'text'}
+                  component={RouterLink}
+                  to={PATH_DASHBOARD.order.create}
+                >
+                  New order
+                </Button>
+              </Stack>
             }
           />
 

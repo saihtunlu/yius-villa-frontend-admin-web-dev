@@ -56,6 +56,9 @@ const INITIAL_CUSTOM_PRODUCT = {
   number_of_fulfilled: 0,
   product: null,
   subtotal: 0,
+  number_of_stock: 0,
+  regular_price: 0,
+  sale_price: 0,
 };
 
 const ListWrapperStyle = styled(Paper)(({ theme }) => ({
@@ -123,6 +126,9 @@ const AddProduct = (props) => {
             number_of_fulfilled: 0,
             product: product.is_main_product ? product.id : null,
             subtotal: sellingPrice,
+            number_of_stock: product.number_of_stock,
+            regular_price: product.regular_price,
+            sale_price: product.sale_price,
           });
         }
       });

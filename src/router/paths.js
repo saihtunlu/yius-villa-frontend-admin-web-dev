@@ -63,6 +63,7 @@ export const PATH_DASHBOARD = {
   },
   order: {
     list: path(ROOTS_DASHBOARD, 'order/list'),
+    itemList: path(ROOTS_DASHBOARD, 'order/item/list'),
     create: path(ROOTS_DASHBOARD, 'order/create'),
     edit: (id) => path(ROOTS_DASHBOARD, `order/${id}/edit`),
   },

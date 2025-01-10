@@ -163,7 +163,7 @@ function ProductEditForm(props) {
                   })
                 }
               />
-              {/* <div>
+              <div>
                 <LabelStyle>Description</LabelStyle>
                 <QuillEditor
                   simple
@@ -175,7 +175,7 @@ function ProductEditForm(props) {
                     });
                   }}
                 />
-              </div> */}
+              </div>
 
               <FormControlLabel
                 control={<Switch checked={product.has_variant} inputProps={{ 'aria-label': 'controlled' }} />}
@@ -1012,8 +1012,7 @@ function ProductEditForm(props) {
                     </Stack>
                   </RadioGroup>
                 </div>
-
-                {/* <RemoteAutocomplete
+                <RemoteAutocomplete
                   value={product.main_category?.name || ''}
                   onChange={(value, data) => {
                     if (data) {
@@ -1031,7 +1030,7 @@ function ProductEditForm(props) {
                     }
                   }}
                   required
-                  remote="category/main/search/"
+                  remote="main-category/search/"
                   label={'Main Category'}
                 />
 
@@ -1048,9 +1047,9 @@ function ProductEditForm(props) {
                       });
                     }
                   }}
-                  remote={`category/sub/${product.main_category?.id || '0'}/search/`}
+                  remote={`sub-category/${product.main_category?.id || '0'}/search/`}
                   label={'Sub Category'}
-                /> */}
+                />
 
                 {/* <RemoteAutocomplete
                   value={product.supplier_name}
