@@ -6,8 +6,8 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import LoadingButton from '@mui/lab/LoadingButton';
 
-import { changePassword } from '../../../redux/actions';
 import { PATH_AUTH } from '../../../router/paths';
+import { changePassword } from '../../../redux/slices/auth';
 
 function ChangePasswordForm() {
   const { enqueueSnackbar } = useSnackbar();

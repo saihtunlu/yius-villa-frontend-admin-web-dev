@@ -3,9 +3,9 @@ import { useState } from 'react';
 import LoadingButton from '@mui/lab/LoadingButton';
 import { useNavigate } from 'react-router-dom';
 
-import { forgot } from '../../../redux/actions';
 import { PATH_AUTH } from '../../../router/paths';
 import useQuery from '../../../utils/RouteQuery';
+import { forgot } from '../../../redux/slices/auth';
 
 function ForgotPasswordForm(props) {
   const [loading, setLoading] = useState(false);

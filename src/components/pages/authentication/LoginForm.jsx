@@ -4,8 +4,8 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import LoadingButton from '@mui/lab/LoadingButton';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
-import { login } from '../../../redux/actions';
 import { PATH_AUTH } from '../../../router/paths';
+import { handleLogin } from '../../../redux/slices/auth';
 
 function LoginForm(_props) {
   const [email, setEmail] = useState('');
@@ -18,7 +18,7 @@ function LoginForm(_props) {
     e.preventDefault();
     setLoading(true);
     // const buf = Buffer.from(password);
-    login({ email, password })
+    handleLogin({ email, password })
       .then((_res) => {
         setLoading(false);
       })

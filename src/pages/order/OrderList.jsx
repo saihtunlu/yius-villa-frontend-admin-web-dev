@@ -152,7 +152,6 @@ const TABLE_HEAD = [
 
   { id: 'total_price', label: 'Total', alignRight: false },
   { id: 'status', label: 'Status', alignRight: false },
-  { id: '' },
 ];
 
 const pageOptions = Array.from({ length: 10 }, (_, index) => (1 + index) * 15);
@@ -450,12 +449,17 @@ const OrderList = () => {
                       <TableBody>
                         {orders.results.map((row, index) => {
                           return (
-                            <TableRow hover key={`${row.id}`}>
-                              <TableCell
-                                sx={{ cursor: 'pointer' }}
-                                onClick={() => navigate(PATH_DASHBOARD.order.edit(row.id))}
-                                align="left"
-                              >
+                            <TableRow
+                              hover
+                              key={`${row.id}`}
+                              sx={{
+                                cursor: 'pointer',
+                              }}
+                              onClick={() => {
+                                navigate(PATH_DASHBOARD.order.edit(row.id));
+                              }}
+                            >
+                              <TableCell align="left">
                                 <Typography variant="subtitle3">#{row.id}</Typography>
                               </TableCell>
                               <TableCell sx={{ minWidth: 120 }} align="left">
@@ -538,24 +542,6 @@ const OrderList = () => {
                                     {row.is_fulfilled ? 'Fulfilled' : 'Not Fulfilled'}
                                   </Label>
                                 </Stack>
-                              </TableCell>
-
-                              <TableCell align="center">
-                                <MoreMenu
-                                  actions={[
-                                    {
-                                      icon: <Iconify icon={'solar:pen-new-round-bold-duotone'} />,
-                                      text: 'Edit',
-                                      props: {
-                                        onClick: () => {
-                                          navigate(PATH_DASHBOARD.order.edit(row.id));
-                                        },
-
-                                        sx: { color: 'text.secondary' },
-                                      },
-                                    },
-                                  ]}
-                                />
                               </TableCell>
                             </TableRow>
                           );

@@ -18,9 +18,9 @@ import { TimePicker } from '@mui/x-date-pickers';
 import moment from 'moment';
 
 import LoadingButton from '@mui/lab/LoadingButton';
-import { updateStore } from '../../../redux/actions';
-import { INITIAL_STORE } from '../../../redux/reducer/store';
+
 import Iconify from '../../common/Iconify';
+import { updateStore, INITIAL_STORE } from '../../../redux/slices/store';
 
 export const STORE_TYPES = [
   'Beauty',

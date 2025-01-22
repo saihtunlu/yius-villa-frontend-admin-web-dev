@@ -13,8 +13,9 @@ import useQuery from '../../utils/RouteQuery';
 import UserEditForm from '../../components/pages/settings/UserEditForm';
 import ChangePasswordForm from '../../components/pages/settings/ChangePasswordForm';
 import SettingSkeleton from '../../components/skeleton/SettingSkeleton';
-import { INITIAL_USER } from '../../redux/reducer/auth';
+
 import Iconify from '../../components/common/Iconify';
+import { INITIAL_USER } from '../../redux/slices/auth';
 
 const MyAccount = (props) => {
   const { user } = props;

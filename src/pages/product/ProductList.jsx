@@ -17,7 +17,6 @@ import {
   Typography,
   IconButton,
   Tooltip,
-  Skeleton,
   Stack,
   Select,
   InputLabel,
@@ -27,11 +26,6 @@ import {
 import { connect } from 'react-redux';
 import { useSnackbar } from 'notistack';
 import axios from 'axios';
-import trash2Fill from '@iconify/icons-eva/trash-2-fill';
-import archiveFill from '@iconify/icons-eva/archive-fill';
-import edit2Fill from '@iconify/icons-eva/edit-2-fill';
-import { Icon } from '@iconify/react';
-import plusFill from '@iconify/icons-eva/plus-fill';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { sentenceCase } from 'change-case';
 
@@ -40,13 +34,11 @@ import HeaderBreadcrumbs from '../../components/common/HeaderBreadcrumbs';
 import { PATH_DASHBOARD } from '../../router/paths';
 import ListToolbar from '../../components/common/ListToolbar';
 import SearchNotFound from '../../components/common/SearchNotFound';
-import TabActions from '../../components/common/TabActions';
 import MoreMenu from '../../components/common/MoreMenu';
 import Label from '../../components/common/Label';
 import { fCurrency } from '../../utils/formatNumber';
 import Img from '../../components/common/Img';
 import { fDate } from '../../utils/formatTime';
-import { removeProducts } from '../../redux/actions';
 
 import useQuery from '../../utils/RouteQuery';
 import ListSkeleton from '../../components/skeleton/ListSkeleton';
@@ -107,6 +99,15 @@ const TABLE_HEAD = [
   { id: 'created_at', label: 'Created Date', alignRight: false },
   { id: '' },
 ];
+
+export const removeProducts = async ({ data, type }) => {
+  try {
+    await axios.post(`product/remove/?type=${type}`, { data });
+    return Promise.resolve();
+  } catch (err) {
+    return Promise.reject(err);
+  }
+};
 
 const ProductList = (props) => {
   const { categories } = props;

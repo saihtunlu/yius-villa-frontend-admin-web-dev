@@ -18,6 +18,7 @@ import {
   Radio,
   RadioGroup,
   IconButton,
+  useTheme,
 } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { Icon } from '@iconify/react';
@@ -35,13 +36,15 @@ export default function OrderSummary({
   subtotal,
   tax,
   taxIncluded,
+  totalDiscount,
+  productsDiscount,
   onAddedDiscount,
   onAddedExtraFees,
   OnRemoveExtraFee,
   extraFees,
 }) {
-  const user = useSelector((state) => state.user);
-
+  const user = useSelector((state) => state.auth.user);
+  const theme = useTheme();
   const [open, setOpen] = useState(false);
   const [openExtraFees, setOpenExtraFees] = useState(false);
   const [extraFee, setExtraFee] = useState({
@@ -109,18 +112,35 @@ export default function OrderSummary({
             </Stack>
 
             <Stack direction="row" justifyContent="space-between">
+              <Typography variant="body2">Products Discount</Typography>
+
+              <Typography variant="subtitle3" color={theme.palette.error.main}>
+                {productsDiscount ? '-' + fCurrency(productsDiscount) : '-'}
+              </Typography>
+            </Stack>
+
+            <Stack direction="row" justifyContent="space-between">
               <Tooltip title="Add discount">
                 <Button variant="text" onClick={handleClickOpen} sx={{ p: 0, minWidth: 0 }} disableRipple>
                   <Typography variant="body2" sx={{ textDecoration: 'underline' }}>
-                    Discount
+                    Store Discount
                   </Typography>
                 </Button>
               </Tooltip>
 
-              <Typography variant="subtitle3">
+              <Typography variant="subtitle3" color={theme.palette.error.main}>
                 {discount.discount ? '-' + fCurrency(discount.discount) : '-'}
               </Typography>
             </Stack>
+
+            <Stack direction="row" justifyContent="space-between">
+              <Typography variant="body2">Total Discount</Typography>
+
+              <Typography variant="subtitle3" color={theme.palette.error.main}>
+                {totalDiscount ? '-' + fCurrency(totalDiscount) : '-'}
+              </Typography>
+            </Stack>
+
             {user?.role?.name === 'Owner' && (
               <Stack direction="row" justifyContent="space-between">
                 <Typography variant="body2" sx={{ color: 'text.secondary' }}>

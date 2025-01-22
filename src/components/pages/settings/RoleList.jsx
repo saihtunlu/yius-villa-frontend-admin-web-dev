@@ -103,6 +103,13 @@ const INITIAL_ROLE = {
       delete: true,
       read: true,
     },
+    {
+      name: 'Coupon',
+      create: true,
+      update: true,
+      delete: true,
+      read: true,
+    },
   ],
 };
 function RoleList() {

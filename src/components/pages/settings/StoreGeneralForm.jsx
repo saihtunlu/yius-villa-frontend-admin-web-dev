@@ -17,8 +17,7 @@ import { connect } from 'react-redux';
 
 import LoadingButton from '@mui/lab/LoadingButton';
 import Media from '../../common/Media';
-import { updateStore } from '../../../redux/actions';
-import { INITIAL_STORE } from '../../../redux/reducer/store';
+import { INITIAL_STORE, updateStore } from '../../../redux/slices/store';
 import AddressPicker from '../../common/AddressPicker';
 import SettingSkeleton from '../../skeleton/SettingSkeleton';
 

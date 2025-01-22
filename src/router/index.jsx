@@ -38,7 +38,21 @@ const OrderItemList = Loadable(lazy(() => import('../pages/order/OrderItemList')
 const CreateOrder = Loadable(lazy(() => import('../pages/order/CreateOrder')));
 const EditOrder = Loadable(lazy(() => import('../pages/order/EditOrder')));
 
-// Order
+//delivery
+const DeliveryList = Loadable(lazy(() => import('../pages/delivery/DeliveryList')));
+const DeliveryPickupList = Loadable(lazy(() => import('../pages/delivery/DeliveryPickupList')));
+const EditPickup = Loadable(lazy(() => import('../pages/delivery/EditPickup')));
+const CreatePickup = Loadable(lazy(() => import('../pages/delivery/CreatePickup')));
+
+//coupon
+const CouponList = Loadable(lazy(() => import('../pages/coupon/CouponList')));
+
+//website order
+const WebsiteOrderList = Loadable(lazy(() => import('../pages/website-order/WebsiteOrderList')));
+const WebsiteOrderItemList = Loadable(lazy(() => import('../pages/website-order/WebsiteOrderItemList')));
+const WebsiteEditOrder = Loadable(lazy(() => import('../pages/website-order/WebsiteEditOrder')));
+
+// Product
 const CreateProduct = Loadable(lazy(() => import('../pages/product/CreateProduct')));
 const ProductList = Loadable(lazy(() => import('../pages/product/ProductList')));
 const EditProduct = Loadable(lazy(() => import('../pages/product/EditProduct')));
@@ -116,6 +130,32 @@ const routes = [
           { path: 'item/list', element: <OrderItemList /> },
           { path: 'create', element: <CreateOrder /> },
           { path: ':id/edit', element: <EditOrder /> },
+        ],
+      },
+      {
+        path: 'delivery',
+        children: [
+          { element: <Navigate to="list" replace />, index: true },
+          { path: 'list', element: <DeliveryList /> },
+          { path: 'pickup-list', element: <DeliveryPickupList /> },
+          { path: 'pickup/:id/edit', element: <EditPickup /> },
+          { path: 'pickup/create', element: <CreatePickup /> },
+        ],
+      },
+      {
+        path: 'coupon',
+        children: [
+          { element: <Navigate to="list" replace />, index: true },
+          { path: 'list', element: <CouponList /> },
+        ],
+      },
+      {
+        path: 'website-order',
+        children: [
+          { element: <Navigate to="list" replace />, index: true },
+          { path: 'list', element: <WebsiteOrderList /> },
+          { path: 'item/list', element: <WebsiteOrderItemList /> },
+          { path: ':id/edit', element: <WebsiteEditOrder /> },
         ],
       },
       {

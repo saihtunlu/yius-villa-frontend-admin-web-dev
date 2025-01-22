@@ -1,7 +1,5 @@
 import { useState } from 'react';
-import trash2Fill from '@iconify/icons-eva/trash-2-fill';
 import { Icon } from '@iconify/react';
-import plusFill from '@iconify/icons-eva/plus-fill';
 // material
 import {
   Card,
@@ -10,7 +8,6 @@ import {
   Stack,
   Paper,
   CardContent,
-  CardHeader,
   Dialog,
   DialogActions,
   DialogContent,
@@ -19,10 +16,6 @@ import {
   TextField,
   useTheme,
   Box,
-  Select,
-  MenuItem,
-  InputLabel,
-  FormControl,
   styled,
   List,
   FormControlLabel,
@@ -40,11 +33,9 @@ import axios from 'axios';
 
 import { fDateTimeSuffix } from '../../../utils/formatTime';
 import { fCurrency } from '../../../utils/formatNumber';
-import { addOrderPayment, removeOrderPayment } from '../../../redux/actions';
 import Label from '../../common/Label';
 import Media from '../../common/Media';
 import Img from '../../common/Img';
-import EmptyContent from '../../common/EmptyContent';
 import Iconify from '../../common/Iconify';
 
 const LabelStyle = styled(Typography)(({ theme }) => ({
@@ -67,8 +58,26 @@ const INITIAL_PAYMENT = {
   },
   image: '/assets/img/default.png',
 };
+
+export const addOrderPayment = async (payment) => {
+  try {
+    const { data } = await axios.post('sale/payment/', { data: payment });
+    return Promise.resolve(data);
+  } catch (err) {
+    return Promise.reject(err);
+  }
+};
+export const removeOrderPayment = async (id) => {
+  try {
+    const { data } = await axios.delete(`sale/payment/?id=${id}`);
+    return Promise.resolve(data);
+  } catch (err) {
+    return Promise.reject(err);
+  }
+};
+
 export default function OrderPayment({ initialOrder, onRemovePayment, onChange }) {
-  const payments = useSelector((state) => state.payment);
+  const payments = useSelector((state) => state.paymentMethod);
   const [open, setOpen] = useState(false);
   const [sendEmail, setSendEmail] = useState(false);
   const [checkingIndex, setCheckingIndex] = useState(0);

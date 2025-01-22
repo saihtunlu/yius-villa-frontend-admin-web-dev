@@ -32,17 +32,26 @@ import { useNavigate } from 'react-router-dom';
 import { Icon } from '@iconify/react';
 import Autocomplete from '@mui/material/Autocomplete';
 import LoadingButton from '@mui/lab/LoadingButton';
+import axios from 'axios';
 
 import QuillEditor from '../../common/quill';
 import Media from '../../common/Media';
-import { createNewProduct } from '../../../redux/actions';
 import { PATH_DASHBOARD } from '../../../router/paths';
-import axios from '../../../utils/axios';
+
 import { getVariations } from '../../../utils/getVariation';
 import { fCurrency } from '../../../utils/formatNumber';
 import barcodeGenerator from '../../../utils/barcodeGenerator';
 import RemoteAutocomplete from '../../common/RemoteAutocomplete';
 import Iconify from '../../common/Iconify';
+
+export const createNewProduct = async (data) => {
+  try {
+    const response = await axios.post('product/', { data });
+    return Promise.resolve(response);
+  } catch (err) {
+    return Promise.reject();
+  }
+};
 
 export const INITIAL_PRODUCT = {
   name: '',
@@ -110,12 +119,12 @@ function ProductNewForm(props) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  useEffect(() => {
-    const variations = getVariations(product.options, product);
-    setVariations(variations);
-    return () => {};
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [product.options]);
+  // useEffect(() => {
+  //   const variations = getVariations(product.options, product);
+  //   setVariations(variations);
+  //   return () => {};
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [product.options]);
 
   useEffect(() => {
     calcPrice();
@@ -123,6 +132,10 @@ function ProductNewForm(props) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [product.sale_price, product.regular_price, product.cost_per_item]);
 
+  const generateVariations = () => {
+    const variations = getVariations(product.options, product);
+    setVariations(variations);
+  };
   const calcPrice = () => {
     var profit = null;
     var margin = null;
@@ -514,7 +527,7 @@ function ProductNewForm(props) {
                     );
                   })}
                   {product.options.length < 3 && (
-                    <Stack direction={'row'} justifyContent="flex-start">
+                    <Stack direction={'row'} justifyContent="space-between">
                       <Button
                         variant="text"
                         color="primary"
@@ -531,6 +544,17 @@ function ProductNewForm(props) {
                         Add
                         {product.options.length > 0 ? ' another ' : ' an '}
                         option
+                      </Button>
+                      <Button
+                        variant="text"
+                        color="primary"
+                        size="small"
+                        onClick={() => {
+                          generateVariations();
+                        }}
+                        startIcon={<Iconify icon="gg:redo" />}
+                      >
+                        Generate Variations
                       </Button>
                     </Stack>
                   )}
@@ -869,27 +893,25 @@ function ProductNewForm(props) {
                   </RadioGroup>
                 </div>
 
-                {/* <RemoteAutocomplete
+                <RemoteAutocomplete
                   value={product.main_category?.name || ''}
                   onChange={(value, data) => {
                     if (data) {
                       setProduct((preState) => {
                         var newState = JSON.parse(JSON.stringify(preState));
                         newState.main_category = data;
-                        newState.sub_category = [];
                         return newState;
                       });
                     } else {
                       setProduct((preState) => {
                         var newState = JSON.parse(JSON.stringify(preState));
                         newState.main_category = { name: value };
-                        newState.sub_category = [];
                         return newState;
                       });
                     }
                   }}
                   required
-                  remote="category/main/search/"
+                  remote="main-category/search/"
                   label={'Main Category'}
                 />
 
@@ -906,61 +928,9 @@ function ProductNewForm(props) {
                       });
                     }
                   }}
-                  remote={`category/sub/${product.main_category?.id || '0'}/search/`}
+                  remote={`sub-category/${product.main_category?.id || '0'}/search/`}
                   label={'Sub Category'}
-                /> */}
-
-                {/* <FormControl fullWidth>
-                  <InputLabel id="city-select-label">Sub Category*</InputLabel>
-                  <Select
-                    labelId="SubCategory"
-                    id="SubCategory"
-                    required
-                    value={product.sub_category?.id || ''}
-                    label="Sub Category"
-                    onChange={(event) => {
-                      setProduct((preState) => {
-                        return {
-                          ...preState,
-                          sub_category: categories
-                            .filter((state) => state.id === product.main_category?.id)[0]
-                            ?.sub_categories.filter((cate) => cate.id === event.target.value)[0],
-                        };
-                      });
-                    }}
-                  >
-                    {categories
-                      .filter((state) => state.id === product.main_category?.id)[0]
-                      ?.sub_categories.map((val, index) => (
-                        <MenuItem key={`${index}-sub`} value={val.id}>
-                          {val.name}
-                        </MenuItem>
-                      ))}
-                  </Select>
-                </FormControl> */}
-
-                {/* <RemoteAutocomplete
-                  value={product.category}
-                  onChange={(value) => {
-                    setProduct((preState) => {
-                      return { ...preState, category: value };
-                    });
-                  }}
-                  required
-                  remote="category/search/"
-                  label={'Category'}
-                /> */}
-
-                {/* <RemoteAutocomplete
-                  value={product.supplier_name}
-                  onChange={(value) => {
-                    setProduct((preState) => {
-                      return { ...preState, supplier_name: value };
-                    });
-                  }}
-                  remote="supplier/search/"
-                  label={"Supplier"}
-                /> */}
+                />
 
                 <Autocomplete
                   multiple

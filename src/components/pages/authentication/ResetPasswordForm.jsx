@@ -6,8 +6,8 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import { useSnackbar } from 'notistack';
 import useQuery from '../../../utils/RouteQuery';
-import { resetPassword } from '../../../redux/actions';
 import { PATH_AUTH } from '../../../router/paths';
+import { resetPassword } from '../../../redux/slices/auth';
 
 function ResetPasswordForm(props) {
   const query = useQuery();
@@ -58,7 +58,7 @@ function ResetPasswordForm(props) {
   }, []);
 
   return (
-    (<form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit}>
       <Stack spacing={3}>
         <TextField
           fullWidth
@@ -81,7 +81,7 @@ function ResetPasswordForm(props) {
                   </IconButton>
                 </InputAdornment>
               ),
-            }
+            },
           }}
         />
 
@@ -89,7 +89,7 @@ function ResetPasswordForm(props) {
           Reset Password
         </LoadingButton>
       </Stack>
-    </form>)
+    </form>
   );
 }
 

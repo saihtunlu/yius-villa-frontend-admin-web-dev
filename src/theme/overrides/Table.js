@@ -34,7 +34,7 @@ export default function Table(theme) {
             // boxShadow: `inset 8px 0 0 ${theme.palette.background.paper}`,
           },
           '&:last-of-type': {
-            paddingRight: theme.spacing(0),
+            // paddingRight: theme.spacing(0),
             // borderTopRightRadius: theme.shape.borderRadius,
             // borderBottomRightRadius: theme.shape.borderRadius,
             // boxShadow: `inset -8px 0 0 ${theme.palette.background.paper}`,

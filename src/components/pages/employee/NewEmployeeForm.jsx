@@ -39,7 +39,7 @@ import AddressPicker from '../../common/AddressPicker';
 import Media from '../../common/Media';
 import { PATH_DASHBOARD } from '../../../router/paths';
 import Iconify from '../../common/Iconify';
-import { INITIAL_STORE } from '../../../redux/reducer/store';
+import { INITIAL_STORE } from '../../../redux/slices/store';
 
 export const INITIAL_EMPLOYEE = {
   name: '',

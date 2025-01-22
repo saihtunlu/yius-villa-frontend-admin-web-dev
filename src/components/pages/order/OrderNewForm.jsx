@@ -6,18 +6,27 @@ import { useSnackbar } from 'notistack';
 import { useNavigate } from 'react-router-dom';
 import { sum } from 'lodash';
 import onScan from 'onscan.js';
+import axios from 'axios';
 
 import OrderProductList from './OrderProductList';
 import Scrollbar from '../../common/Scrollbar';
 import EmptyContent from '../../common/EmptyContent';
-import AddProduct from './AddProduct';
+import AddProduct, { searchProducts } from './AddProduct';
 import OrderSummary from './OrderSummary';
 import CustomerDetail from './CustomerDetail';
 import { PATH_DASHBOARD } from '../../../router/paths';
-import { createNewOrder, searchProducts } from '../../../redux/actions';
 import { PREFIX_URL } from '../../../config';
-import { INITIAL_STORE } from '../../../redux/reducer/store';
+import { INITIAL_STORE } from '../../../redux/slices/store';
 import GeneralDetail from './GeneralDetail';
+
+export const createNewOrder = async (order) => {
+  try {
+    const { data } = await axios.post('sale/', { data: order });
+    return Promise.resolve(data);
+  } catch (err) {
+    return Promise.reject(err);
+  }
+};
 
 export const INITIAL_ORDER = {
   payment_status: 'Unpaid',
@@ -169,11 +178,11 @@ function OrderNewForm(props) {
         setLoading(false);
       });
   };
-  const handleUpdateQuantity = (index, number) => {
+  const handleUpdateQuantity = (quantity, index) => {
     setOrder((preState) => {
       var newState = JSON.parse(JSON.stringify(preState));
       // eslint-disable-next-line
-      newState.products[index].quantity = parseInt(newState.products[index].quantity, 10) + number;
+      newState.products[index].quantity = quantity;
       newState.products[index].subtotal =
         parseInt(newState.products[index].quantity, 10) * newState.products[index].price;
 
@@ -182,6 +191,13 @@ function OrderNewForm(props) {
       if (!newState.products[index].cost_per_item || parseInt(newState.products[index].cost_per_item, 10) === 0) {
         newState.products[index].cost_per_item = parseInt(parseFloat(sellingPrice) * 0.6666, 10).toFixed(0);
       }
+
+      var discount =
+        parseInt(newState.products[index].sale_price, 10) > 0
+          ? (parseInt(newState.products[index].price, 10) - parseInt(newState.products[index].sale_price, 10)) *
+            parseInt(newState.products[index].quantity, 10)
+          : 0;
+      newState.products[index].discount = discount;
 
       newState.products[index].profit =
         parseInt(sellingPrice - newState.products[index].cost_per_item, 10) *
@@ -195,6 +211,21 @@ function OrderNewForm(props) {
       return newState;
     });
   };
+
+  const handleChangeSalePrice = (sale_price, index) => {
+    setOrder((preState) => {
+      var newState = JSON.parse(JSON.stringify(preState));
+      newState.products[index].sale_price = sale_price;
+      var discount =
+        parseInt(newState.products[index].sale_price, 10) > 0
+          ? (parseInt(newState.products[index].price, 10) - parseInt(newState.products[index].sale_price, 10)) *
+            parseInt(newState.products[index].quantity, 10)
+          : 0;
+      newState.products[index].discount = discount;
+      return newState;
+    });
+  };
+
   const handleUpdateProducts = (products) => {
     setOrder((preState) => {
       return {
@@ -213,7 +244,8 @@ function OrderNewForm(props) {
 
   const calcOrderValues = (newDiscount) => {
     const subtotal = sum(order.products.map((item) => parseInt(item.subtotal, 10)));
-    const totalProfit = sum(order.products.map((item) => parseInt(item.profit, 10)));
+    const productsProfit = sum(order.products.map((item) => parseInt(item.profit, 10)));
+    const productsDiscount = sum(order.products.map((item) => parseInt(item.discount, 10)));
 
     var discount = order.discount;
     var discount_percentage = order.discount_percentage;
@@ -230,21 +262,15 @@ function OrderNewForm(props) {
       discount = discountAmount;
     }
 
-    // const tax_rate = order.tax_rate / 100;
-    // var tax = '';
-    // if (store.settings.tax_type === 'Inclusive') {
-    //   tax = ((subtotal / (1 + tax_rate)) * tax_rate).toFixed(0);
-    // }
-    // if (store.settings.tax_type === 'Exclusive') {
-    //   tax = (subtotal * tax_rate).toFixed(0);
-    // }
-
+    const totalDiscount = parseInt(productsDiscount, 10) + parseInt(discount, 10);
     const totalExtraFees = sum(order.extra_fees.map((item) => parseInt(item.amount, 10)));
-    const total = totalExtraFees + subtotal - discount;
-
+    const total = totalExtraFees + subtotal - totalDiscount;
+    const totalProfit = productsProfit - totalDiscount;
     setOrder((preState) => {
       return {
         ...preState,
+        total_discount: totalDiscount,
+        products_discount: productsDiscount,
         subtotal: String(subtotal),
         total: String(total),
         due_amount: String(total),
@@ -280,8 +306,8 @@ function OrderNewForm(props) {
                   <OrderProductList
                     products={order.products}
                     onDelete={(index) => handleRemoveProduct(index)}
-                    onIncreaseQuantity={(index) => handleUpdateQuantity(index, 1)}
-                    onDecreaseQuantity={(index) => handleUpdateQuantity(index, -1)}
+                    onChangeQuantity={(quantity, index) => handleUpdateQuantity(quantity, index)}
+                    onChangeSalePrice={handleChangeSalePrice}
                   />
                 </Scrollbar>
               ) : (
@@ -324,6 +350,8 @@ function OrderNewForm(props) {
               }}
               total={order.total}
               taxIncluded={store.settings.tax_type !== 'Exclusive'}
+              productsDiscount={order.products_discount}
+              totalDiscount={order.total_discount}
               discount={{
                 discount: order.discount,
                 discountPercentage: order.discount_percentage,

@@ -1,11 +1,11 @@
 import { useState, ReactNode } from 'react';
-import { connect } from 'react-redux';
+import { connect, useSelector } from 'react-redux';
 import { Navigate, useLocation } from 'react-router-dom';
 // pages
 import Login from '../pages/authentication/Login';
 
-
-function AuthGuard({ children, isLoggedIn }) {
+function AuthGuard({ children }) {
+  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
   const { pathname } = useLocation();
   const [requestedLocation, setRequestedLocation] = useState(null);
 
@@ -24,8 +24,4 @@ function AuthGuard({ children, isLoggedIn }) {
   return <>{children}</>;
 }
 
-const mapStateToProps = (state) => ({
-  isLoggedIn: state.auth.isLoggedIn
-})
-
-export default connect(mapStateToProps)(AuthGuard)
+export default AuthGuard;

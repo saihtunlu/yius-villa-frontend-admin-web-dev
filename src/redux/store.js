@@ -1,14 +1,25 @@
-import { applyMiddleware } from 'redux';
-import { configureStore, Tuple } from '@reduxjs/toolkit';
-import { composeWithDevTools } from 'redux-devtools-extension/developmentOnly';
-import { thunk } from 'redux-thunk';
-import rootReducer from './reducer';
+import { configureStore } from '@reduxjs/toolkit';
+import { useDispatch as useAppDispatch, useSelector as useAppSelector } from 'react-redux';
+import { persistStore, persistReducer } from 'redux-persist';
+import { rootPersistConfig, rootReducer } from './rootReducer';
 
-const middleware = [thunk];
+// ----------------------------------------------------------------------
 
-// const store = configureStore(rootReducer, composeWithDevTools(applyMiddleware(...middleware)));
 const store = configureStore({
-  reducer: rootReducer,
-  middleware: () => new Tuple(...middleware),
+  reducer: persistReducer(rootPersistConfig, rootReducer),
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: false,
+      immutableCheck: false,
+    }),
 });
-export default store;
+
+const persistor = persistStore(store);
+
+const { dispatch } = store;
+
+const useSelector = useAppSelector;
+
+const useDispatch = () => useAppDispatch();
+
+export { store, persistor, dispatch, useSelector, useDispatch };

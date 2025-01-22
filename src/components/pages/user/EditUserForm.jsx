@@ -1,8 +1,6 @@
-import { Icon } from '@iconify/react';
 import {
   Card,
   Stack,
-  Button,
   TextField,
   CardHeader,
   Grid2 as Grid,
@@ -10,8 +8,6 @@ import {
   InputLabel,
   Select,
   MenuItem,
-  IconButton,
-  InputAdornment,
   Typography,
   Paper,
   Checkbox,
@@ -21,19 +17,14 @@ import {
   TableHead,
   Table,
   TableContainer,
-  FormControlLabel,
   Switch,
 } from '@mui/material';
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { useSnackbar } from 'notistack';
-import VisibilityIcon from '@mui/icons-material/Visibility';
-import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import axios from 'axios';
 import { LoadingButton } from '@mui/lab';
 
 import Media from '../../common/Media';
-import Iconify from '../../common/Iconify';
 
 const EditUserDetail = ({ user }) => {
   const { enqueueSnackbar } = useSnackbar();

@@ -8,7 +8,7 @@ import peopleOutline from '@iconify/icons-eva/people-outline';
 import { PATH_DASHBOARD } from '../../../router/paths';
 import Iconify from '../../../components/common/Iconify';
 import { checkRole } from '../../../utils/role';
-import store from '../../../redux/store';
+import { store, useSelector } from '../../../redux/store';
 
 const sidebarConfig = [
   {
@@ -33,6 +33,45 @@ const sidebarConfig = [
         path: 'order',
         icon: <Iconify icon={'solar:cart-3-bold-duotone'} />,
         show: (user) => checkRole('Order', 'read', user),
+      },
+      {
+        title: 'Website Orders',
+        path: 'website-order',
+        icon: <Iconify icon={'solar:inbox-in-bold-duotone'} />,
+        show: (user) => checkRole('Order', 'read', user),
+        badge: 'websiteOrderBadge',
+      },
+
+      {
+        title: 'Delivery',
+        path: 'delivery',
+        icon: <Iconify icon={'mage:delivery-truck-fill'} />,
+        show: () => true,
+        children: [
+          {
+            title: 'List',
+            path: PATH_DASHBOARD.delivery.list,
+            show: () => true,
+          },
+          {
+            title: 'Pickup List',
+            path: PATH_DASHBOARD.delivery.pickupList,
+            show: () => true,
+          },
+        ],
+      },
+      {
+        title: 'Coupon',
+        path: 'coupon',
+        icon: <Iconify icon={'mdi:coupon'} />,
+        show: (user) => checkRole('Coupon', 'read', user),
+        children: [
+          {
+            title: 'List',
+            path: PATH_DASHBOARD.coupon.list,
+            show: (user) => checkRole('Coupon', 'read', user),
+          },
+        ],
       },
       {
         title: 'Products',

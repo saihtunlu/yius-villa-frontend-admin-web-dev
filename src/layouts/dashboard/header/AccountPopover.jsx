@@ -10,10 +10,10 @@ import { Box, Divider, Typography, Stack, MenuItem } from '@mui/material';
 import useIsMountedRef from '../../../hooks/useIsMountedRef';
 // components
 import Avatar from '../../../components/common/Avatar';
-import { logout } from '../../../redux/actions';
 import { IconButtonAnimate } from '../../../components/animate';
 import MenuPopover from '../../../components/common/MenuPopover';
 import { PATH_DASHBOARD, PATH_AUTH } from '../../../router/paths';
+import { handleLogOut } from '../../../redux/slices/auth';
 
 // ----------------------------------------------------------------------
 
@@ -49,9 +49,9 @@ function AccountPopover({ user }) {
     setOpen(null);
   };
 
-  const handleLogout = async () => {
+  const handleLogout_ = async () => {
     try {
-      await logout();
+      await handleLogOut();
       navigate(PATH_AUTH.login, { replace: true });
 
       if (isMountedRef.current) {
@@ -121,7 +121,7 @@ function AccountPopover({ user }) {
 
         <Divider sx={{ borderStyle: 'dashed', mt: 1, mb: 1 }} />
 
-        <MenuItem onClick={handleLogout} sx={{ m: '8px !important' }}>
+        <MenuItem onClick={handleLogout_} sx={{ m: '8px !important' }}>
           Logout
         </MenuItem>
       </MenuPopover>

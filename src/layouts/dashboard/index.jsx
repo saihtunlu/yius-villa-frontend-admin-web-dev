@@ -18,16 +18,11 @@ import { HEADER, NAVBAR } from '../../config';
 import DashboardHeader from './header';
 import NavbarVertical from './navbar/NavbarVertical';
 import NavbarHorizontal from './navbar/NavbarHorizontal';
-import {
-  getImages,
-  getLocations,
-  getInvoiceSetting,
-  getPaymentMethods,
-  getPackingSlipSetting,
-  getCategory,
-} from '../../redux/actions';
-import { FabButtonAnimate, varFade, varZoom } from '../../components/animate';
-import AttendForm from '../../components/pages/attendance/AttendForm';
+// import { getImages, getPaymentMethods } from '../../redux/actions';
+import { varZoom } from '../../components/animate';
+import { handleGettingImagesList } from '../../redux/slices/images';
+import { getPaymentMethods } from '../../redux/slices/paymentMethod';
+import { handleGetWebsiteOrderBadges } from '../../redux/slices/badge';
 
 // ----------------------------------------------------------------------
 
@@ -75,7 +70,8 @@ export default function DashboardLayout() {
   }, [pathname]);
 
   useEffect(() => {
-    getImages(1);
+    handleGettingImagesList(1);
+    handleGetWebsiteOrderBadges();
     // getCategory();
     getPaymentMethods();
     // getInvoiceSetting();

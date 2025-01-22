@@ -5,20 +5,31 @@ import { connect } from 'react-redux';
 import { sum } from 'lodash';
 import { useBlocker } from 'react-router-dom';
 import onScan from 'onscan.js';
+import axios from 'axios';
 
 import { useSnackbar } from 'notistack';
 import OrderProductList from './OrderProductList';
 import Scrollbar from '../../common/Scrollbar';
 import EmptyContent from '../../common/EmptyContent';
-import AddProduct from './AddProduct';
+import AddProduct, { searchProducts } from './AddProduct';
 import OrderSummary from './OrderSummary';
 import CustomerDetail from './CustomerDetail';
-import { searchProducts, updateOrder } from '../../../redux/actions';
+
 import OrderPayment from './OrderPayment';
 import FulfillProducts from './FulfillProducts';
 import OrderTimeline from './OrderTimeline';
-import { INITIAL_STORE } from '../../../redux/reducer/store';
+
 import GeneralDetail from './GeneralDetail';
+import { INITIAL_STORE } from '../../../redux/slices/store';
+
+export const updateOrder = async (order, removedIDs) => {
+  try {
+    const { data } = await axios.put('sale/', { data: order, removed_ids: removedIDs });
+    return Promise.resolve(data);
+  } catch (err) {
+    return Promise.reject(err);
+  }
+};
 
 function OrderEditForm(props) {
   const { store, initialOrder, onUpdateStatus } = props;
@@ -180,11 +191,11 @@ function OrderEditForm(props) {
         setLoading(false);
       });
   };
-  const handleUpdateQuantity = (index, number) => {
+  const handleUpdateQuantity = (quantity, index) => {
     setOrder((preState) => {
       var newState = JSON.parse(JSON.stringify(preState));
       // eslint-disable-next-line
-      newState.products[index].quantity = parseInt(newState.products[index].quantity, 10) + number;
+      newState.products[index].quantity = quantity;
       newState.products[index].subtotal =
         parseInt(newState.products[index].quantity, 10) * newState.products[index].price;
 
@@ -193,6 +204,13 @@ function OrderEditForm(props) {
       if (!newState.products[index].cost_per_item || parseInt(newState.products[index].cost_per_item, 10) === 0) {
         newState.products[index].cost_per_item = parseInt(parseFloat(sellingPrice) * 0.6666, 10).toFixed(0);
       }
+
+      var discount =
+        parseInt(newState.products[index].sale_price, 10) > 0
+          ? (parseInt(newState.products[index].price, 10) - parseInt(newState.products[index].sale_price, 10)) *
+            parseInt(newState.products[index].quantity, 10)
+          : 0;
+      newState.products[index].discount = discount;
 
       newState.products[index].profit =
         parseInt(sellingPrice - newState.products[index].cost_per_item, 10) *
@@ -213,7 +231,19 @@ function OrderEditForm(props) {
       return newState;
     });
   };
-
+  const handleChangeSalePrice = (sale_price, index) => {
+    setOrder((preState) => {
+      var newState = JSON.parse(JSON.stringify(preState));
+      newState.products[index].sale_price = sale_price;
+      var discount =
+        parseInt(newState.products[index].sale_price, 10) > 0
+          ? (parseInt(newState.products[index].price, 10) - parseInt(newState.products[index].sale_price, 10)) *
+            parseInt(newState.products[index].quantity, 10)
+          : 0;
+      newState.products[index].discount = discount;
+      return newState;
+    });
+  };
   const handleRemoveProduct = (index) => {
     const removedID = order.products[index]?.id;
     if (removedID) {
@@ -230,7 +260,8 @@ function OrderEditForm(props) {
 
   const calcOrderValues = (newDiscount) => {
     const subtotal = sum(order.products.map((item) => parseInt(item.subtotal, 10)));
-    const profit_amount = sum(order.products.map((item) => parseInt(item.profit, 10)));
+    const productsProfit = sum(order.products.map((item) => parseInt(item.profit, 10)));
+    const productsDiscount = sum(order.products.map((item) => parseInt(item.discount, 10)));
 
     var discount = order.discount;
     var discount_percentage = order.discount_percentage;
@@ -246,21 +277,24 @@ function OrderEditForm(props) {
       var discountAmount = ((parseInt(discount_percentage, 10) / 100) * subtotal).toFixed(0);
       discount = discountAmount;
     }
-    const totalExtraFees = sum(order.extra_fees.map((item) => parseInt(item.amount, 10)));
-    const total = totalExtraFees + subtotal - parseInt(discount, 10);
-    const due_amount = total - parseInt(order.paid_amount, 10);
 
+    const totalDiscount = parseInt(productsDiscount, 10) + parseInt(discount, 10);
+    const totalExtraFees = sum(order.extra_fees.map((item) => parseInt(item.amount, 10)));
+    const total = totalExtraFees + subtotal - totalDiscount;
+    const totalProfit = productsProfit - totalDiscount;
     setOrder((preState) => {
       return {
         ...preState,
-        subtotal,
-        total,
-        discount,
+        total_discount: totalDiscount,
+        products_discount: productsDiscount,
+        subtotal: String(subtotal),
+        total: String(total),
+        due_amount: String(total),
+        discount: String(discount),
         discount_percentage,
         discount_reason,
         discount_type,
-        profit_amount,
-        due_amount,
+        profit_amount: totalProfit,
       };
     });
   };
@@ -298,8 +332,8 @@ function OrderEditForm(props) {
                   <OrderProductList
                     products={order.products}
                     onDelete={(index) => handleRemoveProduct(index)}
-                    onIncreaseQuantity={(index) => handleUpdateQuantity(index, 1)}
-                    onDecreaseQuantity={(index) => handleUpdateQuantity(index, -1)}
+                    onChangeQuantity={(quantity, index) => handleUpdateQuantity(quantity, index)}
+                    onChangeSalePrice={handleChangeSalePrice}
                   />
                 </Scrollbar>
               ) : (
@@ -366,6 +400,8 @@ function OrderEditForm(props) {
                   };
                 });
               }}
+              productsDiscount={order.products_discount}
+              totalDiscount={order.total_discount}
               profitAmount={order.profit_amount}
               total={order.total}
               taxIncluded={store.settings.tax_type !== 'Exclusive'}

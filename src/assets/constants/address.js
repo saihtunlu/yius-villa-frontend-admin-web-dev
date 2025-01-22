@@ -1215,3 +1215,5 @@ address.forEach((item) => {
 });
 
 export default address;
+
+export const allCities = address.flatMap((add) => add.children.map((child) => child.value));

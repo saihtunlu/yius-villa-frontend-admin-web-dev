@@ -1,14 +1,14 @@
 const isDev = process.env.NODE_ENV === 'development';
 
-export const googleAnalyticsConfig = process.env.REACT_APP_GA_MEASUREMENT_ID;
+export const googleAnalyticsConfig = 'G-W4TB8DG09R';
 
 export const APP_URL = window.location.origin;
 
 // export const API_URL = process.env.REACT_APP_API_URL || '/api/';
 // export const MEDIA_URL = '';
 
-// export const API_URL = 'http://localhost:8000/api/';
-export const API_URL = 'https://backend.yiusvilla.com/api/';
+export const API_URL = 'http://localhost:8000/api/';
+// export const API_URL = 'https://backend.yiusvilla.com/api/';
 export const MEDIA_URL = '';
 
 export const HEADER = {

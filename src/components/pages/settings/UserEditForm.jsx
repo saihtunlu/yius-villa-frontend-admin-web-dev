@@ -4,8 +4,7 @@ import LoadingButton from '@mui/lab/LoadingButton';
 import { useSnackbar } from 'notistack';
 
 import Media from '../../common/Media';
-import { updateAuth } from '../../../redux/actions';
-import { INITIAL_USER } from '../../../redux/reducer/auth';
+import { INITIAL_USER, updateAuth } from '../../../redux/slices/auth';
 
 function UserEditForm(props) {
   const { enqueueSnackbar } = useSnackbar();

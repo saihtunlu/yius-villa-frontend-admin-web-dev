@@ -3,12 +3,11 @@ import { useEffect, useState } from 'react';
 import { useSnackbar } from 'notistack';
 import { connect } from 'react-redux';
 
-import { updateStore } from '../../../redux/actions';
 import Img from '../../common/Img';
 import Label from '../../common/Label';
 import axios from '../../../utils/axios';
 import SkeletonCard from '../../skeleton/SkeletonCard';
-import { INITIAL_STORE } from '../../../redux/reducer/store';
+import { INITIAL_STORE, updateStore } from '../../../redux/slices/store';
 
 function VoucherTemplate(props) {
   const { enqueueSnackbar } = useSnackbar();

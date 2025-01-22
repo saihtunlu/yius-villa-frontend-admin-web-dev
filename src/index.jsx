@@ -10,7 +10,7 @@ import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment';
 
 // redux
 import { Provider } from 'react-redux';
-import store from './redux/store';
+import { store } from './redux/store';
 
 import App from './App';
 import './assets/style/index.css';
@@ -62,19 +62,22 @@ import { SettingsProvider } from './contexts/SettingsContext';
 import ThemeSettings from './components/settings';
 
 import { MotionLazyContainer } from './components/animate';
+import { registerFBSW } from './firebase';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
-    navigator.serviceWorker
-      .register('/service-worker.js')
-      .then((registration) => {
-        console.log('Service Worker registered: ', registration);
-      })
-      .catch((registrationError) => {
-        console.log('Service Worker registration failed: ', registrationError);
-      });
+    // navigator.serviceWorker
+    //   .register('/service-worker.js')
+    //   .then((registration) => {
+    //     console.log('Service Worker registered: ', registration);
+    //   })
+    //   .catch((registrationError) => {
+    //     console.log('Service Worker registration failed: ', registrationError);
+    //   });
+
+    registerFBSW();
   });
 }
 

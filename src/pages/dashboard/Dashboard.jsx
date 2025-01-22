@@ -23,10 +23,11 @@ import TopCustomers from '../../components/pages/dashboard/TopCustomers';
 import TopCities from '../../components/pages/dashboard/TopCities';
 import Iconify from '../../components/common/Iconify';
 import SaleChannels from '../../components/pages/dashboard/SaleChannels';
-import { INITIAL_STORE } from '../../redux/reducer/store';
-import { INITIAL_USER } from '../../components/pages/user/NewUserForm';
+
 import TopSalesmen from '../../components/pages/dashboard/TopSalesmen';
 import { fCurrency } from '../../utils/formatNumber';
+import { INITIAL_USER } from '../../redux/slices/auth';
+import { INITIAL_STORE } from '../../redux/slices/store';
 
 const end = new Date();
 const start = new Date();

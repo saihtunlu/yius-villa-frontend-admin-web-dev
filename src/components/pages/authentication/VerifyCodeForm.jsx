@@ -5,8 +5,8 @@ import { useNavigate } from 'react-router-dom';
 import ReactCodeInput from 'react-verification-code-input';
 import { useSnackbar } from 'notistack';
 import useQuery from '../../../utils/RouteQuery';
-import { forgot, verify } from '../../../redux/actions';
 import { PATH_AUTH } from '../../../router/paths';
+import { forgot, verify } from '../../../redux/slices/auth';
 
 function VerifyCodeForm(props) {
   // constants

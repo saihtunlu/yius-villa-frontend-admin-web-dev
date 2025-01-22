@@ -19,7 +19,7 @@ import {
   styled,
 } from '@mui/material';
 import { useState, useEffect, useRef, useCallback } from 'react';
-import { connect } from 'react-redux';
+import { connect, useSelector } from 'react-redux';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { LoadingButton } from '@mui/lab';
 import closeFill from '@iconify/icons-eva/close-fill';
@@ -33,11 +33,12 @@ import { useSnackbar } from 'notistack';
 
 import Scrollbar from './Scrollbar';
 import UploadMultiFile from './UploadMultiFile';
-import { getImages, removeImage, uploadImages } from '../../redux/actions';
+
 import LightboxModal from './LightboxModal';
 import Img from './Img';
-import { varBounce, varFade, varZoom } from '../animate';
+import { varFade } from '../animate';
 import Iconify from './Iconify';
+import { handleGettingImagesList, handleRemoveImage, handleUploadImages } from '../../redux/slices/images';
 
 const SingleRootStyle = styled('div')(({ theme, sx }) => ({
   width: 144,
@@ -83,9 +84,10 @@ const PlaceholderStyle = styled('div')(({ theme }) => ({
   '&:hover': { opacity: 0.72 },
 }));
 
-const Media = ({ imagesState, initialSelected, onChange, single, caption, profile = false }) => {
+const Media = ({ initialSelected, onChange, single, caption, profile = false }) => {
   const { enqueueSnackbar } = useSnackbar();
 
+  const imagesState = useSelector((state) => state.images.list);
   const [selected, setSelected] = useState([]);
   const [files, setFiles] = useState([]);
   const [images, setImages] = useState({
@@ -194,7 +196,7 @@ const Media = ({ imagesState, initialSelected, onChange, single, caption, profil
   };
   const handleUpload = () => {
     setUploading(true);
-    uploadImages(files)
+    handleUploadImages(files)
       .then(() => {
         setTab(0);
         setFiles([]);
@@ -221,7 +223,7 @@ const Media = ({ imagesState, initialSelected, onChange, single, caption, profil
         data.push(image.id);
       }
     });
-    removeImage(data)
+    handleRemoveImage(data)
       .then(() => {
         setRemoving(false);
       })
@@ -520,7 +522,7 @@ const Media = ({ imagesState, initialSelected, onChange, single, caption, profil
                       <Tooltip title="Load More images">
                         <IconButton
                           onClick={() => {
-                            getImages(images.next);
+                            handleGettingImagesList(images.next);
                           }}
                         >
                           <Iconify icon={'si:expand-more-alt-fill'} />
@@ -640,9 +642,5 @@ const Media = ({ imagesState, initialSelected, onChange, single, caption, profil
     </div>
   );
 };
-const mapStateToProps = (state) => {
-  return {
-    imagesState: state.images,
-  };
-};
-export default connect(mapStateToProps)(Media);
+
+export default Media;

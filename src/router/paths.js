@@ -67,6 +67,21 @@ export const PATH_DASHBOARD = {
     create: path(ROOTS_DASHBOARD, 'order/create'),
     edit: (id) => path(ROOTS_DASHBOARD, `order/${id}/edit`),
   },
+  delivery: {
+    list: path(ROOTS_DASHBOARD, 'delivery/list'),
+    pickupList: path(ROOTS_DASHBOARD, 'delivery/pickup-list'),
+    editPickup: (id) => path(ROOTS_DASHBOARD, `delivery/pickup/${id}/edit`),
+    createPickup: path(ROOTS_DASHBOARD, 'delivery/pickup/create'),
+  },
+  coupon: {
+    list: path(ROOTS_DASHBOARD, 'coupon/list'),
+  },
+  websiteOrder: {
+    list: path(ROOTS_DASHBOARD, 'website-order/list'),
+    itemList: path(ROOTS_DASHBOARD, 'website-order/item/list'),
+    create: path(ROOTS_DASHBOARD, 'website-order/create'),
+    edit: (id) => path(ROOTS_DASHBOARD, `website-order/${id}/edit`),
+  },
   settings: {
     general: path(ROOTS_DASHBOARD, 'settings/general'),
     account: path(ROOTS_DASHBOARD, 'settings/my-account'),

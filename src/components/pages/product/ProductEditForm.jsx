@@ -31,20 +31,28 @@ import LoadingButton from '@mui/lab/LoadingButton';
 import { connect } from 'react-redux';
 import { useSnackbar } from 'notistack';
 import arrowIosDownwardFill from '@iconify/icons-eva/arrow-ios-downward-fill';
-import trash2Fill from '@iconify/icons-eva/trash-2-fill';
 import { Icon } from '@iconify/react';
 import { useNavigate } from 'react-router-dom';
-import { PATH_DASHBOARD } from '../../../router/paths';
+import axios from 'axios';
 
 import QuillEditor from '../../common/quill';
 import Media from '../../common/Media';
-import { editProduct } from '../../../redux/actions';
+
 import Iconify from '../../common/Iconify';
 import { getInitialVariation } from '../../../utils/getVariation';
 import { fCurrency } from '../../../utils/formatNumber';
 import BarcodePrint from './BarcodePrint';
 import Label from '../../common/Label';
 import RemoteAutocomplete from '../../common/RemoteAutocomplete';
+
+export const editProduct = async (data, removedVariations) => {
+  try {
+    const response = await axios.put('product/', { data, removed_variations: removedVariations });
+    return Promise.resolve(response);
+  } catch (err) {
+    return Promise.reject();
+  }
+};
 
 const LabelStyle = styled(Typography)(({ theme }) => ({
   ...theme.typography.subtitle2,

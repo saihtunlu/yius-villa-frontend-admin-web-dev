@@ -15,7 +15,7 @@ import Page from '../../components/common/Page';
 import AuthHeader from '../../components/pages/authentication/AuthHeader';
 import StoreRegisterForm from '../../components/pages/authentication/StoreRegisterForm';
 import LocationRegisterForm from '../../components/pages/authentication/LocationRegisterForm';
-import { register } from '../../redux/actions';
+
 import { fUsername } from '../../utils/formatString';
 import useResponsive from '../../hooks/useResponsive';
 import { PREFIX_URL } from '../../config';
@@ -93,6 +93,7 @@ function QontoStepIcon({ active, completed }) {
   );
 }
 
+const register = () => {};
 export default function Register() {
   const mdUp = useResponsive('up', 'md');
   const smUp = useResponsive('up', 'sm');

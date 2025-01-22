@@ -1,15 +1,23 @@
 import { NavLink as RouterLink } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 // @mui
 import { Box, Link, ListItemText } from '@mui/material';
 //
 import Iconify from '../../common/Iconify';
 import { ListItemStyle, ListItemTextStyle, ListItemIconStyle } from './style';
 import { isExternalLink } from '..';
+import Label from '../../common/Label';
 
 // ----------------------------------------------------------------------
 
 export function NavItemRoot({ item, isCollapse, open = false, active, onOpen }) {
   const { title, path, icon, info, children } = item;
+  const badge = useSelector((state) => state.badge);
+
+  var totalBadge = 0;
+  if (item.badge) {
+    totalBadge = Object.values(badge[item.badge]).reduce((acc, value) => acc + value, 0);
+  }
 
   const renderContent = (
     <>
@@ -20,6 +28,11 @@ export function NavItemRoot({ item, isCollapse, open = false, active, onOpen }) 
           {info && info}
           {children && <ArrowIcon open={open} />}
         </>
+      )}
+      {totalBadge !== 0 && (
+        <Label color="error" variant="filled" sx={{ borderRadius: '100px' }}>
+          {totalBadge}
+        </Label>
       )}
     </>
   );

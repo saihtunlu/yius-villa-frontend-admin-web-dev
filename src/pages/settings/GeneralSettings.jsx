@@ -2,13 +2,8 @@ import { useEffect, useState } from 'react';
 import { Grid2 as Grid, Box, Tab, Tabs } from '@mui/material';
 import { connect } from 'react-redux';
 
-import homeFill from '@iconify/icons-eva/home-fill';
-import pinFill from '@iconify/icons-eva/pin-fill';
-import creditCardFill from '@iconify/icons-eva/credit-card-fill';
 import { capitalCase } from 'change-case';
 import { useNavigate } from 'react-router-dom';
-import printerFill from '@iconify/icons-eva/printer-fill';
-import { Icon } from '@iconify/react';
 
 import Page from '../../components/common/Page';
 import HeaderBreadcrumbs from '../../components/common/HeaderBreadcrumbs';
@@ -21,11 +16,11 @@ import StorePaymentMethods from '../../components/pages/settings/StorePaymentMet
 import PackingSlipTemplates from '../../components/pages/settings/PackingSlipTemplates';
 import VoucherTemplate from '../../components/pages/settings/VoucherTemplate';
 import SaleSlipTemplates from '../../components/pages/settings/SaleSlipTemplates';
-import Deduction from '../../components/pages/attendance/AttendanceSettingForm';
 
-import { INITIAL_STORE } from '../../redux/reducer/store';
 import RoleList from '../../components/pages/settings/RoleList';
 import Iconify from '../../components/common/Iconify';
+import { INITIAL_STORE } from '../../redux/slices/store';
+import WebsiteContacts from '../../components/pages/settings/WebsiteContacts';
 
 const StoreSettings = (props) => {
   const { store } = props;
@@ -39,6 +34,12 @@ const StoreSettings = (props) => {
       icon: <Iconify icon={'solar:shop-bold-duotone'} />,
       component: <StoreGeneralForm />,
     },
+    {
+      value: 'Website Contacts',
+      icon: <Iconify icon={'fluent:plug-connected-20-filled'} />,
+      component: store.id ? <WebsiteContacts /> : <SettingSkeleton />,
+    },
+
     {
       value: 'Payment Methods',
       icon: <Iconify icon={'solar:card-bold-duotone'} />,

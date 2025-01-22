@@ -35,13 +35,23 @@ import closeFill from '@iconify/icons-eva/close-fill';
 import plusFill from '@iconify/icons-eva/plus-fill';
 import searchFill from '@iconify/icons-eva/search-fill';
 import trash2Fill from '@iconify/icons-eva/trash-2-fill';
+import axios from 'axios';
 
 import SearchNotFound from '../../common/SearchNotFound';
-import { searchProducts } from '../../../redux/actions';
 import Img from '../../common/Img';
 import { fCurrency } from '../../../utils/formatNumber';
 import Media from '../../common/Media';
 import Iconify from '../../common/Iconify';
+
+export const searchProducts = async (query) => {
+  const url = `product/search/?query=${query}`;
+  try {
+    const { data } = await axios.get(url);
+    return Promise.resolve(data);
+  } catch (err) {
+    return Promise.reject(err);
+  }
+};
 
 const INITIAL_CUSTOM_PRODUCT = {
   name: '',
@@ -101,35 +111,8 @@ const AddProduct = (props) => {
       var selectedProducts = [];
       searchResult.forEach((product, index) => {
         if (product.isSelected) {
-          var sellingPrice = product.sale_price || product.regular_price;
-
-          var primary_price =
-            parseInt(product.cost_per_item, 10) === 0 || !product.cost_per_item
-              ? parseInt(parseInt(sellingPrice, 10) * 0.6666, 10)
-              : product.cost_per_item;
-
-          var profit = sellingPrice - primary_price;
-
-          var margin = ((profit / sellingPrice) * 100).toFixed(2);
-
-          selectedProducts.push({
-            profit,
-            margin,
-            cost_per_item: product.cost_per_item,
-            name: product.is_main_product ? product.name : product.product_name + ' - ' + product.name,
-            quantity: 1,
-            price: sellingPrice,
-            image:
-              (product.is_main_product ? product.images[0]?.image || '/assets/img/default.png' : product.image) ||
-              '/assets/img/default.png',
-            variation_product: product.is_main_product ? null : product.id,
-            number_of_fulfilled: 0,
-            product: product.is_main_product ? product.id : null,
-            subtotal: sellingPrice,
-            number_of_stock: product.number_of_stock,
-            regular_price: product.regular_price,
-            sale_price: product.sale_price,
-          });
+          const item = getCartItem(product);
+          selectedProducts.push(item);
         }
       });
       onSelect(selectedProducts);
@@ -147,6 +130,44 @@ const AddProduct = (props) => {
       onSelect(selectedCustomProducts);
     }
     setOpen(false);
+  };
+
+  const getCartItem = (item) => {
+    var sellingPrice = item.regular_price;
+
+    var primary_price =
+      parseInt(item.cost_per_item, 10) === 0 || !item.cost_per_item
+        ? parseInt(parseInt(sellingPrice, 10) * 0.6666, 10)
+        : item.cost_per_item;
+
+    var discount =
+      parseInt(item.sale_price, 10) > 0 ? (parseInt(item.regular_price, 10) - parseInt(item.sale_price, 10)) * 1 : 0;
+
+    var profit = sellingPrice - primary_price;
+
+    var margin = ((profit / sellingPrice) * 100).toFixed(2);
+
+    return {
+      cost_per_item: primary_price,
+      name: item.is_main_product ? item.name : item.product_name + ' - ' + item.name,
+      quantity: 1,
+      price: sellingPrice,
+      profit,
+      margin,
+      image:
+        (item.is_main_product ? item.images[0]?.image || '/assets/img/default.png' : item.image) ||
+        '/assets/img/default.png',
+      variation_product: item.is_main_product ? null : item.id,
+      number_of_fulfilled: 0,
+      product: item.is_main_product ? item.id : item.product,
+      subtotal: sellingPrice,
+      number_of_stock: item.number_of_stock,
+      regular_price: item.regular_price,
+      sale_price: item.sale_price || 0,
+      selectedID: item.id,
+      discount,
+      store: item.store,
+    };
   };
 
   const handleSearchProducts = () => {
@@ -359,10 +380,34 @@ const AddProduct = (props) => {
                                   </Typography>
                                 }
                                 secondary={
-                                  <Typography variant="body2">
-                                    Price : {fCurrency(product.sale_price || product.regular_price)} /{' '}
-                                    {product.number_of_stock} in stock
-                                  </Typography>
+                                  <Stack direction={'row'} spacing={1.5}>
+                                    {product.sale_price !== 0 ? (
+                                      <Stack
+                                        direction={'row'}
+                                        spacing={1}
+                                        sx={{
+                                          mt: 0.5,
+                                        }}
+                                        alignItems={'center'}
+                                      >
+                                        <Typography variant="body2" sx={{ fontWeight: 500 }} color="primary">
+                                          {fCurrency(product.sale_price)}
+                                        </Typography>
+                                        <Typography
+                                          variant="body2"
+                                          sx={{ textDecoration: 'line-through', opacity: 0.7 }}
+                                          color="primary"
+                                        >
+                                          {fCurrency(product.regular_price)}
+                                        </Typography>
+                                      </Stack>
+                                    ) : (
+                                      <Typography variant="body2" sx={{ mt: 0.5, fontWeight: 500 }} color="primary">
+                                        {fCurrency(product.regular_price)}
+                                      </Typography>
+                                    )}
+                                    <Typography variant="body2">/ {product.number_of_stock} in stock</Typography>
+                                  </Stack>
                                 }
                               />
                             </ListItemButton>

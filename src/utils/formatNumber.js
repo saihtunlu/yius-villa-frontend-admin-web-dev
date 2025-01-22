@@ -1,6 +1,6 @@
 import { replace } from 'lodash';
 import numeral from 'numeral';
-import store from '../redux/store';
+import { store } from '../redux/store';
 
 // ----------------------------------------------------------------------
 
@@ -9,7 +9,7 @@ export function fCurrency(number) {
   // return numeral(number).format(Number.isInteger(number) ? '0,000' : '0,000') + 'KS';
 
   return (
-    (store_.auth.user.store.settings.prefix_currency || '') +
+    (store_.auth?.user?.store?.settings?.prefix_currency || '') +
     numeral(number).format(Number.isInteger(number) ? '0,000' : '0,000') +
     (store_.auth.user.store.settings.suffix_currency || '')
   );

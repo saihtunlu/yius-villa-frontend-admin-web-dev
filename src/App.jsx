@@ -1,18 +1,42 @@
 import React, { useEffect } from 'react';
 import { useSnackbar } from 'notistack';
-import { Button, useTheme } from '@mui/material';
+import { useTheme } from '@mui/material';
 import { RouterProvider } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { onMessage } from 'firebase/messaging';
 
-import { connect } from 'react-redux';
-import { setOldToken } from './redux/actions';
 import LoadingScreen from './components/common/LoadingScreen';
 import Router from './router';
 import { errorHandler, loadProgressBar } from './utils/axios';
 import { addScrollbarStyle } from './utils/scrollbarStyle';
+import { setOldToken, storeFCMToken } from './redux/slices/auth';
+import { requestNotificationPermission, messaging } from './firebase';
+import { handleGetWebsiteOrderBadges } from './redux/slices/badge';
 
-const App = ({ isReady }) => {
+const App = () => {
+  const isReady = useSelector((state) => state.auth.isReady);
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
   const theme = useTheme();
+  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
+
+  useEffect(() => {
+    if (isLoggedIn) {
+      requestNotificationPermission()
+        .then((token) => {
+          if (token) {
+            storeFCMToken(token);
+          }
+        })
+        .catch((err) => console.log('Permission denied:', err));
+    }
+  }, [isLoggedIn]);
+
+  onMessage(messaging, (payload) => {
+    if (payload.data.type === 'Update Order') {
+      handleGetWebsiteOrderBadges();
+    }
+    enqueueSnackbar(payload.notification.body);
+  });
 
   // ----------------------------------------------------------------------
   useEffect(() => {
@@ -50,8 +74,4 @@ const App = ({ isReady }) => {
   );
 };
 
-const mapStateToProps = (state) => ({
-  isReady: state.auth.isReady,
-});
-
-export default connect(mapStateToProps)(App);
+export default App;
