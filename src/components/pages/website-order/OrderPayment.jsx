@@ -1,64 +1,14 @@
 import { useState } from 'react';
 import { Icon } from '@iconify/react';
 // material
-import {
-  Card,
-  Button,
-  Typography,
-  Stack,
-  Paper,
-  CardContent,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-  InputAdornment,
-  TextField,
-  useTheme,
-  Box,
-  styled,
-  List,
-  FormControlLabel,
-  RadioGroup,
-  ListItem,
-  ListItemButton,
-  Radio,
-  ListItemAvatar,
-  ListItemText,
-  ListSubheader,
-  Divider,
-} from '@mui/material';
+import { Card, Typography, Stack, Paper, CardContent, useTheme, Divider } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
-import { useSelector } from 'react-redux';
 import axios from 'axios';
 
 import { fDateTimeSuffix } from '../../../utils/formatTime';
 import { fCurrency } from '../../../utils/formatNumber';
 import Label from '../../common/Label';
-import Media from '../../common/Media';
 import Img from '../../common/Img';
-import Iconify from '../../common/Iconify';
-
-const LabelStyle = styled(Typography)(({ theme }) => ({
-  ...theme.typography.subtitle2,
-  color: theme.palette.text.secondary,
-  marginBottom: theme.spacing(1),
-}));
-
-const ListWrapperStyle = styled(Paper)(({ theme }) => ({
-  width: '100%',
-  border: `solid 1px ${theme.palette.divider}`,
-  overflow: 'hidden',
-}));
-
-const INITIAL_PAYMENT = {
-  amount: '',
-  date: new Date(),
-  payment_method: {
-    name: '',
-  },
-  image: '/assets/img/default.png',
-};
 
 export const addOrderPayment = async (payment) => {
   try {

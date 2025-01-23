@@ -94,11 +94,12 @@ export default function OrderPayment({ initialOrder, onRemovePayment, onChange }
   const handleClose = () => {
     setOpen(false);
   };
-  const handleCheckPayment = (id) => {
+  const handleCheckPayment = (id, checked) => {
     setCheckingPayment(true);
     const payload = {
       sid: initialOrder.id,
       id,
+      checked,
     };
     axios
       .put('sale/payment/', { data: payload })
@@ -239,9 +240,7 @@ export default function OrderPayment({ initialOrder, onRemovePayment, onChange }
                           startIcon={<Icon icon={payment.checked ? 'line-md:check-all' : 'iconamoon:clock-bold'} />}
                           onClick={() => {
                             setCheckingIndex(index);
-                            if (!payment.checked) {
-                              handleCheckPayment(payment.id);
-                            }
+                            handleCheckPayment(payment.id, !payment.checked);
                           }}
                           sx={{ mr: 1 }}
                         >

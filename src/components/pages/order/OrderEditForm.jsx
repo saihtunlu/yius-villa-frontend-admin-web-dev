@@ -156,13 +156,12 @@ function OrderEditForm(props) {
 
   useBlocker(shouldBlockNavigation);
 
-  useEffect(() => {
-    setTimeout(() => {
-      setUnSavedChanges(initialData !== JSON.stringify(order));
-    }, 1000);
-
-    return () => {};
-  }, [order]);
+  // useEffect(() => {
+  //   setTimeout(() => {
+  //     setUnSavedChanges(initialData !== JSON.stringify(order));
+  //   }, 1000);
+  //   return () => {};
+  // }, [order]);
 
   useEffect(() => {
     setOrder(initialOrder);
@@ -183,9 +182,9 @@ function OrderEditForm(props) {
       .then((data) => {
         setLoading(false);
         setOrder(data);
-        setInitialData(JSON.stringify(data));
         setRemovedIDs([]);
         enqueueSnackbar('Update success', { variant: 'success' });
+        setUnSavedChanges(false);
       })
       .catch(() => {
         setLoading(false);
@@ -223,6 +222,7 @@ function OrderEditForm(props) {
 
       return newState;
     });
+    setUnSavedChanges(true);
   };
   const handleUpdateProducts = (products) => {
     setOrder((preState) => {
@@ -230,6 +230,7 @@ function OrderEditForm(props) {
       newState.products = [...newState.products, ...products];
       return newState;
     });
+    setUnSavedChanges(true);
   };
   const handleChangeSalePrice = (sale_price, index) => {
     setOrder((preState) => {
@@ -243,6 +244,7 @@ function OrderEditForm(props) {
       newState.products[index].discount = discount;
       return newState;
     });
+    setUnSavedChanges(true);
   };
   const handleRemoveProduct = (index) => {
     const removedID = order.products[index]?.id;
@@ -256,6 +258,7 @@ function OrderEditForm(props) {
       newState.products.splice(index, 1);
       return newState;
     });
+    setUnSavedChanges(true);
   };
 
   const calcOrderValues = (newDiscount) => {
@@ -289,7 +292,7 @@ function OrderEditForm(props) {
         products_discount: productsDiscount,
         subtotal: String(subtotal),
         total: String(total),
-        due_amount: String(total),
+        due_amount: total - preState.paid_amount,
         discount: String(discount),
         discount_percentage,
         discount_reason,
@@ -315,6 +318,7 @@ function OrderEditForm(props) {
                     sid={order.id}
                     onChange={(data) => {
                       setOrder(data);
+                      setUnSavedChanges(false);
                       setInitialData(JSON.stringify(data));
                       onUpdateStatus({
                         status: data.status,
@@ -347,6 +351,7 @@ function OrderEditForm(props) {
             <OrderPayment
               onChange={(data) => {
                 setOrder(data);
+                setUnSavedChanges(false);
                 setInitialData(JSON.stringify(data));
                 onUpdateStatus({
                   status: data.status,
@@ -368,6 +373,7 @@ function OrderEditForm(props) {
               onSave={(order) => {
                 setOrder(order);
                 setInitialData(JSON.stringify(order));
+                setUnSavedChanges(true);
               }}
             />
 
@@ -377,6 +383,7 @@ function OrderEditForm(props) {
                 onSaveCustomer={(order) => {
                   setOrder(order);
                   setInitialData(JSON.stringify(order));
+                  setUnSavedChanges(true);
                 }}
               />
             )}
@@ -390,6 +397,7 @@ function OrderEditForm(props) {
                     extra_fees: [...preState.extra_fees, extraFee],
                   };
                 });
+                setUnSavedChanges(true);
               }}
               OnRemoveExtraFee={(index) => {
                 setOrder((preState) => {
@@ -399,6 +407,7 @@ function OrderEditForm(props) {
                     ...newState,
                   };
                 });
+                setUnSavedChanges(true);
               }}
               productsDiscount={order.products_discount}
               totalDiscount={order.total_discount}
@@ -413,7 +422,10 @@ function OrderEditForm(props) {
               }}
               tax={{ value: order.tax, rate: order.tax_rate }}
               subtotal={order.subtotal}
-              onAddedDiscount={(discount) => calcOrderValues(discount)}
+              onAddedDiscount={(discount) => {
+                calcOrderValues(discount);
+                setUnSavedChanges(true);
+              }}
             />
             <LoadingButton fullWidth size="large" type="submit" variant="contained" loading={loading}>
               Update Order
