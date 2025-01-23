@@ -390,7 +390,7 @@ const WebsiteOrderList = () => {
 
                               <TableCell align="left" sx={{ maxWidth: 200, minWidth: 150 }}>
                                 <Stack direction={'row'} alignItems={'center'}>
-                                  <Avatar sx={{ width: 25, height: 25 }} user={row.customer} />
+                                  <Avatar sx={{ width: 25, height: 25 }} user={row.customer.user} />
                                   <TextMaxLine variant="body2" sx={{ ml: '5px' }} line={1}>
                                     {row.address?.receiver || '-'}
                                   </TextMaxLine>
