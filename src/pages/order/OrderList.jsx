@@ -505,7 +505,6 @@ const OrderList = () => {
                                   </TextMaxLine>
                                 </Stack>
                               </TableCell>
-
                               <TableCell align="left" sx={{ fontWeight: 600 }}>
                                 {fCurrency(row.total)}
                                 <br />

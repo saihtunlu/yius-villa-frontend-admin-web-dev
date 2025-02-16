@@ -27,9 +27,6 @@ import moment from 'moment';
 
 //
 import Iconify from '../../common/Iconify';
-import { varFade } from '../../animate';
-import cssStyles from '../../../utils/cssStyles';
-import { NAVBAR } from '../../../config';
 import RemoteAutocomplete from '../../common/RemoteAutocomplete';
 
 // ----------------------------------------------------------------------

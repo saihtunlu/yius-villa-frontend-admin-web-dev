@@ -2,10 +2,8 @@ import * as React from 'react';
 import { useState, useEffect } from 'react';
 import {
   Grid2 as Grid,
-  Button,
   Box,
   Card,
-  Checkbox,
   Table,
   TableBody,
   TableCell,
@@ -15,24 +13,12 @@ import {
   TableHead,
   useTheme,
   IconButton,
-  Tooltip,
   Stack,
   Typography,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
 } from '@mui/material';
-import { Link as RouterLink, useNavigate, useNavigation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { connect } from 'react-redux';
-import plusFill from '@iconify/icons-eva/plus-fill';
-import archiveFill from '@iconify/icons-eva/archive-fill';
-import edit2Fill from '@iconify/icons-eva/edit-2-fill';
-import starFill from '@iconify/icons-eva/star-fill';
-import checkmarkCircleFill from '@iconify/icons-eva/checkmark-circle-fill';
 import { useSnackbar } from 'notistack';
-import { capitalCase } from 'change-case';
-import { Icon } from '@iconify/react';
 import moment from 'moment';
 import { DatePicker } from '@mui/x-date-pickers';
 
@@ -41,7 +27,6 @@ import HeaderBreadcrumbs from '../../components/common/HeaderBreadcrumbs';
 import { PATH_DASHBOARD } from '../../router/paths';
 import ListToolbar from '../../components/common/ListToolbar';
 import SearchNotFound from '../../components/common/SearchNotFound';
-import MoreMenu from '../../components/common/MoreMenu';
 import useQuery from '../../utils/RouteQuery';
 import axios from '../../utils/axios';
 import ListSkeleton from '../../components/skeleton/ListSkeleton';
@@ -51,33 +36,6 @@ import AttendanceForm from '../../components/pages/attendance/AttendanceForm';
 import TextMaxLine from '../../components/common/TextMaxLine';
 import { fTime } from '../../utils/formatTime';
 import Iconify from '../../components/common/Iconify';
-
-const sortList = [
-  {
-    name: 'Created (oldest first)',
-    value: 'created_at',
-  },
-  {
-    name: 'Created (newest first)',
-    value: '-created_at',
-  },
-  {
-    name: 'Updated (oldest first)',
-    value: 'updated_at',
-  },
-  {
-    name: 'Updated (newest first)',
-    value: '-updated_at',
-  },
-  {
-    name: 'Customer A–Z',
-    value: 'customer__name',
-  },
-  {
-    name: 'Customer Z–A',
-    value: '-customer__name',
-  },
-];
 
 const TABLE_HEAD = [
   { id: 'id', label: 'Employee', alignRight: false },
@@ -148,7 +106,6 @@ const AttendanceList = () => {
     dates: [fromDateParam, toDateParam],
     page: 0,
   });
-  const [selected, setSelected] = useState([]);
   const [editingData, setEditingData] = useState({});
 
   const [isReady, setIsReady] = useState(false);

@@ -146,6 +146,17 @@ const FinanceList = () => {
   });
 
   const isProductNotFound = finances.results.length === 0;
+  const totals = finances.results.reduce(
+    (acc, finance) => {
+      if (finance.type === 'Expense') {
+        acc.Expense += parseInt(finance.amount, 10);
+      } else if (finance.type === 'Income') {
+        acc.Income += parseInt(finance.amount, 10);
+      }
+      return acc;
+    },
+    { Expense: 0, Income: 0 }
+  );
 
   // effects
   useEffect(() => {
@@ -295,6 +306,16 @@ const FinanceList = () => {
                         }
                       }}
                     />
+
+                    <Stack justifyContent={'center'} spacing={1}>
+                      <Label variant={theme.palette.mode === 'light' ? 'ghost' : 'filled'} color={'error'}>
+                        Total Expense : {fCurrency(totals.Expense)}
+                      </Label>
+
+                      <Label variant={theme.palette.mode === 'light' ? 'ghost' : 'filled'} color={'success'}>
+                        Total Income : {fCurrency(totals.Income)}
+                      </Label>
+                    </Stack>
                   </Stack>
                 }
                 numSelected={selected.length}
