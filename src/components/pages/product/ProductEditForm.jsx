@@ -100,6 +100,11 @@ function ProductEditForm(props) {
 
   // Side effect: Update variation name when options change
   useEffect(() => {
+    setNewVariation(getInitialVariation(initialProduct));
+  }, [isAddingNewVariation]);
+
+  // Side effect: Update variation name when options change
+  useEffect(() => {
     const name = newVariation.options
       .map((option, index) => (index !== newVariation.options.length - 1 ? `${option.name} / ` : option.name))
       .join('');
