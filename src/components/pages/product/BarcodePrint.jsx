@@ -5,7 +5,7 @@ import { useRef } from 'react';
 import Barcode from 'react-barcode';
 import Iconify from '../../common/Iconify';
 
-export default function BarcodePrint({ value, onChangeValue, price }) {
+export default function BarcodePrint({ value, onChangeValue, price, regularPrice }) {
   const contentRef = useRef(null);
   const reactToPrintFn = useReactToPrint({ contentRef });
 
@@ -24,6 +24,26 @@ export default function BarcodePrint({ value, onChangeValue, price }) {
         width={'100%'}
       >
         <Barcode value={value} width={1} height={55} fontSize={10} />
+        {regularPrice !== 0 && (
+          <Typography
+            align="center"
+            fontSize={12}
+            variant="span"
+            sx={{
+              position: 'absolute',
+              margin: 0,
+              textDecoration: 'line-through',
+              marginTop: '-4mm',
+              zIndex: 1,
+              fontWeight: 700,
+              textAlign: 'center',
+              left: 0,
+              right: 0,
+            }}
+          >
+            {regularPrice}Ks
+          </Typography>
+        )}
         <Typography
           align="center"
           fontSize={14}
@@ -31,7 +51,7 @@ export default function BarcodePrint({ value, onChangeValue, price }) {
           sx={{
             position: 'absolute',
             margin: 0,
-            marginTop: '-2mm',
+            marginTop: '-1mm',
             zIndex: 1,
             fontWeight: 700,
             textAlign: 'center',

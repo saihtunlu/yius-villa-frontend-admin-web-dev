@@ -487,7 +487,10 @@ function ProductEditForm(props) {
                             />
 
                             <BarcodePrint
-                              price={variant.sale_price || variant.regular_price}
+                              price={
+                                parseInt(variant.sale_price, 10) !== 0 ? variant.sale_price : variant.regular_price
+                              }
+                              regularPrice={parseInt(variant.sale_price, 10) !== 0 ? variant.regular_price : 0}
                               value={variant.barcode}
                               onChangeValue={(event) =>
                                 setVariations((preState) => {
@@ -1103,6 +1106,7 @@ function ProductEditForm(props) {
                 {!product.has_variant && (
                   <BarcodePrint
                     price={product.sale_price || product.regular_price}
+                    regularPrice={product.sale_price ? product.regular_price : 0}
                     value={product.barcode}
                     onChangeValue={(event) =>
                       setProduct((preState) => {
